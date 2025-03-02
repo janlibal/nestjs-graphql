@@ -14,7 +14,7 @@ export class UserRepository {
 
   async save(data: UserModel): Promise<UserModel> {
     const persistenceModel = await UserMapper.toPersistence(data)
-    const newEntity = await this.prisma.user.create({data: persistenceModel,})
+    const newEntity = await this.prisma.user.create({ data: persistenceModel })
     return await UserMapper.toDomain(newEntity)
   }
 }

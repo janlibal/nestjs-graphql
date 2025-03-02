@@ -23,5 +23,5 @@ export class User {
   provider: AuthProvidersEnum
 
   @Field(() => Status)
-  status: Status;
+  status: Status
 }
