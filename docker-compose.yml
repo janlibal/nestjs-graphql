@@ -1,0 +1,21 @@
+name: nestjs-vitest
+services:
+  postgres:
+    container_name: nest-vitest-db
+    image: janlibal/pg-multipledb # postgres:16.3-alpine
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      #POSTGRES_DB: ${DB_NAME}
+      POSTGRES_MULTIPLE_DATABASES: ${MULTIPLE_DATABASES}
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+volumes:
+  postgres:
+    driver: local

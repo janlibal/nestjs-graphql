@@ -1,0 +1,31 @@
+NODE_ENV=prod
+APP_PORT=80
+#DATABASE_USERNAME=root
+#DATABASE_PASSWORD=root
+#MULTIPLE_DATABASES=dev,test,prod
+PGADMIN_EMAIL=admin@admin.com
+PGADMIN_PASSWORD=Password123!
+PGADMIN_PORT=16543
+#DATABASE_PORT=5432
+#DATABASE_HOST=postgres://root:root@postgres:5432/prod
+
+
+# POSTGRES
+DB_USERNAME=root
+DB_PASSWORD=root
+DB_NAME=prod
+MULTIPLE_DATABASES=dev,test,prod
+
+# Nest run locally
+#DB_HOST=localhost
+# Nest run in docker, change host to database container name
+DB_HOST=postgres
+
+DB_PORT=5432
+DB_SCHEMA=prod
+
+# Prisma database connection
+#DATABASE_URL=postgresql://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?schema=${DB_SCHEMA}&sslmode=prefer
+DATABASE_URL=postgresql://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=prefer
+
+REDIS_PORT=6379
