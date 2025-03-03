@@ -18,7 +18,8 @@ type User {
 }
 
 type Query {
-  users: [User!]!
+  findAll: [User!]
+  findOne(id: String!): User
 }
 
 type Mutation {

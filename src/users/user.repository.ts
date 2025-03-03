@@ -12,6 +12,11 @@ export class UserRepository {
     return await this.prisma.user.findMany()
   }
 
+  async findOne(id: string): Promise<UserModel | null> {
+    const entity = await this.prisma.user.findUnique({ where: { id }  });
+    return await UserMapper.toDomain(entity)
+  }
+
   async save(data: UserModel): Promise<UserModel> {
     const persistenceModel = await UserMapper.toPersistence(data)
     const newEntity = await this.prisma.user.create({ data: persistenceModel })

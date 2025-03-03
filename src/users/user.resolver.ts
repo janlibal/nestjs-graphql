@@ -8,9 +8,14 @@ import { CreateUserInput } from './inputs/create.user.intput'
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
-  @Query(() => [UserModel])
-  async users() {
+  @Query(() => [UserModel], { nullable: true })
+  async findAll(): Promise<User[]> {
     return this.userService.getAll()
+  }
+
+  @Query(() => UserModel, { nullable: true })
+  async findOne(@Args('id') id: string): Promise<UserModel> {
+    return this.userService.findById(id);
   }
 
   /*@Mutation(() => UserModel)

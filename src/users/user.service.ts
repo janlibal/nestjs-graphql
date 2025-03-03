@@ -14,6 +14,10 @@ export class UserService {
     return await this.userRepository.findAll()
   }
 
+  async findById(id: string): Promise<UserModel> {
+    return await this.userRepository.findOne(id)
+  }
+
   async createUser(createUserInput: CreateUserInput): Promise<UserModel> {
     const clonedPayload: UserModel = {
       firstName: createUserInput.firstName,
