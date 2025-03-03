@@ -3,6 +3,7 @@ import { UserService } from './user.service'
 import { User } from '@prisma/client'
 import { User as UserModel } from './model/user.model'
 import { CreateUserInput } from './inputs/create.user.intput'
+import { NullableType } from 'src/utils/types/nullable.type'
 
 @Resolver('User')
 export class UserResolver {
@@ -24,7 +25,7 @@ export class UserResolver {
   }
 
   @Query(() => UserModel, { nullable: true })
-  async findOne(@Args('id') id: string): Promise<UserModel> {
+  async findOne(@Args('id') id: User['id']): Promise<NullableType<UserModel>> {
     return this.userService.findById(id);
   }
 

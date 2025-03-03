@@ -5,6 +5,7 @@ import { UserRepository } from './user.repository'
 import { AuthProvidersEnum } from './enums/auth.provider.enum'
 import { CreateUserInput } from './inputs/create.user.intput'
 import { StatusEnum } from '../../src/statuses/status.enum'
+import { NullableType } from 'src/utils/types/nullable.type'
 
 @Injectable()
 export class UserService {
@@ -23,7 +24,7 @@ export class UserService {
     return await this.userRepository.findPaginated(page, pageSize)
   }
 
-  async findById(id: string): Promise<UserModel> {
+  async findById(id: User['id']): Promise<NullableType<UserModel>> {
     return await this.userRepository.findOne(id)
   }
 
