@@ -22,6 +22,6 @@ export class User {
   @Field()
   provider: AuthProvidersEnum
 
-  @Field(() => Status)
+  @Field(() => Status, {nullable:true})
   status: Status
 }

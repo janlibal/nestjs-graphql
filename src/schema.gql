@@ -14,11 +14,12 @@ type User {
   password: String!
   email: String!
   provider: String!
-  status: Status!
+  status: Status
 }
 
 type Query {
   findAll: [User!]
+  findPaginated: [User!]
   findOne(id: String!): User
 }
 

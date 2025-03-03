@@ -12,6 +12,13 @@ export class UserRepository {
     return await this.prisma.user.findMany()
   }
 
+  async findPaginated(page: number, pageSize: number): Promise<User[]> {
+    return this.prisma.user.findMany({
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    });
+  }
+
   async findOne(id: string): Promise<UserModel | null> {
     const entity = await this.prisma.user.findUnique({ where: { id }  });
     return await UserMapper.toDomain(entity)

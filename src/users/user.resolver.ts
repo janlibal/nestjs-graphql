@@ -13,6 +13,11 @@ export class UserResolver {
     return this.userService.getAll()
   }
 
+  @Query(() => [UserModel], { nullable: true })
+  async findPaginated(): Promise<User[]> {
+    return this.userService.getPaginated()
+  }
+
   @Query(() => UserModel, { nullable: true })
   async findOne(@Args('id') id: string): Promise<UserModel> {
     return this.userService.findById(id);

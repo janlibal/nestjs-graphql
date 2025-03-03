@@ -14,6 +14,11 @@ export class UserService {
     return await this.userRepository.findAll()
   }
 
+  async getPaginated(): Promise<User[]> {
+    const page: number = 1, pageSize: number = 10
+    return await this.userRepository.findPaginated(page, pageSize)
+  }
+
   async findById(id: string): Promise<UserModel> {
     return await this.userRepository.findOne(id)
   }
