@@ -8,6 +8,11 @@ import { CreateUserInput } from './inputs/create.user.intput'
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
+  @Query(() => [UserModel])
+  async findbyFirstNames(@Args('firstNames', { type: () => [String] }) firstNames: string[]): Promise<User[]> {
+    return this.userService.getByFirstNames(firstNames);
+  }
+
   @Query(() => [UserModel], { nullable: true })
   async findAll(): Promise<User[]> {
     return this.userService.getAll()

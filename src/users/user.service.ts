@@ -10,6 +10,10 @@ import { StatusEnum } from '../../src/statuses/status.enum'
 export class UserService {
   constructor(private userRepository: UserRepository) {}
 
+  async getByFirstNames(firstNames: string[]): Promise<User[]> {
+    return await this.userRepository.findByFirstNames(firstNames)
+  }
+
   async getAll(): Promise<User[]> {
     return await this.userRepository.findAll()
   }

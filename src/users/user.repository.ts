@@ -8,6 +8,19 @@ import { UserMapper } from './mapper/user.mapper'
 export class UserRepository {
   constructor(private prisma: PrismaService) {}
 
+  async findByFirstNames(firstNames: string[]): Promise<User[]> {
+    return this.prisma.user.findMany({
+      where: {
+        firstName: {
+          in: firstNames,
+        },
+      },
+      include: {
+        status: true, 
+      },
+    });
+  }
+
   async findAll(): Promise<User[]> {
     return await this.prisma.user.findMany()
   }

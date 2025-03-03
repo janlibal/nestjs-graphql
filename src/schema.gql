@@ -18,6 +18,7 @@ type User {
 }
 
 type Query {
+  findbyFirstNames(firstNames: [String!]!): [User!]!
   findAll: [User!]
   findPaginated: [User!]
   findOne(id: String!): User
