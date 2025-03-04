@@ -10,7 +10,7 @@ export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
   @Query(() => [UserModel])
-  async findbyFirstNames(@Args('firstNames', { type: () => [String] }) firstNames: string[]): Promise<User[]> {
+  async findbyFirstNames(@Args('firstNames', { type: () => [String] }) firstNames: User['firstName'][]): Promise<User[]> {
     return this.userService.getByFirstNames(firstNames);
   }
 
@@ -25,7 +25,7 @@ export class UserResolver {
   }
 
   @Query(() => UserModel, { nullable: true })
-  async findOne(@Args('id') id: User['id']): Promise<NullableType<UserModel>> {
+  async findOne(@Args('id', { type: () => String}) id: User['id']): Promise<NullableType<UserModel>> {
     return this.userService.findById(id);
   }
 
