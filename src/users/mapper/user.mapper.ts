@@ -2,6 +2,7 @@ import { Status } from 'src/statuses/status.model'
 import { AuthProvidersEnum } from '../enums/auth.provider.enum'
 import { User } from '../model/user.model'
 import { User as UserEntity, ProviderEnum as Provider } from '@prisma/client'
+import { Role } from 'src/roles/role.model'
 
 export class UserMapper {
   static async toPersistence(data: User): Promise<Omit<UserEntity, 'id'>> {
@@ -12,6 +13,7 @@ export class UserMapper {
       email: data.email,
       provider: this.mapProviderToPersistence(data.provider),
       statusId: data.status.id,
+      roleId: data.role.id
     }
     return persistenceEntity
   }
@@ -20,6 +22,11 @@ export class UserMapper {
     let status: Status | undefined = undefined
     status = new Status()
     status = { id: Number(raw.statusId) }
+    
+    let role: Role | undefined = undefined
+    role = new Role()
+    role = { id: Number(raw.roleId) }
+    
     const domainEntity: User = {
       id: raw.id,
       firstName: raw.firstName,
@@ -28,6 +35,7 @@ export class UserMapper {
       email: raw.email,
       provider: this.mapProviderToDomain(raw.provider),
       status: status,
+      role: role
     }
     return domainEntity
   }

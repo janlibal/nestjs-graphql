@@ -6,6 +6,7 @@ import { AuthProvidersEnum } from './enums/auth.provider.enum'
 import { CreateUserInput } from './inputs/create.user.intput'
 import { StatusEnum } from '../../src/statuses/status.enum'
 import { NullableType } from 'src/utils/types/nullable.type'
+import { RoleEnum } from 'src/roles/role.enum'
 
 @Injectable()
 export class UserService {
@@ -35,6 +36,9 @@ export class UserService {
       password: createUserInput.password,
       email: createUserInput.email,
       provider: AuthProvidersEnum.facebook,
+      role: {
+        id: RoleEnum.user,
+      },
       status: {
         id: StatusEnum.inactive,
       },

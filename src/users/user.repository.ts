@@ -18,6 +18,7 @@ export class UserRepository {
       },
       include: {
         status: true, 
+        role: true
       },
     });
   }

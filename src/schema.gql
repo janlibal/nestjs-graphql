@@ -7,6 +7,11 @@ type Status {
   title: String!
 }
 
+type Role {
+  id: Float!
+  name: String!
+}
+
 type User {
   id: String!
   firstName: String!
@@ -15,6 +20,7 @@ type User {
   email: String!
   provider: String!
   status: Status
+  role: Role
 }
 
 type Query {
