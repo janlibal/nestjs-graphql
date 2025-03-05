@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { User } from '@prisma/client'
+import { Prisma, User } from '@prisma/client'
 import { User as UserModel } from './model/user.model'
 import { PrismaService } from 'src/database/prisma.service'
 import { UserMapper } from './mapper/user.mapper'
@@ -47,7 +47,7 @@ export class UserRepository {
     });
   }
 
-  async findManyWithPagination({filterOptions,sortOptions,paginationOptions,}: {filterOptions?: FilterUserInput | null;sortOptions?: SortUserInput[] | null; paginationOptions: IPaginationOptions;}): Promise<User[]> {
+  /*async findManyWithPagination({filterOptions,sortOptions,paginationOptions,}: {filterOptions?: FilterUserInput | null;sortOptions?: SortUserInput[] | null; paginationOptions: IPaginationOptions;}): Promise<User[]> {
     const where: FindOptionsWhere<User> = {};
     
     if (filterOptions?.roles?.length) {
@@ -69,6 +69,62 @@ export class UserRepository {
       ),
     });
 
+    return entities.map((user) => UserMapper.toDomain(user));
+  }*/
+
+  async findManyWithPagination2({
+    //filterOptions,
+    sortOptions,
+    paginationOptions,
+  }: {
+    //filterOptions?: FilterUserInput | null;
+    sortOptions?: SortUserInput[] | null;
+    paginationOptions: IPaginationOptions;
+  }): Promise<User[]> {
+    //const where: Prisma.UserWhereInput = {};
+  
+    // Apply filtering if filterOptions are provided
+    /*if (filterOptions?.roles?.length) {
+      where.role = {
+        some: {
+          id: {
+            in: filterOptions.roles.map((role) => Number(role.id)),
+          },
+        },
+      };
+    }*/
+
+  
+  
+    // Prisma's `findMany` for pagination and filtering
+    const entities = await this.prisma.user.findMany({
+      skip: (paginationOptions.page - 1) * paginationOptions.limit,
+      take: paginationOptions.limit,
+      //where, // The filter conditions
+      orderBy: sortOptions?.reduce(
+        (accumulator, sort) => ({
+          ...accumulator,
+          [sort.orderBy]: sort.order,
+        }),
+        {},
+      ),
+    });
+  
+    // Map the result to the domain model (if needed)
+    const mapEntity = entities.map((data) => {
+      const usr: User = {
+        id: data.id,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        password: data.password,
+        provider: data.provider,
+        statusId: data.statusId,
+        roleId: data.roleId,
+        email: data.email
+      }
+      return usr
+    })
+    //return mapEntity.map((user) => UserMapper.toDomain(user))//await UserMapper.toDomain(mapEntity)
     return entities.map((user) => UserMapper.toDomain(user));
   }
 }
