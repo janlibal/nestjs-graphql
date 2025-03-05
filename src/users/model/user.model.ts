@@ -23,9 +23,9 @@ export class User {
   @Field()
   provider: AuthProvidersEnum
 
-  @Field(() => Status, {nullable:true})
+  @Field(() => Status, { nullable: true })
   status: Status
 
-  @Field(() => Role, {nullable:true})
+  @Field(() => Role, { nullable: true })
   role: Role
 }

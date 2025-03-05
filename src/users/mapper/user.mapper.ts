@@ -13,7 +13,7 @@ export class UserMapper {
       email: data.email,
       provider: this.mapProviderToPersistence(data.provider),
       statusId: data.status.id,
-      roleId: data.role.id
+      roleId: data.role.id,
     }
     return persistenceEntity
   }
@@ -22,11 +22,11 @@ export class UserMapper {
     let status: Status | undefined = undefined
     status = new Status()
     status = { id: Number(raw.statusId) }
-    
+
     let role: Role | undefined = undefined
     role = new Role()
     role = { id: Number(raw.roleId) }
-    
+
     const domainEntity: User = {
       id: raw.id,
       firstName: raw.firstName,
@@ -35,7 +35,7 @@ export class UserMapper {
       email: raw.email,
       provider: this.mapProviderToDomain(raw.provider),
       status: status,
-      role: role
+      role: role,
     }
     return domainEntity
   }
