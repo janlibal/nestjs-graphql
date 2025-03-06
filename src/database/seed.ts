@@ -8,7 +8,7 @@ async function main() {
   console.log('Seeding...')
 
   const role = await prisma.role.findFirst()
-  if(!role) {
+  if (!role) {
     await prisma.role.createMany({
       data: [
         {

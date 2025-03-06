@@ -25,14 +25,13 @@ type User {
 
 type Query {
   findbyFirstNames(firstNames: [String!]!): [User!]!
-  findAll: [User!]
-  findPaginated: [User!]
   findOne(id: String!): User
+  findAll: [User!]
+  findAllPaginated(page: Int! = 1, limit: Int! = 10): [User!]!
 }
 
 type Mutation {
   createUser(input: CreateUserInput!): User!
-  OldcreateUser(input: CreateUserInput!): User!
 }
 
 input CreateUserInput {

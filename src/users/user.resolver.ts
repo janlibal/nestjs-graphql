@@ -4,23 +4,25 @@ import { User } from '@prisma/client'
 import { User as UserModel } from './model/user.model'
 import { CreateUserInput } from './inputs/create.user.intput'
 import { NullableType } from 'src/utils/types/nullable.type'
-import { ValidateUserInputPipe } from './pipes/validate-user-input.pipe'
-import { QueryUserInput } from './inputs/query.user.input'
-import { InfinityPaginationResponseInput } from 'src/utils/dto/infinity-pagination-response.input'
-import { infinityPagination } from 'src/utils/infinity-pagination'
+import { PaginationArgs } from './inputs/pagination.args'
 
 @Resolver('User')
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
   @Query(() => [UserModel])
-  async findbyFirstNames(@Args('firstNames', { type: () => [String] }) firstNames: User['firstName'][]): Promise<User[]> {
-    return this.userService.getByFirstNames(firstNames);
+  async findbyFirstNames(
+    @Args('firstNames', { type: () => [String] })
+    firstNames: User['firstName'][],
+  ): Promise<User[]> {
+    return this.userService.getByFirstNames(firstNames)
   }
 
   @Query(() => UserModel, { nullable: true })
-  async findOne(@Args('id', { type: () => String}) id: User['id']): Promise<NullableType<UserModel>> {
-    return this.userService.findById(id);
+  async findOne(
+    @Args('id', { type: () => String }) id: User['id'],
+  ): Promise<NullableType<UserModel>> {
+    return this.userService.findById(id)
   }
 
   @Mutation(() => UserModel)
@@ -50,23 +52,10 @@ export class UserResolver {
     return this.userService.getAll()
   }
 
-  @Query(() => [UserModel], { nullable: true })
-  async findPaginated(@Args('input') query: QueryUserInput): Promise<InfinityPaginationResponseInput<User>> {
-    const page = query?.page ?? 1;
-    let limit = query?.limit ?? 10;
-    if (limit > 50) {
-      limit = 50;
-    }
-    return infinityPagination(
-      await this.userService.findManyWithPagination({
-        filterOptions: query?.filters,
-        sortOptions: query?.sort,
-        paginationOptions: {
-          page,
-          limit,
-        },
-      }),
-      { page, limit },
-    );
+  @Query(() => [UserModel])
+  async findAllPaginated(@Args() paginationArgs: PaginationArgs): Promise<UserModel[]> {
+    return this.userService.getAllPaginated(paginationArgs)
   }
 }
+
+

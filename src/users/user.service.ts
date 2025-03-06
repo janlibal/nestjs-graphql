@@ -7,8 +7,7 @@ import { CreateUserInput } from './inputs/create.user.intput'
 import { StatusEnum } from '../../src/statuses/status.enum'
 import { NullableType } from 'src/utils/types/nullable.type'
 import { RoleEnum } from 'src/roles/role.enum'
-import { FilterUserInput, SortUserInput } from './inputs/query.user.input'
-import { IPaginationOptions } from 'src/utils/types/pagination-options'
+import { PaginationArgs } from './inputs/pagination.args'
 
 @Injectable()
 export class UserService {
@@ -43,24 +42,7 @@ export class UserService {
     return await this.userRepository.save(clonedPayload)
   }
 
-  async getPaginated(): Promise<User[]> {
-    const page: number = 1, pageSize: number = 10
-    return await this.userRepository.findPaginated(page, pageSize)
-  }
-
-  findManyWithPagination({
-    filterOptions,
-    sortOptions,
-    paginationOptions,
-  }: {
-    filterOptions?: FilterUserInput | null;
-    sortOptions?: SortUserInput[] | null;
-    paginationOptions: IPaginationOptions;
-  }): Promise<User[]> {
-    return this.userRepository.findManyWithPagination({
-      filterOptions,
-      sortOptions,
-      paginationOptions,
-    });
+  async getAllPaginated(paginationArgs: PaginationArgs): Promise<UserModel[]> {
+    return await this.userRepository.findPaginated(paginationArgs)
   }
 }

@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql'
+import { Field, Int, ObjectType } from '@nestjs/graphql'
 import { AuthProvidersEnum } from '../enums/auth.provider.enum'
 import { Status } from '../../statuses/status.model'
 import { Role } from '../../roles/role.model'
@@ -23,9 +23,9 @@ export class User {
   @Field()
   provider: AuthProvidersEnum
 
-  @Field(() => Status, {nullable:true})
+  @Field(() => Status, { nullable: true })
   status: Status
 
-  @Field(() => Role, {nullable:true})
+  @Field(() => Role, { nullable: true })
   role: Role
 }
