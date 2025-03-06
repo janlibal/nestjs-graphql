@@ -1,15 +1,11 @@
 import { Injectable } from '@nestjs/common'
-import { Prisma, User } from '@prisma/client'
+import { User } from '@prisma/client'
 import { User as UserModel } from './model/user.model'
 import { PrismaService } from 'src/database/prisma.service'
 import { UserMapper } from './mapper/user.mapper'
 import { NullableType } from 'src/utils/types/nullable.type'
-import {
-  PaginateOutput,
-  paginate,
-  paginateOutput,
-} from 'src/utils/pagination-utils'
-import { QueryPaginationDto } from './inputs/query-pagination.dto'
+import { PaginationArgs } from './inputs/pagination.args'
+import { PaginatedUsers } from './inputs/paginated.users'
 
 @Injectable()
 export class UserRepository {
@@ -30,7 +26,7 @@ export class UserRepository {
   }
 
   async findAll(): Promise<User[]> {
-    return await this.prisma.user.findMany()
+    return await this.prisma.user.findMany({include: { status: true, role: true}})
   }
 
   async findOne(id: User['id']): Promise<NullableType<UserModel>> {
@@ -44,23 +40,17 @@ export class UserRepository {
     return await UserMapper.toDomain(newEntity)
   }
 
-  async findPaginated(page: number, pageSize: number): Promise<User[]> {
-    return this.prisma.user.findMany({
-      skip: (page - 1) * pageSize,
-      take: pageSize,
+  async findPaginated(paginationArgs: PaginationArgs): Promise<UserModel[]> {
+    const users = await this.prisma.user.findMany({
+      include: { status: true, role: true},
+      skip: (paginationArgs.page - 1) * paginationArgs.limit, // Skip (page - 1) * limit
+      take: paginationArgs.limit, // Limit the number of results
     })
-  }
 
-  async findUsersWithPagination(
-    query?: QueryPaginationDto,
-  ): Promise<PaginateOutput<User>> {
-    const [posts, total] = await Promise.all([
-      await this.prisma.user.findMany({
-        ...paginate(query),
-      }),
-      await this.prisma.user.count(),
-    ])
-
-    return paginateOutput<User>(posts, total, query)
+    return await Promise.all((users).map(async (userEntity) => {
+      return await UserMapper.toDomain(userEntity)
+    })) 
   }
 }
+
+

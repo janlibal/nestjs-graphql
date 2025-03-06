@@ -54,9 +54,11 @@ export class UserMapper {
         return Provider.twitter
       case AuthProvidersEnum.apple:
         return Provider.apple
+      default:
+        throw new Error('Unsupported provider')
     }
   }
-
+  
   private static mapProviderToDomain(provider: Provider): AuthProvidersEnum {
     switch (provider) {
       case Provider.email:
@@ -69,6 +71,8 @@ export class UserMapper {
         return AuthProvidersEnum.twitter
       case Provider.apple:
         return AuthProvidersEnum.apple
+      default:
+        throw new Error('Unsupported provider')
     }
   }
 }

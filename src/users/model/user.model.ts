@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql'
+import { Field, Int, ObjectType } from '@nestjs/graphql'
 import { AuthProvidersEnum } from '../enums/auth.provider.enum'
 import { Status } from '../../statuses/status.model'
 import { Role } from '../../roles/role.model'

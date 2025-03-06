@@ -4,8 +4,7 @@ import { User } from '@prisma/client'
 import { User as UserModel } from './model/user.model'
 import { CreateUserInput } from './inputs/create.user.intput'
 import { NullableType } from 'src/utils/types/nullable.type'
-import { QueryPaginationDto } from './inputs/query-pagination.dto'
-import { PaginateOutput } from 'src/utils/pagination-utils'
+import { PaginationArgs } from './inputs/pagination.args'
 
 @Resolver('User')
 export class UserResolver {
@@ -53,10 +52,10 @@ export class UserResolver {
     return this.userService.getAll()
   }
 
-  @Query(() => [UserModel], { nullable: true })
-  async getAllUsers(
-    @Args('input') query: QueryPaginationDto,
-  ): Promise<PaginateOutput<User>> {
-    return await this.userService.getUsersPaginated(query)
+  @Query(() => [UserModel])
+  async findAllPaginated(@Args() paginationArgs: PaginationArgs): Promise<UserModel[]> {
+    return this.userService.getAllPaginated(paginationArgs)
   }
 }
+
+
