@@ -25,8 +25,15 @@ export class UserRepository {
     })
   }
 
-  async findAll(): Promise<User[]> {
-    return await this.prisma.user.findMany({include: { status: true, role: true}})
+  async findAll(): Promise<UserModel[]> {
+    const users = await this.prisma.user.findMany({
+      include: { status: true, role: true },
+    })
+    return await Promise.all(
+      users.map(async (userEntity) => {
+        return await UserMapper.toDomain(userEntity)
+      }),
+    )
   }
 
   async findOne(id: User['id']): Promise<NullableType<UserModel>> {
@@ -42,15 +49,15 @@ export class UserRepository {
 
   async findPaginated(paginationArgs: PaginationArgs): Promise<UserModel[]> {
     const users = await this.prisma.user.findMany({
-      include: { status: true, role: true},
+      include: { status: true, role: true },
       skip: (paginationArgs.page - 1) * paginationArgs.limit, // Skip (page - 1) * limit
       take: paginationArgs.limit, // Limit the number of results
     })
 
-    return await Promise.all((users).map(async (userEntity) => {
-      return await UserMapper.toDomain(userEntity)
-    })) 
+    return await Promise.all(
+      users.map(async (userEntity) => {
+        return await UserMapper.toDomain(userEntity)
+      }),
+    )
   }
 }
-
-

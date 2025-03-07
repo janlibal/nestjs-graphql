@@ -48,14 +48,14 @@ export class UserResolver {
   */
 
   @Query(() => [UserModel], { nullable: true })
-  async findAll(): Promise<User[]> {
+  async findAll(): Promise<UserModel[]> {
     return this.userService.getAll()
   }
 
   @Query(() => [UserModel])
-  async findAllPaginated(@Args() paginationArgs: PaginationArgs): Promise<UserModel[]> {
+  async findAllPaginated(
+    @Args() paginationArgs: PaginationArgs,
+  ): Promise<UserModel[]> {
     return this.userService.getAllPaginated(paginationArgs)
   }
 }
-
-

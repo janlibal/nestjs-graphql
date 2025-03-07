@@ -58,7 +58,7 @@ export class UserMapper {
         throw new Error('Unsupported provider')
     }
   }
-  
+
   private static mapProviderToDomain(provider: Provider): AuthProvidersEnum {
     switch (provider) {
       case Provider.email:
