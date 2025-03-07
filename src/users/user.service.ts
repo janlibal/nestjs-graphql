@@ -17,7 +17,7 @@ export class UserService {
     return await this.userRepository.findByFirstNames(firstNames)
   }
 
-  async getAll(): Promise<User[]> {
+  async getAll(): Promise<UserModel[]> {
     return await this.userRepository.findAll()
   }
 
