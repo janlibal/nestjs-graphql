@@ -1,26 +1,31 @@
 import request from 'supertest'
 import { describe, it, expect } from 'vitest'
-import { APP_URL } from '../utils/constants'
+import { APP_URL, END_POINT } from '../utils/constants'
 
 describe('App', () => {
   const app = APP_URL
+  const endPoint = END_POINT
 
   describe('App', () => {
-    it('should return hello (GET)', async () => {
+    it('QUERY > hello', async () => {
+      const mockName: string = 'John'
+
       const response = await request(app)
-      .post('/graphql')
-      .send({
-        query: `
+        //.post('/graphql')
+        .post(`/${endPoint}`)
+        .send({
+          query: `
           query {
-            hello {
+            hello(name: "${mockName}") {
               message
             }
           }
         `,
-      })
-      .expect(200)
-      
-      expect(response.body.data.hello.message).toMatch('Hello World!')
+        })
+        .expect(200)
+      expect(response.body.data.hello.message).toMatch(
+        `Hello World! ${mockName}`,
+      )
     })
   })
 })
