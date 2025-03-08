@@ -28,7 +28,7 @@ type User {
 }
 
 type Query {
-  hello: HelloResponseDto!
+  hello(name: String!): HelloResponseDto!
   findbyFirstNames(firstNames: [String!]!): [User!]!
   findOne(id: String!): User
   findAll: [User!]
