@@ -24,9 +24,10 @@ import { ApolloDriver } from '@nestjs/apollo'
     UserModule,
     GraphQLModule.forRoot({
       driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-      playground: true, // This enables the GraphQL playground for easy testing
+      autoSchemaFile: join(process.cwd(), 'src/schema-v1.gql'),
+      playground: true,
       //playground: process.env.NODE_ENV !== 'prod',
+      path: 'api/v1/graphql'
     }),
   ],
 })

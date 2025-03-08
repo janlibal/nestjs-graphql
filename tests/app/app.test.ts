@@ -1,10 +1,10 @@
 import request from 'supertest'
 import { describe, it, expect } from 'vitest'
-import { APP_URL, END_POINT } from '../utils/constants'
+import { API, APP_URL, END_POINT, VER } from '../utils/constants'
 
 describe('App', () => {
   const app = APP_URL
-  const endPoint = END_POINT
+  const endPoint = `${API}/${VER}/${END_POINT}`
 
   describe('App', () => {
     it('QUERY > hello', async () => {
