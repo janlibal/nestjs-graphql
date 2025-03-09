@@ -11,8 +11,8 @@ describe('App', () => {
       const mockName: string = 'John'
 
       const response = await request(app)
-        //.post('/graphql')
         .post(`/${endPoint}`)
+        //.set('Authorization', `Bearer ${mockToken}`)
         .send({
           query: `
           query {
