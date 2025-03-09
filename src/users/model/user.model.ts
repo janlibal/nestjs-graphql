@@ -1,11 +1,11 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql'
+import { Field, ObjectType } from '@nestjs/graphql'
 import { AuthProvidersEnum } from '../enums/auth.provider.enum'
 import { Status } from '../../statuses/status.model'
 import { Role } from '../../roles/role.model'
 
 @ObjectType()
 export class User {
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   id?: string
 
   @Field()
@@ -14,7 +14,7 @@ export class User {
   @Field()
   lastName: string
 
-  @Field()
+  @Field(() => String, { nullable: true })
   password: string
 
   @Field()

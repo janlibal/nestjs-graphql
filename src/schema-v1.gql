@@ -17,18 +17,26 @@ type Role {
 }
 
 type User {
-  id: String!
+  id: String
   firstName: String!
   lastName: String!
-  password: String!
+  password: String
   email: String!
   provider: String!
   status: Status
   role: Role
 }
 
+type LoginResponseDto {
+  token: String!
+  refreshToken: String!
+  tokenExpires: Float!
+  user: User
+}
+
 type Query {
   hello(name: String!): HelloResponseDto!
+  hello2(name: String!): HelloResponseDto!
   findbyFirstNames(firstNames: [String!]!): [User!]!
   findOne(id: String!): User
   findAll: [User!]
@@ -37,6 +45,7 @@ type Query {
 
 type Mutation {
   createUser(input: CreateUserInput!): User!
+  login(input: AuthEmailLoginInput!): LoginResponseDto!
 }
 
 input CreateUserInput {
@@ -44,4 +53,9 @@ input CreateUserInput {
   lastName: String!
   password: String!
   email: String!
+}
+
+input AuthEmailLoginInput {
+  password: String
+  email: String
 }

@@ -1,5 +1,4 @@
 import { InputType, Field } from '@nestjs/graphql'
-import { AuthProvidersEnum } from '../enums/auth.provider.enum'
 
 @InputType()
 export class CreateUserInput {
