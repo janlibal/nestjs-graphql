@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common'
 import { User } from '@prisma/client'
-import { User as UserModel } from './model/user.model'
-import { UserRepository } from './user.repository'
-import { AuthProvidersEnum } from './enums/auth.provider.enum'
-import { CreateUserInput } from './inputs/create.user.intput'
-import { StatusEnum } from '../../src/statuses/status.enum'
+import { User as UserModel } from '../model/user.model'
+import { UserRepository } from '../repositories/user.repository'
+import { AuthProvidersEnum } from '../enums/auth.provider.enum'
+import { CreateUserInput } from '../inputs/create.user.intput'
+import { StatusEnum } from '../../statuses/status.enum'
 import { NullableType } from 'src/utils/types/nullable.type'
 import { RoleEnum } from 'src/roles/role.enum'
-import { PaginationArgs } from './inputs/pagination.args'
+import { PaginationArgs } from '../inputs/pagination.args'
 
 @Injectable()
 export class UserService {

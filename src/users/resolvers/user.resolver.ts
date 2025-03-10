@@ -1,10 +1,10 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql'
-import { UserService } from './user.service'
+import { UserService } from '../services/user.service'
 import { User } from '@prisma/client'
-import { User as UserModel } from './model/user.model'
-import { CreateUserInput } from './inputs/create.user.intput'
+import { User as UserModel } from '../model/user.model'
+import { CreateUserInput } from '../inputs/create.user.intput'
 import { NullableType } from 'src/utils/types/nullable.type'
-import { PaginationArgs } from './inputs/pagination.args'
+import { PaginationArgs } from '../inputs/pagination.args'
 
 @Resolver('User')
 export class UserResolver {
