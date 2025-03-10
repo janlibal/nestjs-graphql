@@ -6,6 +6,7 @@ import { API_PREFIX } from './shared/constants/global.constants'
 import { ValidationPipe } from '@nestjs/common'
 import { PrismaClientExceptionFilter } from 'nestjs-prisma'
 import { PinoLoggerService } from './logger/adapters/pino.logger.service'
+import { GraphQLExceptionFilter } from './filters/http-exception.filter'
 
 async function bootstrap() {
   const app = await NestFactory.create(GlobalModule)
@@ -21,7 +22,10 @@ async function bootstrap() {
 
   // Prisma Client Exception Filter for unhandled exceptions
   const { httpAdapter } = app.get(HttpAdapterHost)
-  app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter))
+  app.useGlobalFilters(
+    new PrismaClientExceptionFilter(httpAdapter),
+    new GraphQLExceptionFilter(),
+  )
 
   const configService = app.get(ConfigService<AllConfigType>)
 
