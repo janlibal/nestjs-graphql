@@ -5,7 +5,7 @@ import { PrismaService } from 'src/database/prisma.service'
 import { UserMapper } from './mapper/user.mapper'
 import { NullableType } from 'src/utils/types/nullable.type'
 import { PaginationArgs } from './inputs/pagination.args'
-import { PaginatedUsers } from './inputs/paginated.users'
+//import { PaginatedUsers } from './inputs/paginated.users'
 
 @Injectable()
 export class UserRepository {
