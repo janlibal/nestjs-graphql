@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import { User } from '@prisma/client'
-import { User as UserModel } from './model/user.model'
+import { User as UserModel } from '../model/user.model'
 import { PrismaService } from 'src/database/prisma.service'
-import { UserMapper } from './mapper/user.mapper'
+import { UserMapper } from '../mapper/user.mapper'
 import { NullableType } from 'src/utils/types/nullable.type'
-import { PaginationArgs } from './inputs/pagination.args'
+import { PaginationArgs } from '../inputs/pagination.args'
 //import { PaginatedUsers } from './inputs/paginated.users'
 
 @Injectable()

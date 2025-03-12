@@ -12,6 +12,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const status = exception.getStatus();
     const errorResponse = exception.getResponse();
 
+    const stackTrace = exception.stack
+
     // Handle GraphQL error format
     if (this.isGraphQLError(errorResponse)) {
       // Handle GraphQL errors in a specific way
@@ -23,6 +25,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       statusCode: status,
       timestamp: new Date().toISOString(),
       path: request.url,
+      stack: stackTrace,
       message: this.extractErrorMessage(errorResponse),
     });
   }
@@ -39,6 +42,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       message: error.message,
       path: error.path,
       locations: error.locations,
+      stack: error.stack
     }));
 
     response.status(status).json({
