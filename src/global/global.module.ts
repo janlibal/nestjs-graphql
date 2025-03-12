@@ -20,7 +20,7 @@ import { CqrsModule } from '@nestjs/cqrs'
     UserModule,
     GraphqlConfigModule,
     AuthModule,
-    CqrsModule
+    CqrsModule,
   ],
   providers: [GqlAuthGuard],
 })

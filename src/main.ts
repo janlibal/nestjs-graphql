@@ -3,10 +3,8 @@ import { GlobalModule } from './global/global.module'
 import { ConfigService } from '@nestjs/config'
 import { AllConfigType } from './config/config/config.type'
 import { API_PREFIX } from './shared/constants/global.constants'
-import { ValidationPipe } from '@nestjs/common'
 import { PinoLoggerService } from './logger/adapters/pino.logger.service'
 import { HttpExceptionFilter } from './filters/http-exception.filter'
-import { useContainer } from 'class-validator'
 
 async function bootstrap() {
   const app = await NestFactory.create(GlobalModule)
@@ -14,20 +12,10 @@ async function bootstrap() {
   logger.setContext('main')
   app.useLogger(logger)
 
-  /*app.useGlobalPipes(new ValidationPipe({
-    transform: true,  // Automatically transform the input into DTO instances
-    whitelist: true,  // Strip properties not in the DTO
-    forbidNonWhitelisted: true,  // Throw an error if non-whitelisted properties are found
-  }));*/
-
-  // Register the custom exception filter globally
- // app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalFilters(new HttpExceptionFilter())
 
   // enable shutdown hook
   app.enableShutdownHooks()
-
-  // Enable global validation pipes with transformation
-  //useContainer(app.select(GlobalModule), { fallbackOnErrors: true });
 
   const configService = app.get(ConfigService<AllConfigType>)
 
