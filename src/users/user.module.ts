@@ -12,7 +12,15 @@ import { GetUsersHandler } from './handlers/get-users.handler'
 
 @Module({
   imports: [PrismaModule, CqrsModule],
-  providers: [UserService,UserResolver,UserRepository,PrismaService, CreateUserHandler, GetByNameHandler, GetUserHandler, GetUsersHandler
+  providers: [
+    UserService,
+    UserResolver,
+    UserRepository,
+    PrismaService,
+    CreateUserHandler,
+    GetByNameHandler,
+    GetUserHandler,
+    GetUsersHandler,
   ],
 })
 export class UserModule {}

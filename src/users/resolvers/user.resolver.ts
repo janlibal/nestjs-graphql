@@ -25,7 +25,10 @@ export class UserResolver {
   }
 
   @Query(() => [UserModel])
-  async findbyFirstNames(@Args('firstNames', { type: () => [String] })firstNames: User['firstName'][],): Promise<User[]> {
+  async findbyFirstNames(
+    @Args('firstNames', { type: () => [String] })
+    firstNames: User['firstName'][],
+  ): Promise<User[]> {
     return await this.queryBus.execute(new GetByNameQuery(firstNames))
   }
 
@@ -35,7 +38,9 @@ export class UserResolver {
   }
 
   @Query(() => UserModel, { nullable: true })
-  async findOne(@Args('id', { type: () => String }) id: User['id']): Promise<NullableType<UserModel>> {
+  async findOne(
+    @Args('id', { type: () => String }) id: User['id'],
+  ): Promise<NullableType<UserModel>> {
     return await this.queryBus.execute(new GetUserQuery(id))
   }
 }

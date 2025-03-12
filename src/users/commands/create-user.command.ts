@@ -1,7 +1,5 @@
-import { CreateUserInput } from "../inputs/create.user.intput";
+import { CreateUserInput } from '../inputs/create.user.intput'
 
 export class CreateUserCommand {
-    constructor(
-      public readonly input: CreateUserInput
-        ) {}
-  }
+  constructor(public readonly input: CreateUserInput) {}
+}

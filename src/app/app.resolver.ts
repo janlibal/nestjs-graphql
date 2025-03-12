@@ -3,7 +3,7 @@ import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql'
 import { ValidateNamePipe } from './pipes/validate-name.pipe'
 import { UseGuards } from '@nestjs/common'
 import { GqlAuthGuard } from 'src/auth/guards/gpl-auth.guard'
-import { CustomGraphQLError } from 'src/filters/custom.error'
+import { NotFoundException } from '@nestjs/common'
 
 @Resolver('App')
 export class AppResolver {
@@ -26,7 +26,7 @@ export class AppResolver {
     const data = {
       message: 'Hello World - ' + name,
     }
-    if (data) throw new CustomGraphQLError('Data full!', 'NO_CONTENT')
+    if (data) throw new NotFoundException('Data full')
     return data
   }
 }

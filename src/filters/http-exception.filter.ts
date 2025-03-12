@@ -1,66 +1,75 @@
-import { ExceptionFilter, Catch, ArgumentsHost, HttpException } from '@nestjs/common';
-import { Request, Response } from 'express';
-import { GraphQLError } from 'graphql';
+import {
+  Catch,
+  ExceptionFilter,
+  HttpException,
+  ArgumentsHost,
+  Logger,
+  HttpStatus,
+} from '@nestjs/common'
+import { Request, Response } from 'express'
+import { GqlArgumentsHost, GqlExceptionFilter } from '@nestjs/graphql'
+import { GraphQLResolveInfo } from 'graphql'
 
-@Catch(HttpException)
-export class HttpExceptionFilter implements ExceptionFilter {
+@Catch()
+export class HttpExceptionFilter
+  implements ExceptionFilter, GqlExceptionFilter
+{
   catch(exception: HttpException, host: ArgumentsHost) {
-    const context = host.switchToHttp();
-    const response = context.getResponse<Response>();
-    const request = context.getRequest<Request>();
+    const ctx = host.switchToHttp()
+    const response = ctx.getResponse<Response>()
+    const request = ctx.getRequest<Request>()
 
-    const status = exception.getStatus();
-    const errorResponse = exception.getResponse();
+    const gqlHost = GqlArgumentsHost.create(host)
+    const info = gqlHost.getInfo<GraphQLResolveInfo>()
 
-    const stackTrace = exception.stack
+    const status = exception.getStatus
+      ? exception.getStatus()
+      : HttpStatus.INTERNAL_SERVER_ERROR
 
-    // Handle GraphQL error format
-    if (this.isGraphQLError(errorResponse)) {
-      // Handle GraphQL errors in a specific way
-      return this.handleGraphQLError(errorResponse, response, status, request);
+    if (status === HttpStatus.INTERNAL_SERVER_ERROR) {
+      // tslint:disable-next-line: no-console
+      console.error(exception)
     }
 
-    // Handle REST/HTTP error format
-    response.status(status).json({
+    const errorResponse = {
       statusCode: status,
-      timestamp: new Date().toISOString(),
-      path: request.url,
-      stack: stackTrace,
-      message: this.extractErrorMessage(errorResponse),
-    });
-  }
+      timeStamp: new Date().toLocaleDateString(),
+      error:
+        status !== HttpStatus.INTERNAL_SERVER_ERROR
+          ? exception.message || exception.message || null
+          : 'Internal server error',
+    }
 
-  // Check if the error response is from GraphQL
-  private isGraphQLError(errorResponse: any): boolean {
-    return errorResponse && Array.isArray(errorResponse.errors);
-  }
+    // This is for REST petitions
+    if (request) {
+      const error = {
+        ...errorResponse,
+        path: request.url,
+        method: request.method,
+      }
 
-  // Handle GraphQL error format
-  private handleGraphQLError(errorResponse: any, response: Response, status: number, request: Request) {
-    // For GraphQL, we return an array of errors, which we can format accordingly
-    const errorMessages = errorResponse.errors.map((error: GraphQLError) => ({
-      message: error.message,
-      path: error.path,
-      locations: error.locations,
-      stack: error.stack
-    }));
+      Logger.error(
+        `${request.method} ${request.url}`,
+        JSON.stringify(error),
+        'ExceptionFilter',
+      )
 
-    response.status(status).json({
-      statusCode: status,
-      timestamp: new Date().toISOString(),
-      path: request.url,
-      errors: errorMessages, // GraphQL errors
-    });
-  }
-
-  // Extract the message from the error response (for REST or non-GraphQL errors)
-  private extractErrorMessage(errorResponse: any): string {
-    if (typeof errorResponse === 'string') {
-      return errorResponse; // For general string error responses
-    } else if (errorResponse && errorResponse.message) {
-      return errorResponse.message; // For errors like validation failures
+      response.status(status).json(errorResponse)
     } else {
-      return 'Internal server error';
+      // This is for GRAPHQL petitions
+      const error = {
+        ...errorResponse,
+        type: info.parentType,
+        field: info.fieldName,
+      }
+
+      Logger.error(
+        `${info.parentType} ${info.fieldName}`,
+        JSON.stringify(error),
+        'ExceptionFilter!!!!!!!!!!',
+      )
+
+      return exception
     }
   }
 }

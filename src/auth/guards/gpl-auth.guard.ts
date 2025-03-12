@@ -5,7 +5,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common'
 import { GqlExecutionContext } from '@nestjs/graphql'
-import { CustomGraphQLError } from 'src/filters/custom.error'
 
 @Injectable()
 export class GqlAuthGuard implements CanActivate {
@@ -20,8 +19,7 @@ export class GqlAuthGuard implements CanActivate {
     const authorization = ctx.headers.authorization
 
     if (!authorization) {
-      throw new CustomGraphQLError('No authorization!', 'UNAUTHORIZED')
-      //throw new UnauthorizedException('No authorization!')
+      throw new UnauthorizedException('No authorization!')
     }
 
     if (
