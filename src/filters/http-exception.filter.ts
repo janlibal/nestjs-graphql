@@ -1,68 +1,62 @@
-import {
-  Catch,
-  ExceptionFilter,
-  ArgumentsHost,
-  HttpException,
-} from '@nestjs/common'
-import { GqlExceptionFilter } from '@nestjs/graphql'
-import { GraphQLError } from 'graphql'
-import { ApolloError } from 'apollo-server-express'
+import { ExceptionFilter, Catch, ArgumentsHost, HttpException } from '@nestjs/common';
+import { Request, Response } from 'express';
+import { GraphQLError } from 'graphql';
 
-@Catch()
-export class GraphQLExceptionFilter implements GqlExceptionFilter {
-  catch(exception: any, host: ArgumentsHost) {
-    // Log the error for debugging purposes (you can also use a logging service)
-
-    const stack = exception.stack
-      ? exception.stack.split('\n')
-      : exception.stack
-
-    const ctx = host.switchToHttp()
-
-    const errorObj = {
-      //path: request.url,
-      code: exception.extensions.code,
-      timestamp: new Date().toISOString(),
-      stack: stack && stack.length > 2 ? `${stack[0]}  ${stack[1]}` : stack,
-    }
-
-    console.error('EXCEPTION: ', errorObj)
-
-    // If it's a custom ApolloError (or any specific error type)
-    if (exception instanceof ApolloError) {
-      return new GraphQLError(exception.message, {
-        extensions: {
-          code: exception.extensions.code,
-          timestamp: new Date().toISOString(),
-          additionalInfo:
-            exception.extensions.additionalInfo || 'Some extra info', // You can add custom fields here
-        },
-      })
-    }
-
-    // If it's another kind of error, you can customize it too
-    return new GraphQLError('An unexpected error occurred', {
-      extensions: {
-        code: 'INTERNAL_SERVER_ERROR', // You can provide your own code here
-      },
-    })
-  }
-}
-
-/*@Catch(HttpException)
-export class HttpExceptionFilter implements GqlExceptionFilter {
+@Catch(HttpException)
+export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
-    const response = exception.getResponse();
-    const statusCode = exception.getStatus();
+    const context = host.switchToHttp();
+    const response = context.getResponse<Response>();
+    const request = context.getRequest<Request>();
 
-    // Return the GraphQL error response with the correct status code
-    return new GraphQLError(response['message'], {
-      extensions: {
-        code: response['code'] || 'INTERNAL_SERVER_ERROR',
-        timestamp: new Date().toISOString(),
-        statusCode: statusCode, // Send the correct status code
-        details: response['message'],
-      },
+    const status = exception.getStatus();
+    const errorResponse = exception.getResponse();
+
+    // Handle GraphQL error format
+    if (this.isGraphQLError(errorResponse)) {
+      // Handle GraphQL errors in a specific way
+      return this.handleGraphQLError(errorResponse, response, status, request);
+    }
+
+    // Handle REST/HTTP error format
+    response.status(status).json({
+      statusCode: status,
+      timestamp: new Date().toISOString(),
+      path: request.url,
+      message: this.extractErrorMessage(errorResponse),
     });
   }
-}*/
+
+  // Check if the error response is from GraphQL
+  private isGraphQLError(errorResponse: any): boolean {
+    return errorResponse && Array.isArray(errorResponse.errors);
+  }
+
+  // Handle GraphQL error format
+  private handleGraphQLError(errorResponse: any, response: Response, status: number, request: Request) {
+    // For GraphQL, we return an array of errors, which we can format accordingly
+    const errorMessages = errorResponse.errors.map((error: GraphQLError) => ({
+      message: error.message,
+      path: error.path,
+      locations: error.locations,
+    }));
+
+    response.status(status).json({
+      statusCode: status,
+      timestamp: new Date().toISOString(),
+      path: request.url,
+      errors: errorMessages, // GraphQL errors
+    });
+  }
+
+  // Extract the message from the error response (for REST or non-GraphQL errors)
+  private extractErrorMessage(errorResponse: any): string {
+    if (typeof errorResponse === 'string') {
+      return errorResponse; // For general string error responses
+    } else if (errorResponse && errorResponse.message) {
+      return errorResponse.message; // For errors like validation failures
+    } else {
+      return 'Internal server error';
+    }
+  }
+}
