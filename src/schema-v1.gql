@@ -38,13 +38,8 @@ type Query {
   hello(name: String!): HelloResponseDto!
   hello2(name: String!): HelloResponseDto!
   findbyFirstNames(firstNames: [String!]!): [User!]!
-  findOne(id: String!): User
   findAll: [User!]
-<<<<<<< HEAD
-  findAllPaginated(page: Int! = 1, limit: Int! = 10): [User!]!
-=======
   findOne(id: String!): User
->>>>>>> 4cc21f8 (Update cqrs)
 }
 
 type Mutation {
