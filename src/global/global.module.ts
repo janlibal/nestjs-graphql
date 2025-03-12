@@ -8,6 +8,7 @@ import { GraphqlConfigModule } from 'src/graphql/graphql-config.module'
 import { GlobalConfigModule } from 'src/config/config/global-config.module'
 import { AuthModule } from 'src/auth/auth.module'
 import { GqlAuthGuard } from 'src/auth/guards/gpl-auth.guard'
+import { CqrsModule } from '@nestjs/cqrs'
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { GqlAuthGuard } from 'src/auth/guards/gpl-auth.guard'
     UserModule,
     GraphqlConfigModule,
     AuthModule,
+    CqrsModule
   ],
   providers: [GqlAuthGuard],
 })

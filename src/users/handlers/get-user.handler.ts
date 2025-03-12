@@ -10,8 +10,14 @@ import { UserService } from '../services/user.service';
 export class GetUserHandler implements IQueryHandler<GetUserQuery> {
   constructor(private readonly userService: UserService) {}
 
+<<<<<<< HEAD
   // Asynchronous execution
   async execute(query: GetUserQuery): Promise<any> {
     return this.userService.getUserById(query.id);  // This is async and returns a Promise
+=======
+  async execute(query: GetUserQuery): Promise<NullableType<UserModel>> {
+    const { id } = query
+    return await this.userService.findById(id)
+>>>>>>> 4cc21f8 (Update cqrs)
   }
 }
