@@ -5,6 +5,8 @@ import { AllConfigType } from './config/config/config.type'
 import { API_PREFIX } from './shared/constants/global.constants'
 import { PinoLoggerService } from './logger/adapters/pino.logger.service'
 import { HttpExceptionFilter } from './filters/http-exception.filter'
+import { ValidationPipe } from '@nestjs/common'
+import validationOptions from './utils/validation.options'
 
 async function bootstrap() {
   const app = await NestFactory.create(GlobalModule)
@@ -13,6 +15,9 @@ async function bootstrap() {
   app.useLogger(logger)
 
   app.useGlobalFilters(new HttpExceptionFilter())
+
+  app.useGlobalPipes(new ValidationPipe(validationOptions))
+
 
   // enable shutdown hook
   app.enableShutdownHooks()

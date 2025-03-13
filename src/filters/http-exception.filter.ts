@@ -66,7 +66,7 @@ export class HttpExceptionFilter
       Logger.error(
         `${info.parentType} ${info.fieldName}`,
         JSON.stringify(error),
-        'ExceptionFilter!!!!!!!!!!',
+        'GraphQL ExceptionFilter',
       )
 
       return exception

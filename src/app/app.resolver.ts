@@ -26,7 +26,7 @@ export class AppResolver {
     const data = {
       message: 'Hello World - ' + name,
     }
-    if (data) throw new NotFoundException('Data full')
+    if (!data) throw new NotFoundException('Data full')
     return data
   }
 }

@@ -1,16 +1,12 @@
 export const formatGraphQLError = (error: any) => {
-  const stackTrace = error.extensions.stackTrace
-    ? error.extensions.stackTrace.split('\n')
-    : error.extensions.stackTrace
-  const stack = error.stack ? error.stack.split('\n') : error.stack
   return {
-    //message: 'Message from custom formatter'
-    path: error.url,
-    message: error.message,
-    code: error.extensions?.code,
     timestamp: new Date().toISOString(),
-    //details: error.extensions?.exception?.message,
-    //stackTrace: error.stack
-    stack1: stack && stack.length > 2 ? `${stack[0]}  ${stack[1]}` : stack,
+    path: error.path,
+    locations: error.locations,
+    code: error.extensions.status,
+    message: error.extensions.originalError.message,
+    error: error.extensions.originalError.error,
+    statusCode: error.extensions.originalError.statusCode,
+    stack: error.extensions.stacktrace.slice(0, 2)
   }
 }

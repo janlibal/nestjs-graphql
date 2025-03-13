@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common'
 import { User } from 'src/users/model/user.model'
 import { JwtService } from '@nestjs/jwt'
-import { AuthEmailLoginInput } from './inputs/login-user.input'
+
 import { fakeUser } from './cache/db'
 import crypto from 'src/utils/crypto'
 import { Session } from 'src/session/session.model'
 import ms from 'ms'
 import { LoginResponseDto } from './dto/login-response.dto'
+import { AuthEmailLoginInput } from './inputs/login-user.input'
+
 
 @Injectable()
 export class AuthService {
