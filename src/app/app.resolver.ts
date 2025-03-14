@@ -8,9 +8,7 @@ import { NotFoundException } from '@nestjs/common'
 @Resolver('App')
 export class AppResolver {
   @Query(() => HelloResponseDto)
-  async hello(
-    @Args('name', ValidateNamePipe) name: String,
-  ): Promise<HelloResponseDto> {
+  async hello(@Args('name', new ValidateNamePipe()) name: String,): Promise<HelloResponseDto> {
     const data = {
       message: 'Hello World! ' + name,
     }
@@ -19,10 +17,7 @@ export class AppResolver {
 
   @UseGuards(GqlAuthGuard)
   @Query(() => HelloResponseDto)
-  async hello2(
-    @Args('name', ValidateNamePipe) name: String,
-    @Context() context: any,
-  ): Promise<HelloResponseDto> {
+  async hello2(@Args('name', new ValidateNamePipe()) name: String,@Context() context: any,): Promise<HelloResponseDto> {
     const data = {
       message: 'Hello World - ' + name,
     }

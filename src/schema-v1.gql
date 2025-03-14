@@ -45,7 +45,6 @@ type Query {
 type Mutation {
   createUser(input: CreateUserInput!): User!
   login(input: AuthEmailLoginInput!): LoginResponseDto!
-  signin(input: AuthEmailLoginInput!): LoginResponseDto!
 }
 
 input CreateUserInput {
