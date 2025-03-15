@@ -4,7 +4,7 @@ import * as crypto from 'crypto'
 import * as bcrypt from 'bcrypt'
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util'
 
-async function hashPassword(password: string) {
+async function hashPassword(password: string): Promise<string> {
   const salt = await bcrypt.genSalt()
   return await bcrypt.hash(password, salt)
 }

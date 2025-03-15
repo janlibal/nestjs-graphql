@@ -41,6 +41,10 @@ export class UserRepository {
     return await UserMapper.toDomain(entity)
   }
 
+  async findByEmail(email: User['email']): Promise<NullableType<User>> {
+    return await this.prisma.user.findUnique({ where: { email } })
+  }
+
   async save(data: UserModel): Promise<UserModel> {
     const persistenceModel = await UserMapper.toPersistence(data)
     const newEntity = await this.prisma.user.create({ data: persistenceModel })

@@ -1,7 +1,8 @@
-import { Field, ObjectType } from '@nestjs/graphql'
+import { Field, InputType, ObjectType } from '@nestjs/graphql'
+import { Role } from './role.model'
 
-@ObjectType()
-export class RoleInput {
+@InputType()
+export class RoleInput implements Role {
   @Field(() => Number)
   id: number
 }

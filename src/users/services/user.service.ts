@@ -1,4 +1,9 @@
-import { Injectable } from '@nestjs/common'
+import {
+  ConflictException,
+  HttpStatus,
+  Injectable,
+  UnprocessableEntityException,
+} from '@nestjs/common'
 import { User } from '@prisma/client'
 import { User as UserModel } from '../model/user.model'
 import { UserRepository } from '../repositories/user.repository'
@@ -8,6 +13,9 @@ import { StatusEnum } from '../../statuses/status.enum'
 import { NullableType } from 'src/utils/types/nullable.type'
 import { RoleEnum } from 'src/roles/role.enum'
 import { PaginationArgs } from '../inputs/pagination.args'
+import crypto from 'src/utils/crypto'
+import { Role } from 'src/roles/role.model'
+import { Status } from 'src/statuses/status.model'
 
 @Injectable()
 export class UserService {
@@ -26,18 +34,48 @@ export class UserService {
   }
 
   async createUser(createUserInput: CreateUserInput): Promise<UserModel> {
+    let email: string | null = null
+    if (createUserInput.email) {
+      const userObject = await this.userRepository.findByEmail(
+        createUserInput.email,
+      )
+      if (userObject) {
+        throw new ConflictException('User already exists')
+      }
+      email = createUserInput.email
+    }
+
+    let password: string | undefined = undefined
+    if (createUserInput.password) {
+      password = await crypto.hashPassword(createUserInput.password)
+    }
+
+    let role: Role | undefined = undefined
+    const roleObject = Object.values(RoleEnum)
+      .map(String)
+      .includes(String(createUserInput.role.id))
+    if (!roleObject) {
+      throw new UnprocessableEntityException('Role does not exist')
+    }
+    role = { id: createUserInput.role.id }
+
+    let status: Status | undefined = undefined
+    const statusObject = Object.values(StatusEnum)
+      .map(String)
+      .includes(String(createUserInput.role.id))
+    if (!statusObject) {
+      throw new UnprocessableEntityException('Status does not exist')
+    }
+    status = { id: createUserInput.role.id }
+
     const clonedPayload: UserModel = {
       firstName: createUserInput.firstName,
       lastName: createUserInput.lastName,
-      password: createUserInput.password,
-      email: createUserInput.email,
-      provider: AuthProvidersEnum.facebook,
-      role: {
-        id: RoleEnum.user,
-      },
-      status: {
-        id: StatusEnum.inactive,
-      },
+      password: password,
+      email: email,
+      provider: AuthProvidersEnum.email,
+      role: role,
+      status: status,
     }
     return await this.userRepository.save(clonedPayload)
   }
