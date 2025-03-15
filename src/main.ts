@@ -18,7 +18,6 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe(validationOptions))
 
-
   // enable shutdown hook
   app.enableShutdownHooks()
 

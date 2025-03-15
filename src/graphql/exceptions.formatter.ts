@@ -7,6 +7,6 @@ export const formatGraphQLError = (error: any) => {
     message: error.extensions.originalError.message,
     error: error.extensions.originalError.error,
     statusCode: error.extensions.originalError.statusCode,
-    stack: error.extensions.stacktrace.slice(0, 2)
+    stack: error.extensions.stacktrace.slice(0, 2),
   }
 }
