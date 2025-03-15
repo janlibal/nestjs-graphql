@@ -9,7 +9,6 @@ import ms from 'ms'
 import { LoginResponseDto } from './dto/login-response.dto'
 import { AuthEmailLoginInput } from './inputs/login-user.input'
 
-
 @Injectable()
 export class AuthService {
   constructor(private jwtService: JwtService) {}

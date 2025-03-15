@@ -3,43 +3,62 @@ import { Injectable, PipeTransform, BadRequestException } from '@nestjs/common'
 @Injectable()
 export class ValidateUserInputPipe implements PipeTransform {
   transform(value: any) {
-    // Perform input transformations here (e.g., convert strings to lowercase)
     const transformedValue = this.transformInput(value)
-
-    // Validate the transformed input here
-    this.validateInput(transformedValue)
-
-    return transformedValue
+    return this.validateInput(transformedValue)
+    //return transformedValue
   }
 
   private transformInput(value: any) {
     return {
       ...value,
-      firstName: value.firstName.trim().toLowerCase(),
-      lastName: value.lastName.trim().toLowerCase(),
-      email: value.email.trim(),
+      firstName: value.firstName.trim(),
+      lastName: value.lastName.trim(),
+      email: value.email.trim().toLowerCase(),
       password: value.password.trim(),
     }
   }
 
-  // Custom validation logic
   private validateInput(value: any) {
     const errors = []
 
-    if (typeof value.firstName !== 'string') {
-      errors.push('First name must be a string.')
+    if (typeof value.firstName !== 'string' || value.firstName.trim() === '') {
+      errors.push('Firstname cannot be empty and must be a string.')
     }
 
-    if (typeof value.lastName !== 'string') {
-      errors.push('Last name must be a string.')
+    if (value.firstName.length < 2) {
+      errors.push('Firstname must be longer than 1 character.')
     }
 
-    if (typeof value.password !== 'string') {
-      errors.push('Password must be a string.')
+    if (this.isValidChars(value.firstName)) {
+      errors.push('Firstname cannot contain special characters or numbers.')
+    }
+
+    if (typeof value.lastName !== 'string' || value.lastName.trim() === '') {
+      errors.push('Lastname cannot be empty and must be a string.')
+    }
+
+    if (value.lastName.length < 2) {
+      errors.push('Lastname must be longer than 1 character.')
+    }
+
+    if (this.isValidChars(value.lastName)) {
+      errors.push('Lastname cannot contain special characters or numbers.')
+    }
+
+    if (value.password.trim() === '') {
+      errors.push('Password cannot be empty.')
     }
 
     if (value.password.length < 6) {
       errors.push('Password must be at least 6 characters long.')
+    }
+
+    if (value.password.length > 20) {
+      errors.push('Passwword can contain 20 characters at the most.')
+    }
+
+    if (!this.isPwdWeak(value.password)) {
+      errors.push('Password is too weak')
     }
 
     if (typeof value.email === null) {
@@ -55,9 +74,18 @@ export class ValidateUserInputPipe implements PipeTransform {
     }
   }
 
-  // Simple email validation logic
   private isValidEmail(email: string) {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
     return emailRegex.test(email)
+  }
+
+  private isValidChars(name: string) {
+    const invalidChars = /[^a-zA-Z\s]/
+    return invalidChars.test(name)
+  }
+
+  private isPwdWeak(password: string) {
+    const weakPwd = /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/
+    return weakPwd.test(password)
   }
 }

@@ -8,7 +8,9 @@ import { ValidateLoginPipe } from './pipes/validate-login.pipe'
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
   @Mutation(() => LoginResponseDto)
-  async login(@Args('input', new ValidateLoginPipe()) input: AuthEmailLoginInput): Promise<LoginResponseDto> {
+  async login(
+    @Args('input', new ValidateLoginPipe()) input: AuthEmailLoginInput,
+  ): Promise<LoginResponseDto> {
     return await this.authService.validateLogin(input)
   }
 }

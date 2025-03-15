@@ -11,6 +11,7 @@ import { CreateUserInput } from '../inputs/create.user.intput'
 import { NullableType } from 'src/utils/types/nullable.type'
 import { User } from '@prisma/client'
 import { GetByNameQuery } from '../queries/get-byName.query'
+import { ValidateUserInputPipe } from '../pipes/validate-user-input.pipe'
 
 @Resolver('User')
 export class UserResolver {
@@ -20,7 +21,9 @@ export class UserResolver {
   ) {}
 
   @Mutation(() => UserModel)
-  async createUser(@Args('input') input: CreateUserInput): Promise<UserModel> {
+  async createUser(
+    @Args('input', new ValidateUserInputPipe()) input: CreateUserInput,
+  ): Promise<UserModel> {
     return this.commandBus.execute(new CreateUserCommand(input))
   }
 
