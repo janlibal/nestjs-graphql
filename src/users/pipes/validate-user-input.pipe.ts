@@ -4,8 +4,8 @@ import { Injectable, PipeTransform, BadRequestException } from '@nestjs/common'
 export class ValidateUserInputPipe implements PipeTransform {
   transform(value: any) {
     const transformedValue = this.transformInput(value)
-    return this.validateInput(transformedValue)
-    //return transformedValue
+    this.validateInput(transformedValue)
+    return transformedValue
   }
 
   private transformInput(value: any) {

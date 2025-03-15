@@ -52,6 +52,16 @@ input CreateUserInput {
   lastName: String!
   password: String!
   email: String!
+  role: RoleInput
+  status: StatusInput
+}
+
+input RoleInput {
+  id: Float!
+}
+
+input StatusInput {
+  id: Float!
 }
 
 input AuthEmailLoginInput {
