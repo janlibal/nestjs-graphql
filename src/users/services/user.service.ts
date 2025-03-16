@@ -10,12 +10,12 @@ import { UserRepository } from '../repositories/user.repository'
 import { AuthProvidersEnum } from '../enums/auth.provider.enum'
 import { CreateUserInput } from '../inputs/create.user.intput'
 import { StatusEnum } from '../../statuses/status.enum'
-import { NullableType } from 'src/utils/types/nullable.type'
-import { RoleEnum } from 'src/roles/role.enum'
+import { NullableType } from '../../utils/types/nullable.type'
+import { RoleEnum } from '../../roles/role.enum'
 import { PaginationArgs } from '../inputs/pagination.args'
-import crypto from 'src/utils/crypto'
-import { Role } from 'src/roles/role.model'
-import { Status } from 'src/statuses/status.model'
+import crypto from '../../utils/crypto'
+import { Role } from '../../roles/role.model'
+import { Status } from '../../statuses/status.model'
 
 @Injectable()
 export class UserService {
@@ -30,7 +30,7 @@ export class UserService {
   }
 
   async findById(id: User['id']): Promise<NullableType<UserModel>> {
-    return await this.userRepository.findOne(id)
+    return await this.userRepository.findById(id)
   }
 
   async findByEmail(email: User['email']): Promise<NullableType<UserModel>> {

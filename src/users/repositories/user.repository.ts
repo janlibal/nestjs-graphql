@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common'
 import { User } from '@prisma/client'
 import { User as UserModel } from '../model/user.model'
-import { PrismaService } from 'src/database/prisma.service'
+import { PrismaService } from '../../database/prisma.service'
 import { UserMapper } from '../mapper/user.mapper'
-import { NullableType } from 'src/utils/types/nullable.type'
+import { NullableType } from '../../utils/types/nullable.type'
 import { PaginationArgs } from '../inputs/pagination.args'
 //import { PaginatedUsers } from './inputs/paginated.users'
 
@@ -36,9 +36,9 @@ export class UserRepository {
     )
   }
 
-  async findOne(id: User['id']): Promise<NullableType<UserModel>> {
+  async findById(id: User['id']): Promise<NullableType<UserModel>> {
     const entity = await this.prisma.user.findUnique({ where: { id } })
-    return entity ? UserMapper.toDomain(entity) : null;
+    return entity ? UserMapper.toDomain(entity) : null
   }
 
   async findByEmail(email: User['email']): Promise<NullableType<UserModel>> {
@@ -64,5 +64,13 @@ export class UserRepository {
         return await UserMapper.toDomain(userEntity)
       }),
     )
+  }
+
+  async remove(id: User['id']): Promise<void> {
+    await this.prisma.user.delete({
+      where: {
+        id: id,
+      },
+    })
   }
 }

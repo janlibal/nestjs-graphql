@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common'
+import {
+  Injectable,
+  UnauthorizedException,
+  UnprocessableEntityException,
+} from '@nestjs/common'
 import { User as UserModel } from 'src/users/model/user.model'
 import { JwtService } from '@nestjs/jwt'
 import crypto from 'src/utils/crypto'
@@ -13,24 +17,31 @@ import { AuthEmailRegisterInput } from './inputs/auth-email-register.input'
 import { RoleEnum } from 'src/roles/role.enum'
 import { StatusEnum } from 'src/statuses/status.enum'
 
-
-
 @Injectable()
 export class AuthService {
-  constructor(private jwtService: JwtService, private userService: UserService, private configService: ConfigService) {}
-  async validateLogin(loginInput: AuthEmailLoginInput,): Promise<LoginResponseDto> {
+  constructor(
+    private jwtService: JwtService,
+    private userService: UserService,
+    private configService: ConfigService,
+  ) {}
+  async validateLogin(
+    loginInput: AuthEmailLoginInput,
+  ): Promise<LoginResponseDto> {
     const user = await this.userService.findByEmail(loginInput.email)
 
-    if(!user) throw new UnauthorizedException('Unauthorized!')
-    if(user.provider !== AuthProvidersEnum.email) throw new UnprocessableEntityException(`Has to login via provider ${user.provider}`)
-    if(!user.password) throw new UnprocessableEntityException('Missing password')
+    if (!user) throw new UnauthorizedException('Unauthorized!')
+    if (user.provider !== AuthProvidersEnum.email)
+      throw new UnprocessableEntityException(
+        `Has to login via provider ${user.provider}`,
+      )
+    if (!user.password)
+      throw new UnprocessableEntityException('Missing password')
 
     const isValidPassword = await crypto.comparePasswords(
       loginInput.password,
       user.password,
     )
-    if(!isValidPassword) throw new UnauthorizedException('Unauthorized!')
-
+    if (!isValidPassword) throw new UnauthorizedException('Unauthorized!')
 
     const hash = await crypto.makeHash()
 
@@ -49,7 +60,7 @@ export class AuthService {
     }
   }
 
-  async register(registerInput: AuthEmailRegisterInput,): Promise<boolean> {
+  async register(registerInput: AuthEmailRegisterInput): Promise<boolean> {
     const user = await this.userService.createUser({
       firstName: registerInput.firstName,
       lastName: registerInput.lastName,

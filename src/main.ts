@@ -31,22 +31,45 @@ async function bootstrap() {
   const dbUrl = configService.getOrThrow('app.dbUrl', { infer: true })
   const apiPrefix = configService.getOrThrow('app.apiPrefix', { infer: true })
 
-  const workingDirectory = configService.getOrThrow('app.workingDirectory', { infer: true })
-  const frontendDomain = configService.getOrThrow('app.frontendDomain', { infer: true })
-  const backendDomain = configService.getOrThrow('app.backendDomain', { infer: true })
-  const fallbackLanguage = configService.getOrThrow('app.fallbackLanguage', { infer: true })
-  const headerLanguage = configService.getOrThrow('app.headerLanguage', { infer: true })
+  const workingDirectory = configService.getOrThrow('app.workingDirectory', {
+    infer: true,
+  })
+  const frontendDomain = configService.getOrThrow('app.frontendDomain', {
+    infer: true,
+  })
+  const backendDomain = configService.getOrThrow('app.backendDomain', {
+    infer: true,
+  })
+  const fallbackLanguage = configService.getOrThrow('app.fallbackLanguage', {
+    infer: true,
+  })
+  const headerLanguage = configService.getOrThrow('app.headerLanguage', {
+    infer: true,
+  })
 
-  
   const secret = configService.getOrThrow('auth.secret', { infer: true })
   const expires = configService.getOrThrow('auth.expires', { infer: true })
-  const refreshSecret = configService.getOrThrow('auth.refreshSecret', { infer: true })
-  const refreshExpires = configService.getOrThrow('auth.refreshExpires', { infer: true })
-  const forgotSecret = configService.getOrThrow('auth.forgotSecret', { infer: true })
-  const forgotExpires = configService.getOrThrow('auth.forgotExpires', { infer: true })
-  const confirmEmailSecret = configService.getOrThrow('auth.confirmEmailSecret', { infer: true })
-  const confirmEmailExpires = configService.getOrThrow('auth.confirmEmailExpires', { infer: true })
-  
+  const refreshSecret = configService.getOrThrow('auth.refreshSecret', {
+    infer: true,
+  })
+  const refreshExpires = configService.getOrThrow('auth.refreshExpires', {
+    infer: true,
+  })
+  const forgotSecret = configService.getOrThrow('auth.forgotSecret', {
+    infer: true,
+  })
+  const forgotExpires = configService.getOrThrow('auth.forgotExpires', {
+    infer: true,
+  })
+  const confirmEmailSecret = configService.getOrThrow(
+    'auth.confirmEmailSecret',
+    { infer: true },
+  )
+  const confirmEmailExpires = configService.getOrThrow(
+    'auth.confirmEmailExpires',
+    { infer: true },
+  )
+
   app.enableCors()
 
   await app.listen(port, async () => {
@@ -69,7 +92,6 @@ async function bootstrap() {
     console.log(`17. Forgot expires: ${forgotExpires}`)
     console.log(`18. Confirm email secret: ${confirmEmailSecret}`)
     console.log(`19. Confirm email expires: ${confirmEmailExpires}`)
-
 
     logger.log(`App started on port: ${port}!`)
   })

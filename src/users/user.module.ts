@@ -22,6 +22,6 @@ import { GetUsersHandler } from './handlers/get-users.handler'
     GetUserHandler,
     GetUsersHandler,
   ],
-  exports: [UserService,UserRepository]
+  exports: [UserService, UserRepository],
 })
 export class UserModule {}
