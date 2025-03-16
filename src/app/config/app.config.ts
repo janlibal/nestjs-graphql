@@ -61,9 +61,9 @@ export default registerAs<AppConfig>('app', () => {
   return {
     nodeEnv: process.env.NODE_ENV || 'development',
     name: pkginfo.name || 'app',
-    //workingDirectory: process.env.PWD || process.cwd(),
-    //frontendDomain: process.env.FRONTEND_DOMAIN,
-    //backendDomain: process.env.BACKEND_DOMAIN ?? 'http://localhost',
+    workingDirectory: process.env.PWD || process.cwd(),
+    frontendDomain: process.env.FRONTEND_DOMAIN,
+    backendDomain: process.env.BACKEND_DOMAIN ?? 'http://localhost',
     port: process.env.APP_PORT
       ? parseInt(process.env.APP_PORT, 10)
       : process.env.PORT
@@ -71,7 +71,7 @@ export default registerAs<AppConfig>('app', () => {
         : 3000,
     dbUrl: process.env.DATABASE_URL || 'unknown',
     apiPrefix: API_PREFIX || 'api',
-    //fallbackLanguage: process.env.APP_FALLBACK_LANGUAGE || 'en',
-    //headerLanguage: process.env.APP_HEADER_LANGUAGE || 'x-custom-lang',
+    fallbackLanguage: process.env.APP_FALLBACK_LANGUAGE || 'en',
+    headerLanguage: process.env.APP_HEADER_LANGUAGE || 'x-custom-lang',
   }
 })

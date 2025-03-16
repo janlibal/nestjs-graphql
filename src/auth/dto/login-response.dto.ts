@@ -10,7 +10,7 @@ export class LoginResponseDto {
   refreshToken: string
 
   @Field()
-  tokenExpires: number
+  tokenExpires: string
 
   @Field(() => User, { nullable: true })
   user: User

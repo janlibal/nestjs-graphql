@@ -38,11 +38,12 @@ export class UserRepository {
 
   async findOne(id: User['id']): Promise<NullableType<UserModel>> {
     const entity = await this.prisma.user.findUnique({ where: { id } })
-    return await UserMapper.toDomain(entity)
+    return entity ? UserMapper.toDomain(entity) : null;
   }
 
-  async findByEmail(email: User['email']): Promise<NullableType<User>> {
-    return await this.prisma.user.findUnique({ where: { email } })
+  async findByEmail(email: User['email']): Promise<NullableType<UserModel>> {
+    const entity = await this.prisma.user.findUnique({ where: { email } })
+    return entity ? UserMapper.toDomain(entity) : null
   }
 
   async save(data: UserModel): Promise<UserModel> {

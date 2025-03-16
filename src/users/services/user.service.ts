@@ -33,6 +33,10 @@ export class UserService {
     return await this.userRepository.findOne(id)
   }
 
+  async findByEmail(email: User['email']): Promise<NullableType<UserModel>> {
+    return await this.userRepository.findByEmail(email)
+  }
+
   async createUser(createUserInput: CreateUserInput): Promise<UserModel> {
     let email: string | null = null
     if (createUserInput.email) {
@@ -62,7 +66,7 @@ export class UserService {
     let status: Status | undefined = undefined
     const statusObject = Object.values(StatusEnum)
       .map(String)
-      .includes(String(createUserInput.role.id))
+      .includes(String(createUserInput.status.id))
     if (!statusObject) {
       throw new UnprocessableEntityException('Status does not exist')
     }
