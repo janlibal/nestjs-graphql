@@ -3,12 +3,13 @@ import { PrismaModule } from 'nestjs-prisma'
 import { AppModule } from '../app/app.module'
 import { LoggerModule } from '../logger/logger.module'
 import { JwtModule } from '@nestjs/jwt'
-import { UserModule } from 'src/users/user.module'
-import { GraphqlConfigModule } from 'src/graphql/graphql-config.module'
-import { GlobalConfigModule } from 'src/config/config/global-config.module'
-import { AuthModule } from 'src/auth/auth.module'
-import { GqlAuthGuard } from 'src/auth/guards/gpl-auth.guard'
+import { UserModule } from '../users/user.module'
+import { GraphqlConfigModule } from '../graphql/graphql-config.module'
+import { GlobalConfigModule } from '../config/config/global-config.module'
+import { AuthModule } from '../auth/auth.module'
+import { GqlAuthGuard } from '../auth/guards/gpl-auth.guard'
 import { CqrsModule } from '@nestjs/cqrs'
+import { RedisModule } from '../redis/redis.module'
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { CqrsModule } from '@nestjs/cqrs'
     GraphqlConfigModule,
     AuthModule,
     CqrsModule,
+    RedisModule,
   ],
   providers: [GqlAuthGuard],
 })

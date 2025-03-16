@@ -6,7 +6,6 @@ import {
 import { User as UserModel } from 'src/users/model/user.model'
 import { JwtService } from '@nestjs/jwt'
 import crypto from 'src/utils/crypto'
-import { Session } from 'src/session/session.model'
 import ms from 'ms'
 import { LoginResponseDto } from './dto/login-response.dto'
 import { AuthEmailLoginInput } from './inputs/auth-email-login.input'
@@ -16,6 +15,7 @@ import { ConfigService } from '@nestjs/config'
 import { AuthEmailRegisterInput } from './inputs/auth-email-register.input'
 import { RoleEnum } from 'src/roles/role.enum'
 import { StatusEnum } from 'src/statuses/status.enum'
+import { Session } from 'src/session/session.model'
 
 @Injectable()
 export class AuthService {
