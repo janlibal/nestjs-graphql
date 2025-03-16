@@ -19,7 +19,7 @@ async function makeHash(): Promise<string> {
 async function comparePasswords(
   candidatePassword: string,
   userPassword: string,
-):Promise<boolean> {
+): Promise<boolean> {
   return bcrypt.compare(candidatePassword, userPassword)
 }
 

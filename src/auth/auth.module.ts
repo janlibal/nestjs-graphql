@@ -6,6 +6,6 @@ import { UserModule } from 'src/users/user.module'
 
 @Module({
   imports: [UserModule],
-  providers: [AuthService,  AuthResolver, GqlAuthGuard],
+  providers: [AuthService, AuthResolver, GqlAuthGuard],
 })
 export class AuthModule {}

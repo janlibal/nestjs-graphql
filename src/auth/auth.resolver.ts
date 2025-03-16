@@ -10,12 +10,16 @@ import { AuthEmailRegisterInput } from './inputs/auth-email-register.input'
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
   @Mutation(() => LoginResponseDto)
-  async login(@Args('input', new ValidateLoginPipe()) input: AuthEmailLoginInput): Promise<LoginResponseDto> {
+  async login(
+    @Args('input', new ValidateLoginPipe()) input: AuthEmailLoginInput,
+  ): Promise<LoginResponseDto> {
     return await this.authService.validateLogin(input)
   }
 
   @Mutation(() => Boolean)
-  async register(@Args('input', new ValidateRegisterPipe()) input: AuthEmailRegisterInput): Promise<boolean> {
+  async register(
+    @Args('input', new ValidateRegisterPipe()) input: AuthEmailRegisterInput,
+  ): Promise<boolean> {
     return await this.authService.register(input)
   }
 }
