@@ -15,7 +15,8 @@ import { ConfigService } from '@nestjs/config'
 import { AuthEmailRegisterInput } from './inputs/auth-email-register.input'
 import { RoleEnum } from 'src/roles/role.enum'
 import { StatusEnum } from 'src/statuses/status.enum'
-import { Session } from 'src/session/session.model'
+import { Session } from 'src/session/model/session.model'
+import { SessionService } from 'src/session/session.service'
 
 @Injectable()
 export class AuthService {
@@ -23,7 +24,13 @@ export class AuthService {
     private jwtService: JwtService,
     private userService: UserService,
     private configService: ConfigService,
+    private sessionService: SessionService,
   ) {}
+
+  async session(): Promise<string> {
+    return await this.sessionService.session()
+  }
+
   async validateLogin(
     loginInput: AuthEmailLoginInput,
   ): Promise<LoginResponseDto> {

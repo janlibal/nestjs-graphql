@@ -10,6 +10,7 @@ import { AuthModule } from '../auth/auth.module'
 import { GqlAuthGuard } from '../auth/guards/gpl-auth.guard'
 import { CqrsModule } from '@nestjs/cqrs'
 import { RedisModule } from '../redis/redis.module'
+import { SessionModule } from 'src/session/session.module'
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { RedisModule } from '../redis/redis.module'
     AuthModule,
     CqrsModule,
     RedisModule,
+    SessionModule,
   ],
   providers: [GqlAuthGuard],
 })

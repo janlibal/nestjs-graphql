@@ -22,4 +22,9 @@ export class AuthResolver {
   ): Promise<boolean> {
     return await this.authService.register(input)
   }
+
+  @Mutation(() => String)
+  async session(): Promise<string> {
+    return await this.authService.session()
+  }
 }

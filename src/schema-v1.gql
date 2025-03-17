@@ -46,6 +46,7 @@ type Mutation {
   createUser(input: CreateUserInput!): User!
   login(input: AuthEmailLoginInput!): LoginResponseDto!
   register(input: AuthEmailRegisterInput!): Boolean!
+  session: String!
 }
 
 input CreateUserInput {
