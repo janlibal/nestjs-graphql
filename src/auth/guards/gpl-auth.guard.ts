@@ -4,10 +4,19 @@ import {
   CanActivate,
   UnauthorizedException,
 } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { GqlExecutionContext } from '@nestjs/graphql'
+import { JwtService } from '@nestjs/jwt'
+import { AllConfigType } from '../../config/config/config.type'
+import { RedisService } from '../../redis/redis.service'
 
 @Injectable()
 export class GqlAuthGuard implements CanActivate {
+  constructor(
+    private jwtService: JwtService,
+    private redisService: RedisService,
+    private configService: ConfigService<AllConfigType>,
+  ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const gqlContext = GqlExecutionContext.create(context)
     const ctx = gqlContext.getContext().req
@@ -39,14 +48,28 @@ export class GqlAuthGuard implements CanActivate {
       throw new UnauthorizedException('No token provided')
     }
 
-    const user = true // await this.authService.verifyToken(token);
+    const authSecret = this.configService.getOrThrow('auth.secret', {
+      infer: true,
+    })
 
-    if (!user) {
+    const data = await this.jwtService.verifyAsync(accessToken, {
+      secret: authSecret,
+    })
+
+    const redisObject = await this.redisService.getSession(data.id)
+
+    const isTokenFromCacheSameAsTokenFromHeaders = redisObject === accessToken
+
+    if (!isTokenFromCacheSameAsTokenFromHeaders)
+      throw new UnauthorizedException('Nice try')
+
+    if (!data) {
       throw new UnauthorizedException('Invalid or expired token')
     }
 
     // Attach the user to the request context for later use
-    ctx.user = user
+
+    ctx.user = data
 
     return true
   }

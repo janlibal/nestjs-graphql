@@ -3,20 +3,24 @@ import {
   UnauthorizedException,
   UnprocessableEntityException,
 } from '@nestjs/common'
-import { User as UserModel } from 'src/users/model/user.model'
+import { User, User as UserModel } from '../users/model/user.model'
 import { JwtService } from '@nestjs/jwt'
-import crypto from 'src/utils/crypto'
+import crypto from '../utils/crypto'
 import ms from 'ms'
 import { LoginResponseDto } from './dto/login-response.dto'
 import { AuthEmailLoginInput } from './inputs/auth-email-login.input'
-import { UserService } from 'src/users/services/user.service'
-import { AuthProvidersEnum } from 'src/users/enums/auth.provider.enum'
+import { UserService } from '../users/services/user.service'
+import { AuthProvidersEnum } from '../users/enums/auth.provider.enum'
 import { ConfigService } from '@nestjs/config'
 import { AuthEmailRegisterInput } from './inputs/auth-email-register.input'
-import { RoleEnum } from 'src/roles/role.enum'
-import { StatusEnum } from 'src/statuses/status.enum'
-import { Session } from 'src/session/model/session.model'
-import { SessionService } from 'src/session/session.service'
+import { RoleEnum } from '../roles/role.enum'
+import { StatusEnum } from '../statuses/status.enum'
+import { SessionService } from '../session/session.service'
+import { Session } from '../session/domain/session.domain'
+import { RedisPrefixEnum } from '../redis/enums/redis.prefix.enum'
+import { RedisService } from '../redis/redis.service'
+import { NullableType } from 'src/utils/types/nullable.type'
+import { JwtPayloadType } from './strategies/types/jwt.payload.type'
 
 @Injectable()
 export class AuthService {
@@ -25,11 +29,8 @@ export class AuthService {
     private userService: UserService,
     private configService: ConfigService,
     private sessionService: SessionService,
+    private redisService: RedisService,
   ) {}
-
-  async session(): Promise<string> {
-    return await this.sessionService.session()
-  }
 
   async validateLogin(
     loginInput: AuthEmailLoginInput,
@@ -50,14 +51,24 @@ export class AuthService {
     )
     if (!isValidPassword) throw new UnauthorizedException('Unauthorized!')
 
-    const hash = await crypto.makeHash()
+    const hash = crypto.makeHash()
+    const userId = user.id
+
+    const session = await this.sessionService.create({ userId, hash })
+
+    const prefix = RedisPrefixEnum.USER
+    const expiry = this.configService.getOrThrow('redis.expiry', {
+      infer: true,
+    })
 
     const { token, refreshToken, tokenExpires } = await this.getTokensData({
       id: user.id,
       role: user.role,
-      //sessionId: sessionId,
+      sessionId: session.id,
       hash,
     })
+
+    await this.redisService.createSession({ prefix, user, token, expiry })
 
     return {
       refreshToken,
@@ -84,7 +95,7 @@ export class AuthService {
   private async getTokensData(data: {
     id: UserModel['id']
     role: UserModel['role']
-    //sessionId: Session['id']
+    sessionId: Session['id']
     hash: Session['hash']
   }) {
     const tokenExpiresIn = this.configService.getOrThrow('auth.expires', {
@@ -98,7 +109,7 @@ export class AuthService {
         {
           id: data.id,
           role: data.role,
-          //sessionId: data.sessionId,
+          sessionId: data.sessionId,
         },
         {
           secret: this.configService.getOrThrow('auth.secret', { infer: true }),
@@ -107,7 +118,7 @@ export class AuthService {
       ),
       await this.jwtService.signAsync(
         {
-          //sessionId: data.sessionId,
+          sessionId: data.sessionId,
           hash: data.hash,
         },
         {
@@ -126,5 +137,9 @@ export class AuthService {
       refreshToken,
       tokenExpires,
     }
+  }
+
+  async me(userJwtPayload: JwtPayloadType): Promise<NullableType<User>> {
+    return this.userService.findById(userJwtPayload.id)
   }
 }
