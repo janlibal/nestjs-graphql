@@ -54,4 +54,15 @@ model User {
   status        Status @relation(fields: [statusId], references: [id])  
   roleId        Int @default(2)   
   role          Role @relation(fields: [roleId], references: [id])
+  sessions      Session[]
+}
+
+model Session {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+  hash      String
+  userId    String   @db.Uuid
+  user      User     @relation(fields: [userId], references: [id])
 }
