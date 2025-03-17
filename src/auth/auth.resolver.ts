@@ -1,10 +1,14 @@
-import { Resolver, Mutation, Args } from '@nestjs/graphql'
+import { Resolver, Mutation, Args, Query, Context } from '@nestjs/graphql'
 import { AuthEmailLoginInput } from './inputs/auth-email-login.input'
 import { LoginResponseDto } from './dto/login-response.dto'
 import { AuthService } from './auth.service'
 import { ValidateLoginPipe } from './pipes/validate-login.pipe'
 import { ValidateRegisterPipe } from './pipes/validate-register.pipe'
 import { AuthEmailRegisterInput } from './inputs/auth-email-register.input'
+import { NullableType } from '../utils/types/nullable.type'
+import { User } from '../users/model/user.model'
+import { GqlAuthGuard } from './guards/gpl-auth.guard'
+import { UseGuards } from '@nestjs/common'
 
 @Resolver()
 export class AuthResolver {
@@ -23,8 +27,9 @@ export class AuthResolver {
     return await this.authService.register(input)
   }
 
-  @Mutation(() => String)
-  async session(): Promise<string> {
-    return await this.authService.session()
+  @UseGuards(GqlAuthGuard)
+  @Query(() => User, { nullable: true })
+  public me(@Context() context: any): Promise<NullableType<User>> {
+    return this.authService.me(context.req.user)
   }
 }

@@ -29,8 +29,10 @@ export class UserService {
     return await this.userRepository.findAll()
   }
 
-  async findById(id: User['id']): Promise<NullableType<UserModel>> {
-    return await this.userRepository.findById(id)
+  findById(id: User['id']): Promise<NullableType<UserModel>> {
+    const data = this.userRepository.findById(id)
+    if (!data) throw new UnprocessableEntityException('No user found')
+    return data
   }
 
   async findByEmail(email: User['email']): Promise<NullableType<UserModel>> {

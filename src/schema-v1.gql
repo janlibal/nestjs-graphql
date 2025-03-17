@@ -40,13 +40,13 @@ type Query {
   findbyFirstNames(firstNames: [String!]!): [User!]!
   findAll: [User!]
   findOne(id: String!): User
+  me: User
 }
 
 type Mutation {
   createUser(input: CreateUserInput!): User!
   login(input: AuthEmailLoginInput!): LoginResponseDto!
   register(input: AuthEmailRegisterInput!): Boolean!
-  session: String!
 }
 
 input CreateUserInput {

@@ -9,7 +9,7 @@ async function hashPassword(password: string): Promise<string> {
   return await bcrypt.hash(password, salt)
 }
 
-async function makeHash(): Promise<string> {
+function makeHash() {
   return crypto
     .createHash('sha256')
     .update(randomStringGenerator())

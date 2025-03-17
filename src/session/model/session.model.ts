@@ -1,10 +1,22 @@
 import { Field, ObjectType } from '@nestjs/graphql'
 
 @ObjectType()
-export class Session {
+export class SessionModel {
   @Field()
-  id: string
+  id: number
 
   @Field()
   hash: string
+
+  @Field()
+  userId: string
+
+  @Field()
+  createdAt: Date
+
+  @Field()
+  updatedAt: Date
+
+  @Field()
+  deletedAt: Date
 }
