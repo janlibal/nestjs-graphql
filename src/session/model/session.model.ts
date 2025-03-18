@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql'
 
 @ObjectType()
-export class SessionModel {
+export class Session {
   @Field()
   id: number
 

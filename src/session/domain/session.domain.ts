@@ -1,4 +1,4 @@
-export class Session {
+export class SessionDomain {
   id: number
   userId: string
   hash: string

@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import { SessionMapper } from './mappers/session.mapper'
 import { PrismaService } from '../database/prisma.service'
-import { Session } from './domain/session.domain'
+import { Session } from './model/session.model'
+
 
 @Injectable()
 export class SessionRepository {
