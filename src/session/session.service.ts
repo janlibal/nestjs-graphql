@@ -11,4 +11,8 @@ export class SessionService {
   ): Promise<Session> {
     return this.sessionRepository.create(data as Session)
   }
+
+  deleteById(id: Session['id']): Promise<boolean> {
+    return this.sessionRepository.deleteById(id)
+  }
 }

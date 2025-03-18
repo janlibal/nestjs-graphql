@@ -9,6 +9,7 @@ import { GqlExecutionContext } from '@nestjs/graphql'
 import { JwtService } from '@nestjs/jwt'
 import { AllConfigType } from '../../config/config/config.type'
 import { RedisService } from '../../redis/redis.service'
+import { AuthService } from '../auth.service'
 
 @Injectable()
 export class GqlAuthGuard implements CanActivate {
@@ -52,9 +53,9 @@ export class GqlAuthGuard implements CanActivate {
       infer: true,
     })
 
-    const data = await this.jwtService.verifyAsync(accessToken, {
-      secret: authSecret,
-    })
+    const data = await this.verifyToken(accessToken, authSecret)
+
+    if (!data) throw new UnauthorizedException('Invalid or expired token')
 
     const redisObject = await this.redisService.getSession(data.id)
 
@@ -63,15 +64,28 @@ export class GqlAuthGuard implements CanActivate {
     if (!isTokenFromCacheSameAsTokenFromHeaders)
       throw new UnauthorizedException('Nice try')
 
-    if (!data) {
-      throw new UnauthorizedException('Invalid or expired token')
-    }
-
     // Attach the user to the request context for later use
 
     ctx.user = data
 
     return true
+  }
+
+  async verifyToken(accessToken: string, authSecret: string) {
+    try {
+      const data = await this.jwtService.verifyAsync(accessToken, {
+        secret: authSecret,
+      })
+      if (!data) {
+        throw new UnauthorizedException('Invalid token')
+      }
+      return data
+    } catch (error) {
+      if (error instanceof Error && error.name === 'TokenExpiredError') {
+        throw new UnauthorizedException('Token has expired')
+      }
+      throw new UnauthorizedException('Invalid or expired token')
+    }
   }
 }
 

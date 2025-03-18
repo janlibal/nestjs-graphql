@@ -21,6 +21,7 @@ import { RedisPrefixEnum } from '../redis/enums/redis.prefix.enum'
 import { RedisService } from '../redis/redis.service'
 import { NullableType } from 'src/utils/types/nullable.type'
 import { JwtPayloadType } from './strategies/types/jwt.payload.type'
+import { JwtRefreshPayloadType } from './strategies/types/jwt.refresh.payload.type'
 
 @Injectable()
 export class AuthService {
@@ -141,5 +142,12 @@ export class AuthService {
 
   async me(userJwtPayload: JwtPayloadType): Promise<NullableType<User>> {
     return this.userService.findById(userJwtPayload.id)
+  }
+
+  async logout(
+    data: Pick<JwtRefreshPayloadType, 'sessionId' | 'userId'>,
+  ): Promise<boolean> {
+    await this.redisService.releaseByUserId(data)
+    return this.sessionService.deleteById(data.sessionId)
   }
 }
