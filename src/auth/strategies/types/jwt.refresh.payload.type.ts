@@ -1,5 +1,5 @@
 import { User } from '../../../users/model/user.model'
-import { Session } from '../../../session/domain/session.domain'
+import { Session } from '../../../session/model/session.model'
 
 export type JwtRefreshPayloadType = {
   userId: User['id']
