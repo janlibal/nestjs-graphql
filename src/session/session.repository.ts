@@ -13,4 +13,9 @@ export class SessionRepository {
     })
     return await SessionMapper.toDomain(newEntity)
   }
+
+  async deleteById(id: Session['id']): Promise<boolean> {
+    const data = this.prismaService.session.delete({ where: { id: id } })
+    return true
+  }
 }

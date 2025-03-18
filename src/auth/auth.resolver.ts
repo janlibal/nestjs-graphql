@@ -32,4 +32,14 @@ export class AuthResolver {
   public me(@Context() context: any): Promise<NullableType<User>> {
     return this.authService.me(context.req.user)
   }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => Boolean)
+  async logout(@Context() context: any): Promise<boolean> {
+    const data = context
+    return await this.authService.logout({
+      sessionId: context.req.user.sessionId,
+      userId: context.req.user.id,
+    })
+  }
 }
