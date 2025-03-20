@@ -1,5 +1,5 @@
 import { Session as SessionEntity } from '@prisma/client'
-import { Session as SessionModel} from '../model/session.model'
+import { Session as SessionModel } from '../model/session.model'
 
 export class SessionMapper {
   static async toPersistence(data: SessionModel): Promise<SessionEntity> {

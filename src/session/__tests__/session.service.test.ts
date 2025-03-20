@@ -1,40 +1,30 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { vi, describe, beforeEach, it, expect } from 'vitest'
-import { PrismaService } from '../../database/prisma.service'
 import { PrismaModule } from '../../database/prisma.module'
 import { SessionService } from '../session.service'
 import { SessionRepository } from '../session.repository'
-import { SessionModule } from '../session.module'
+import { sessionMockDomainObject, sessionObject } from './mock/session.data'
 
-// Mock Prisma Service
-const mockSessionRepository = {
-  create: vi.fn(),
-  findByEmail: vi.fn(),
-  findById: vi.fn(),
-  waste: vi.fn(),
-  deleteById: vi.fn()
-}
-
-describe('UserService', () => {
+describe('SessionService', () => {
   let sessionService: SessionService
- 
+  const mockSessionRepository = {
+    create: vi.fn(),
+    deleteById: vi.fn(),
+  }
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [SessionModule, PrismaModule],
+      imports: [PrismaModule],
       providers: [
         SessionService,
         {
           provide: SessionRepository,
           useValue: mockSessionRepository,
         },
-        PrismaService,
       ],
     }).compile()
 
     sessionService = module.get<SessionService>(SessionService)
-   
-    vi.restoreAllMocks()
   })
 
   afterEach(() => {
@@ -46,21 +36,25 @@ describe('UserService', () => {
   })
 
   describe('SessionService methods', () => {
-    it('experiment()', () => {
-      mockSessionRepository.waste.mockResolvedValue('This is it')
-      const result = sessionService.experiment()
-      expect(result).toEqual('This is it')
-      //expect(mockUserPersistence.create).toHaveBeenCalledWith({data: userMockEntityObject,})
-    })
+    it('create()', async () => {
+      // Arrange: mock the repository's create method to resolve with sessionMockDomainObject
+      mockSessionRepository.create.mockResolvedValue(sessionMockDomainObject)
 
-    it('deleteById()', async () => {
-        //vi.spyOn(mockSessionRepository, 'deleteById').mockResolvedValue(true)
-        mockSessionRepository.deleteById.mockResolvedValue(true)
-        const result = await sessionService.deleteById(1)
-        expect(result).toBe(true)
-        expect(mockSessionRepository.deleteById).toHaveBeenCalled()
-        //expect(mockSessionRepository.deleteById).toHaveBeenCalledWith(1)
-        //expect(sessionService.deleteById).toHaveBeenCalledTimes(1)
+      // Act: call the create method on the service
+      const result = await sessionService.create(sessionObject)
+
+      // Assert: ensure the service's result matches the mocked domain object
+      expect(result).toEqual(sessionMockDomainObject)
+
+      // Ensure the sessionRepository's create method was called with the correct argument
+      expect(mockSessionRepository.create).toHaveBeenCalledWith(sessionObject)
+      expect(mockSessionRepository.create).toHaveBeenCalledTimes(1)
+    })
+    it('deleteById()', () => {
+      mockSessionRepository.deleteById.mockResolvedValue(true)
+      sessionService.deleteById(sessionObject.id)
+      expect(mockSessionRepository.deleteById).toHaveBeenCalled()
+      expect(mockSessionRepository.deleteById).toHaveBeenCalledTimes(1)
     })
   })
 })
