@@ -15,8 +15,4 @@ export class SessionService {
   deleteById(id: Session['id']): Promise<boolean> {
     return this.sessionRepository.deleteById(id)
   }
-
-  experiment(): string {
-    return this.sessionRepository.waste()
-  }
 }

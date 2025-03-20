@@ -12,11 +12,11 @@ export class Session {
   userId: string
 
   @Field()
-  createdAt: Date
+  createdAt?: Date
 
   @Field()
-  updatedAt: Date
+  updatedAt?: Date
 
   @Field()
-  deletedAt: Date
+  deletedAt?: Date
 }

@@ -5,7 +5,6 @@ import { Session } from './model/session.model'
 import { NullableType } from '../utils/types/nullable.type'
 import { User } from '../users/model/user.model'
 
-
 @Injectable()
 export class SessionRepository {
   constructor(private readonly prismaService: PrismaService) {}
@@ -39,9 +38,5 @@ export class SessionRepository {
       where: { id: id },
     })
     return entity ? await SessionMapper.toDomain(entity) : null
-  }
-
-  waste(): string {
-    return 'This is it'
   }
 }
