@@ -40,4 +40,8 @@ export class SessionRepository {
     })
     return entity ? await SessionMapper.toDomain(entity) : null
   }
+
+  waste(): string {
+    return 'This is it'
+  }
 }
