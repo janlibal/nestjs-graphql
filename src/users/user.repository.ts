@@ -36,12 +36,12 @@ export class UserRepository {
     )
   }
 
-  async findById(id: User['id']): Promise<NullableType<UserModel>> {
+  async findById(id: UserModel['id']): Promise<NullableType<UserModel>> {
     const entity = await this.prisma.user.findUnique({ where: { id } })
     return entity ? UserMapper.toDomain(entity) : null
   }
 
-  async findByEmail(email: User['email']): Promise<NullableType<UserModel>> {
+  async findByEmail(email: UserModel['email']): Promise<NullableType<UserModel>> {
     const entity = await this.prisma.user.findUnique({ where: { email } })
     return entity ? UserMapper.toDomain(entity) : null
   }
@@ -66,7 +66,7 @@ export class UserRepository {
     )
   }
 
-  async remove(id: User['id']): Promise<void> {
+  async remove(id: UserModel['id']): Promise<void> {
     await this.prisma.user.delete({
       where: {
         id: id,
