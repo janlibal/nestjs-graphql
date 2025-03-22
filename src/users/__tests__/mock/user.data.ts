@@ -53,3 +53,38 @@ export const userMockEntityObject: UserEntity = {
   statusId: 1,
   provider: AuthProvidersEnum.email,
 }
+
+const usr1: UserDomain = {
+  id: '1',
+  firstName: 'Jan',
+  lastName: 'Libal',
+  email: 'jan.libal@janlibal.com',
+  password: 'hashedPassword123!',
+  role: { id: 1 },
+  status: { id: 1 },
+  provider: AuthProvidersEnum.email,
+}
+
+const usr2: UserDomain = {
+  id: '2',
+  firstName: 'Joe',
+  lastName: 'Doe',
+  email: 'joe.doe.libal@janlibal.com',
+  password: 'hashedPassword123!',
+  role: { id: 1 },
+  status: { id: 1 },
+  provider: AuthProvidersEnum.email,
+}
+
+const usr3: UserDomain = {
+  id: '2',
+  firstName: 'Jane',
+  lastName: 'Doe',
+  email: 'jane.doe.libal@janlibal.com',
+  password: 'hashedPassword123!',
+  role: { id: 1 },
+  status: { id: 1 },
+  provider: AuthProvidersEnum.email,
+}
+
+export const allUsers = [usr1, usr2, usr3]

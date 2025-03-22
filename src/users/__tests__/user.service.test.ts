@@ -7,6 +7,7 @@ import hashPassword from '../../utils/crypto'
 import { ConflictException, UnprocessableEntityException } from '@nestjs/common'
 import { CreateUserInput } from '../inputs/create.user.intput'
 import {
+  allUsers,
   createUserInput,
   userMockDomainObject,
   userObject,
@@ -18,6 +19,9 @@ describe('SessionService', () => {
   const mockUserRepository = {
     save: vi.fn(),
     findByEmail: vi.fn(),
+    findById: vi.fn(),
+    findAll: vi.fn(),
+    findByFirstNames: vi.fn(),
   }
 
   beforeEach(async () => {
@@ -44,6 +48,54 @@ describe('SessionService', () => {
   })
 
   describe('UserService methods', () => {
+    describe('findById()', () => {
+      it('should return user object if Id provided', async () => {
+        mockUserRepository.findById.mockResolvedValue(userMockDomainObject)
+        const result = await userService.findById(userMockDomainObject.id)
+        expect(result).toEqual(userMockDomainObject)
+        expect(mockUserRepository.findById).toHaveBeenCalledWith(
+          userMockDomainObject.id,
+        )
+      })
+    })
+    describe('findByEmail()', () => {
+      it('should return user object if email provided', async () => {
+        mockUserRepository.findByEmail.mockResolvedValue(userMockDomainObject)
+        const result = await userService.findByEmail(userMockDomainObject.email)
+        expect(result).toEqual(userMockDomainObject)
+        expect(mockUserRepository.findByEmail).toHaveBeenCalledWith(
+          userMockDomainObject.email,
+        )
+      })
+    })
+    describe('getAll()', () => {
+      it('should return all users', async () => {
+        mockUserRepository.findAll.mockResolvedValue(allUsers)
+        const result = await userService.getAll()
+        expect(result).toEqual(allUsers)
+        expect(mockUserRepository.findAll).toHaveBeenCalled()
+      })
+    })
+    describe('getByFirstNames()', () => {
+      it('should return all users based on firstNames search', async () => {
+        //mockUserRepository.findByFirstNames.mockResolvedValue(allUsers.map(a => a.firstName === 'Joe'))
+        mockUserRepository.findByFirstNames.mockResolvedValue(
+          allUsers.filter((user) =>
+            ['Joe'].some((names) => names === user.firstName),
+          ),
+        )
+        const result = await userService.getByFirstNames(['Joe'])
+        //expect(result).toEqual(allUsers.map(a => a.firstName === 'Joe'))
+        expect(result).toEqual(
+          allUsers.filter((user) =>
+            ['Joe'].some((names) => names === user.firstName),
+          ),
+        )
+        expect(mockUserRepository.findByFirstNames).toHaveBeenCalledWith([
+          'Joe',
+        ])
+      })
+    })
     describe('createUser', () => {
       it('should throw ConflictException if user with email already exists', async () => {
         mockUserRepository.findByEmail.mockResolvedValue({})
