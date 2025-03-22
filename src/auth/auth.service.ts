@@ -37,8 +37,8 @@ export class AuthService {
     loginInput: AuthEmailLoginInput,
   ): Promise<LoginResponseDto> {
     const user = await this.userService.findByEmail(loginInput.email)
-
     if (!user) throw new UnauthorizedException('Unauthorized!')
+
     if (user.provider !== AuthProvidersEnum.email)
       throw new UnprocessableEntityException(
         `Has to login via provider ${user.provider}`,
@@ -80,7 +80,7 @@ export class AuthService {
   }
 
   async register(registerInput: AuthEmailRegisterInput): Promise<boolean> {
-    const user = await this.userService.createUser({
+    await this.userService.createUser({
       firstName: registerInput.firstName,
       lastName: registerInput.lastName,
       password: registerInput.password,
