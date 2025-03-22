@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { vi, describe, beforeEach, it, expect } from 'vitest'
-import { UserService } from '../../users/services/user.service'
+import { UserService } from '../../users/user.service'
 import { AuthService } from '../auth.service'
 import { UserModule } from '../../users/user.module'
 import { SessionModule } from '../../session/session.module'

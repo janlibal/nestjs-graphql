@@ -5,17 +5,17 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common'
 import { User } from '@prisma/client'
-import { User as UserModel } from '../model/user.model'
-import { UserRepository } from '../repositories/user.repository'
-import { AuthProvidersEnum } from '../enums/auth.provider.enum'
-import { CreateUserInput } from '../inputs/create.user.intput'
-import { StatusEnum } from '../../statuses/status.enum'
-import { NullableType } from '../../utils/types/nullable.type'
-import { RoleEnum } from '../../roles/role.enum'
-import { PaginationArgs } from '../inputs/pagination.args'
-import crypto from '../../utils/crypto'
-import { Role } from '../../roles/role.model'
-import { Status } from '../../statuses/status.model'
+import { User as UserModel } from './model/user.model'
+import { UserRepository } from './user.repository'
+import { AuthProvidersEnum } from './enums/auth.provider.enum'
+import { CreateUserInput } from './inputs/create.user.intput'
+import { StatusEnum } from '../statuses/status.enum'
+import { NullableType } from '../utils/types/nullable.type'
+import { RoleEnum } from '../roles/role.enum'
+import { PaginationArgs } from './inputs/pagination.args'
+import crypto from '../utils/crypto'
+import { Role } from '../roles/role.model'
+import { Status } from '../statuses/status.model'
 
 @Injectable()
 export class UserService {
