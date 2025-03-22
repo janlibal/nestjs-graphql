@@ -2,8 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { vi, describe, beforeEach, it, expect } from 'vitest'
 import { JwtService } from '@nestjs/jwt'
 import { PrismaModule } from '../../database/prisma.module'
-import { UserResolver } from '../resolvers/user.resolver'
-import { UserService } from '../services/user.service'
+import { UserResolver } from '../user.resolver'
+import { UserService } from '../user.service'
 
 const mockUserService = {
   register: vi.fn(),
@@ -16,11 +16,7 @@ describe('UserResolver', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
-        
-        PrismaModule,
-        
-      ],
+      imports: [PrismaModule],
       providers: [
         UserResolver,
         {

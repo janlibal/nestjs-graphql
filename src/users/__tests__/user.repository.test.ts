@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { vi, describe, beforeEach, it, expect } from 'vitest'
 import { PrismaService } from '../../database/prisma.service'
-import { UserRepository } from '../repositories/user.repository'
+import { UserRepository } from '../user.repository'
 import {
   userMockDomainObject,
   userMockEntityObject,

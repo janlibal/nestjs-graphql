@@ -8,7 +8,6 @@ import { GraphqlConfigModule } from '../graphql/graphql-config.module'
 import { GlobalConfigModule } from '../config/config/global-config.module'
 import { AuthModule } from '../auth/auth.module'
 import { GqlAuthGuard } from '../auth/guards/gpl-auth.guard'
-import { CqrsModule } from '@nestjs/cqrs'
 import { RedisModule } from '../redis/redis.module'
 import { SessionModule } from 'src/session/session.module'
 
@@ -22,7 +21,6 @@ import { SessionModule } from 'src/session/session.module'
     UserModule,
     GraphqlConfigModule,
     AuthModule,
-    CqrsModule,
     RedisModule,
     SessionModule,
   ],
