@@ -54,7 +54,7 @@ export class HttpExceptionFilter
         'ExceptionFilter',
       )
 
-      response.status(status).json(errorResponse)
+      response.status(status).json({ errors: [errorResponse] })
     } else {
       // This is for GRAPHQL petitions
       const error = {

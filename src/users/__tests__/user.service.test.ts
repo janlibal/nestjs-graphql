@@ -60,7 +60,7 @@ describe('SessionService', () => {
       it('should throw UnprocessableEntityException if user not found', async () => {
         mockUserRepository.findById.mockResolvedValue(null)
         try {
-          await userService.findById('999'); // Try with an id that doesn't exist
+          await userService.findById('999') // Try with an id that doesn't exist
         } catch (error) {
           expect(error).toBeInstanceOf(UnprocessableEntityException)
         }
