@@ -41,7 +41,9 @@ export class UserRepository {
     return entity ? UserMapper.toDomain(entity) : null
   }
 
-  async findByEmail(email: UserModel['email']): Promise<NullableType<UserModel>> {
+  async findByEmail(
+    email: UserModel['email'],
+  ): Promise<NullableType<UserModel>> {
     const entity = await this.prisma.user.findUnique({ where: { email } })
     return entity ? UserMapper.toDomain(entity) : null
   }
