@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common'
 import { Request, Response } from 'express'
 import { GqlArgumentsHost, GqlExceptionFilter } from '@nestjs/graphql'
-import { GraphQLResolveInfo } from 'graphql'
+import { GraphQLResolveInfo, GraphQLError } from 'graphql'
 
 @Catch()
 export class HttpExceptionFilter
@@ -69,7 +69,12 @@ export class HttpExceptionFilter
         'GraphQL ExceptionFilter',
       )
 
-      return exception
+      throw new GraphQLError(errorResponse.error || 'Internal server error', {
+        extensions: {
+          status: status,
+          originalError: exception,
+        },
+      })
     }
   }
 }

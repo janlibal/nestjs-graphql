@@ -7,6 +7,7 @@ import { PinoLoggerService } from './logger/adapters/pino.logger.service'
 import { HttpExceptionFilter } from './filters/http-exception.filter'
 import { ValidationPipe } from '@nestjs/common'
 import validationOptions from './utils/validation.options'
+import { GraphQLExceptionFilter } from './filters/graphql.filter'
 
 async function bootstrap() {
   const app = await NestFactory.create(GlobalModule)
@@ -14,7 +15,8 @@ async function bootstrap() {
   logger.setContext('main')
   app.useLogger(logger)
 
-  app.useGlobalFilters(new HttpExceptionFilter())
+  //app.useGlobalFilters(new HttpExceptionFilter())
+  app.useGlobalFilters(new GraphQLExceptionFilter())
 
   app.useGlobalPipes(new ValidationPipe(validationOptions))
 
