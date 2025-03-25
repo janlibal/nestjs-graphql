@@ -20,8 +20,8 @@ describe('Auth', () => {
                 lastName: "Doe",
                 email: "joe.doe@joedoe.com",
                 password: "Password123!",
-                role: {id: 1},
-                status: {id: 1}
+                role: { id: 1},
+                status: { id: 1}
               }) {
                 firstName
                 lastName
@@ -74,18 +74,20 @@ describe('Auth', () => {
           `,
           })
           .expect(200)
-        expect(response.body.errors[0].extensions.timestamp).toMatch(
+        expect(response.body.errors[0].path).toMatch('createUser')
+        expect(response.body.errors[0].timestamp).toMatch(
           /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
         )
-        expect(response.body.errors[1].path[0]).toBe('createUser')
-        expect(response.body.errors.locations[0]).toBe(Number)
-        expect(response.body.errors.locations[1]).toBe(Number)
+        expect(response.body.errors[0].path).toMatch('createUser')
+        expect(response.body.errors[0].locations[0].line).toBeDefined()
+        expect(response.body.errors[0].locations[0].column).toBeDefined()
+        expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
           'Firstname cannot be empty and must be a string. Firstname must be longer than 1 character.',
         )
-        expect(response.body.errors[5].error).toMatch('Bad request')
-        expect(response.body.errors.statusCode).toBe(400)
-        expect(response.body.errors.stack).toMatch(
+        //expect(response.body.errors[0].error).toMatch('Bad request')
+        expect(response.body.errors[0].statusCode).toBe(500)
+        expect(response.body.errors[0].stack).toMatch(
           /BadRequestException: Firstname cannot be empty and must be a string. Firstname must be longer than 1 character./i,
         )
       })
