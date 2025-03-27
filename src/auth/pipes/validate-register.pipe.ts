@@ -45,7 +45,7 @@ export class ValidateRegisterPipe implements PipeTransform {
       errors.push('Lastname cannot contain special characters or numbers.')
     }
 
-    if (value.password.trim() === '') {
+    if (!value.password) {
       errors.push('Password cannot be empty.')
     }
 
