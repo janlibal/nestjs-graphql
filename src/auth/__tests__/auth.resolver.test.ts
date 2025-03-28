@@ -16,6 +16,7 @@ import {
 } from './mock/auth.data'
 import { ValidateRegisterPipe } from '../pipes/validate-register.pipe'
 import { BadRequestException } from '@nestjs/common'
+import { ValidateLoginPipe } from '../pipes/validate-login.pipe'
 
 const mockAuthService = {
   register: vi.fn(),
@@ -232,6 +233,26 @@ describe('AuthResolver', () => {
         const result = await authResolver.login(loginData)
         expect(result).toEqual(mockLoginResponse)
         expect(mockAuthService.validateLogin).toHaveBeenCalledWith(loginData)
+      })
+      it('should throw error when email is invalid', async () => {
+        const pipe = new ValidateLoginPipe()
+        try {
+          await pipe.transform({ ...registerInput, email: 'aa@bb' }),
+            { type: 'body' }
+        } catch (err: any) {
+          expect(err).toBeInstanceOf(BadRequestException)
+          expect(err).toMatch(/Email is invalid./i)
+        }
+      })
+      it('should throw error when password is empty', async () => {
+        const pipe = new ValidateLoginPipe()
+        try {
+          await pipe.transform({ ...registerInput, password: '' }),
+            { type: 'body' }
+        } catch (err: any) {
+          expect(err).toBeInstanceOf(BadRequestException)
+          expect(err).toMatch(/Password cannot be empty./i)
+        }
       })
     })
   })
