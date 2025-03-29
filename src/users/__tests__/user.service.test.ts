@@ -5,12 +5,12 @@ import { UserRepository } from '../user.repository'
 import hashPassword from '../../utils/crypto'
 import { ConflictException, UnprocessableEntityException } from '@nestjs/common'
 import {
-  allUsers,
   createUserInput,
-  userMockDomainObject,
-  userObject,
+  rawUserDomainObject,
+  rawUserEntityObject,
   userObjectHashedPwd,
 } from './mock/user.data'
+import { userMockEntityObjects } from './mock/user.data-helper'
 
 describe('UserService', () => {
   let userService: UserService
@@ -47,11 +47,11 @@ describe('UserService', () => {
   describe('UserService methods', () => {
     describe('findById()', () => {
       it('should return user object if Id provided', async () => {
-        mockUserRepository.findById.mockResolvedValue(userMockDomainObject)
-        const result = await userService.findById(userMockDomainObject.id)
-        expect(result).toEqual(userMockDomainObject)
+        mockUserRepository.findById.mockResolvedValue(rawUserDomainObject)
+        const result = await userService.findById(rawUserDomainObject.id)
+        expect(result).toEqual(rawUserDomainObject)
         expect(mockUserRepository.findById).toHaveBeenCalledWith(
-          userMockDomainObject.id,
+          rawUserDomainObject.id,
         )
       })
       it('should throw UnprocessableEntityException if user not found', async () => {
@@ -65,34 +65,37 @@ describe('UserService', () => {
     })
     describe('findByEmail()', () => {
       it('should return user object if email provided', async () => {
-        mockUserRepository.findByEmail.mockResolvedValue(userMockDomainObject)
-        const result = await userService.findByEmail(userMockDomainObject.email)
-        expect(result).toEqual(userMockDomainObject)
+        mockUserRepository.findByEmail.mockResolvedValue(rawUserDomainObject)
+        const result = await userService.findByEmail(rawUserDomainObject.email)
+        expect(result).toEqual(rawUserDomainObject)
         expect(mockUserRepository.findByEmail).toHaveBeenCalledWith(
-          userMockDomainObject.email,
+          rawUserDomainObject.email,
         )
       })
     })
     describe('getAll()', () => {
       it('should return all users', async () => {
-        mockUserRepository.findAll.mockResolvedValue(allUsers)
+        const userEntityObjects = userMockEntityObjects(rawUserEntityObject, 5)
+        mockUserRepository.findAll.mockResolvedValue(userEntityObjects)
         const result = await userService.getAll()
-        expect(result).toEqual(allUsers)
+        expect(result).toEqual(userEntityObjects)
         expect(mockUserRepository.findAll).toHaveBeenCalled()
       })
     })
     describe('getByFirstNames()', () => {
       it('should return all users based on firstNames search', async () => {
         //mockUserRepository.findByFirstNames.mockResolvedValue(allUsers.map(a => a.firstName === 'Joe'))
+        const userEntityObjects = userMockEntityObjects(rawUserEntityObject, 5)
+
         mockUserRepository.findByFirstNames.mockResolvedValue(
-          allUsers.filter((user) =>
+          userEntityObjects.filter((user) =>
             ['Joe'].some((names) => names === user.firstName),
           ),
         )
         const result = await userService.getByFirstNames(['Joe'])
         //expect(result).toEqual(allUsers.map(a => a.firstName === 'Joe'))
         expect(result).toEqual(
-          allUsers.filter((user) =>
+          userEntityObjects.filter((user) =>
             ['Joe'].some((names) => names === user.firstName),
           ),
         )
@@ -104,9 +107,9 @@ describe('UserService', () => {
     describe('createUser', () => {
       it('should throw ConflictException if user with email already exists', async () => {
         mockUserRepository.findByEmail.mockResolvedValue({})
-        await expect(userService.createUser(userObject)).rejects.toThrowError(
-          ConflictException,
-        )
+        await expect(
+          userService.createUser(rawUserDomainObject),
+        ).rejects.toThrowError(ConflictException)
       })
       it('should throw UnprocessableEntityException if role does not exist', async () => {
         mockUserRepository.findByEmail.mockResolvedValue(null)
@@ -128,7 +131,7 @@ describe('UserService', () => {
           .spyOn(hashPassword, 'hashPassword')
           .mockResolvedValue('hashedPassword123!')
 
-        mockUserRepository.save.mockResolvedValue(userMockDomainObject)
+        mockUserRepository.save.mockResolvedValue(rawUserDomainObject)
 
         const result = await userService.createUser(createUserInput)
 
@@ -136,7 +139,7 @@ describe('UserService', () => {
           expect.objectContaining(userObjectHashedPwd),
         )
 
-        expect(result).toEqual(userMockDomainObject)
+        expect(result).toEqual(rawUserDomainObject)
 
         expect(hashPasswordSpy).toHaveBeenCalled()
         expect(mockUserRepository.findByEmail).toHaveBeenCalledWith(
