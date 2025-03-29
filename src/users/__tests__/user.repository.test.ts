@@ -2,11 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { vi, describe, beforeEach, it, expect } from 'vitest'
 import { PrismaService } from '../../database/prisma.service'
 import { UserRepository } from '../user.repository'
+import { rawUserDomainObject, rawUserEntityObject } from './mock/user.data'
 import {
-  userMockDomainObject,
-  userMockEntityObject,
-  userObject,
-} from './mock/user.data'
+  userMockDomainObjects,
+  userMockEntityObjects,
+} from './mock/user.data-helper'
 import { UserMapper } from '../mapper/user.mapper'
 
 const mockPrismaService = {
@@ -15,6 +15,8 @@ const mockPrismaService = {
     findUnique: vi.fn(),
     findFirst: vi.fn(),
     delete: vi.fn(),
+    findMany: vi.fn(),
+    findByFirstNames: vi.fn(),
   },
 }
 
@@ -45,51 +47,72 @@ describe('UserRepository', () => {
   })
 
   describe('UserRepository Methods', () => {
-    it('findById()', async () => {
-      vi.spyOn(prismaService.user, 'findUnique').mockResolvedValue(
-        userMockEntityObject,
+    it('findByFirstNames()', async () => {
+      const userEntityObjects = userMockEntityObjects(rawUserEntityObject, 5)
+      vi.spyOn(prismaService.user, 'findMany').mockResolvedValue(
+        userEntityObjects,
       )
 
-      const result = await userRepository.findById(userMockDomainObject.id)
+      const result = await userRepository.findByFirstNames(['Joe1', 'Joe5'])
 
-      // Assert: Check that the result is the expected domain model
-      expect(result).toEqual(userMockDomainObject)
+      expect(result).toEqual(userEntityObjects)
 
-      // Assert: Check that Prisma's `create` method was called with correct arguments
+      expect(mockPrismaService.user.findMany).toHaveBeenCalled()
+    })
+    it('findAll()', async () => {
+      const userEntityObjects = userMockEntityObjects(rawUserEntityObject, 5)
+      const userDomainObjects = userMockDomainObjects(rawUserDomainObject, 5)
+      vi.spyOn(prismaService.user, 'findMany').mockResolvedValue(
+        userEntityObjects,
+      )
+
+      const result = await userRepository.findAll()
+
+      expect(result).toEqual(userDomainObjects)
+
+      expect(mockPrismaService.user.findMany).toHaveBeenCalled()
+    })
+
+    it('findById()', async () => {
+      vi.spyOn(prismaService.user, 'findUnique').mockResolvedValue(
+        rawUserEntityObject,
+      )
+
+      const result = await userRepository.findById(rawUserDomainObject.id)
+
+      expect(result).toEqual(rawUserDomainObject)
+
       expect(mockPrismaService.user.findUnique).toHaveBeenCalledWith({
-        where: { id: String(userMockDomainObject.id) },
+        where: { id: String(rawUserDomainObject.id) },
       })
     })
 
     it('findByEmail()', async () => {
       vi.spyOn(prismaService.user, 'findUnique').mockResolvedValue(
-        userMockEntityObject,
+        rawUserEntityObject,
       )
 
-      const result = await userRepository.findByEmail(userObject.email)
+      const result = await userRepository.findByEmail(rawUserDomainObject.email)
 
-      // Assert: Check that the result is the expected domain model
-      expect(result).toEqual(userMockDomainObject)
+      expect(result).toEqual(rawUserDomainObject)
 
-      // Assert: Check that Prisma's `create` method was called with correct arguments
       expect(mockPrismaService.user.findUnique).toHaveBeenCalledWith({
-        where: { email: userObject.email },
+        where: { email: rawUserDomainObject.email },
       })
     })
 
     it('create()', async () => {
-      const persistenceModel = await UserMapper.toPersistence(userObject)
+      const persistenceModel =
+        await UserMapper.toPersistence(rawUserDomainObject)
 
       vi.spyOn(prismaService.user, 'create').mockResolvedValue(
-        userMockEntityObject,
+        rawUserEntityObject,
       )
 
-      const result = await userRepository.save(userObject)
+      const result = await userRepository.save(rawUserDomainObject)
 
-      // Assert: Check that the result is the expected domain model
-      expect(result).toEqual(userMockDomainObject)
+      expect(result).toEqual(rawUserDomainObject)
 
-      // Assert: Check that Prisma's `create` method was called with correct arguments
       expect(mockPrismaService.user.create).toHaveBeenCalledWith({
         data: persistenceModel,
       })
@@ -98,10 +121,10 @@ describe('UserRepository', () => {
     it('remove()', async () => {
       vi.spyOn(prismaService.user, 'delete').mockResolvedValue(null)
 
-      await userRepository.remove(userMockDomainObject.id)
+      await userRepository.remove(rawUserDomainObject.id)
 
       expect(mockPrismaService.user.delete).toHaveBeenCalledWith({
-        where: { id: String(userMockDomainObject.id) },
+        where: { id: String(rawUserDomainObject.id) },
       })
 
       expect(prismaService.user.delete).toHaveBeenCalledTimes(1)
