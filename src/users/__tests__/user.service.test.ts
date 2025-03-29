@@ -1,11 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { vi, describe, beforeEach, it, expect } from 'vitest'
-import { PrismaModule } from '../../database/prisma.module'
 import { UserService } from '../user.service'
 import { UserRepository } from '../user.repository'
 import hashPassword from '../../utils/crypto'
 import { ConflictException, UnprocessableEntityException } from '@nestjs/common'
-import { CreateUserInput } from '../inputs/create.user.intput'
 import {
   allUsers,
   createUserInput,
@@ -14,7 +12,7 @@ import {
   userObjectHashedPwd,
 } from './mock/user.data'
 
-describe('SessionService', () => {
+describe('UserService', () => {
   let userService: UserService
   const mockUserRepository = {
     save: vi.fn(),
@@ -26,7 +24,6 @@ describe('SessionService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [PrismaModule],
       providers: [
         UserService,
         {
@@ -60,7 +57,7 @@ describe('SessionService', () => {
       it('should throw UnprocessableEntityException if user not found', async () => {
         mockUserRepository.findById.mockResolvedValue(null)
         try {
-          await userService.findById('999') // Try with an id that doesn't exist
+          await userService.findById('999')
         } catch (error) {
           expect(error).toBeInstanceOf(UnprocessableEntityException)
         }
@@ -127,17 +124,14 @@ describe('SessionService', () => {
       it('should successfully create a user and save it', async () => {
         mockUserRepository.findByEmail.mockResolvedValue(null)
 
-        // Mock hashPassword to return a hashed password
         const hashPasswordSpy = vi
           .spyOn(hashPassword, 'hashPassword')
           .mockResolvedValue('hashedPassword123!')
 
-        // Mock save method to return the saved user object
         mockUserRepository.save.mockResolvedValue(userMockDomainObject)
 
         const result = await userService.createUser(createUserInput)
 
-        // Assert that the user is created and saved with the correct hashed password
         expect(mockUserRepository.save).toHaveBeenCalledWith(
           expect.objectContaining(userObjectHashedPwd),
         )

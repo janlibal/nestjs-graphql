@@ -9,7 +9,6 @@ import {
 import { SessionRepository } from '../session.repository'
 import { SessionMapper } from '../mappers/session.mapper'
 
-// Mock Prisma Service
 const mockPrismaService = {
   session: {
     create: vi.fn(),
@@ -67,10 +66,8 @@ describe('SessionRepository', () => {
         sessionMockDomainObject.id,
       )
 
-      // Assert: Check that the result is the expected domain model
       expect(result).toEqual(sessionMockDomainObject)
 
-      // Assert: Check that Prisma's `create` method was called with correct arguments
       expect(mockPrismaService.session.findFirst).toHaveBeenCalledWith({
         include: { user: true },
         where: { id: sessionMockDomainObject.id },
@@ -103,10 +100,8 @@ describe('SessionRepository', () => {
 
       const result = await sessionRepository.create(sessionObject)
 
-      // Assert: Check that the result is the expected domain model
       expect(result).toEqual(sessionMockDomainObject)
 
-      // Assert: Check that Prisma's `create` method was called with correct arguments
       expect(mockPrismaService.session.create).toHaveBeenCalledWith({
         data: persistenceModel,
       })

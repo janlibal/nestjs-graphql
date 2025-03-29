@@ -2,10 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { vi, describe, beforeEach, it, expect } from 'vitest'
 import { UserService } from '../../users/user.service'
 import { AuthService } from '../auth.service'
-import { UserModule } from '../../users/user.module'
-import { SessionModule } from '../../session/session.module'
-import { RedisModule } from '../../redis/redis.module'
-import { PrismaModule } from '../../database/prisma.module'
 import { GlobalConfigModule } from 'src/config/config/global-config.module'
 import { SessionService } from '../../session/session.service'
 import { RedisService } from '../../redis/redis.service'
@@ -27,9 +23,6 @@ import { RedisPrefixEnum } from 'src/redis/enums/redis.prefix.enum'
 
 describe('SessionService', () => {
   let authService: AuthService
-  let userService: UserService
-  let sessionService: SessionService
-  let redisService: RedisService
 
   const mockUserService = {
     createUser: vi.fn(),
@@ -46,13 +39,7 @@ describe('SessionService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
-        UserModule,
-        SessionModule,
-        RedisModule,
-        PrismaModule,
-        GlobalConfigModule,
-      ],
+      imports: [GlobalConfigModule],
       providers: [
         AuthService,
         {
@@ -72,9 +59,6 @@ describe('SessionService', () => {
     }).compile()
 
     authService = module.get<AuthService>(AuthService)
-    userService = module.get<UserService>(UserService)
-    sessionService = module.get<SessionService>(SessionService)
-    redisService = module.get<RedisService>(RedisService)
   })
 
   afterEach(() => {

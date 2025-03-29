@@ -2,54 +2,42 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { vi, describe, beforeEach, it, expect } from 'vitest'
 import { AuthService } from '../auth.service'
 import { JwtService } from '@nestjs/jwt'
-import { UserModule } from '../../users/user.module'
-import { PrismaModule } from '../../database/prisma.module'
-import { SessionModule } from '../../session/session.module'
-import { RedisModule } from '../../redis/redis.module'
 import { GlobalConfigModule } from 'src/config/config/global-config.module'
 import { AuthResolver } from '../auth.resolver'
-import {
-  loginData,
-  mockLoginResponse,
-  mockUser,
-  registerInput,
-} from './mock/auth.data'
+import { loginData, mockLoginResponse, registerInput } from './mock/auth.data'
 import { ValidateRegisterPipe } from '../pipes/validate-register.pipe'
 import { BadRequestException } from '@nestjs/common'
 import { ValidateLoginPipe } from '../pipes/validate-login.pipe'
+import { RedisService } from '../../redis/redis.service'
 
 const mockAuthService = {
   register: vi.fn(),
   validateLogin: vi.fn(),
 }
 
+let mockRedisService: any
+
 describe('AuthResolver', () => {
   let authResolver: AuthResolver
-  let authService: AuthService
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
-        UserModule,
-
-        SessionModule,
-
-        RedisModule,
-        PrismaModule,
-        GlobalConfigModule,
-      ],
+      imports: [GlobalConfigModule],
       providers: [
         AuthResolver,
         {
           provide: AuthService,
           useValue: mockAuthService,
         },
+        {
+          provide: RedisService,
+          useValue: mockRedisService,
+        },
         JwtService,
       ],
     }).compile()
 
     authResolver = module.get<AuthResolver>(AuthResolver)
-    authService = module.get<AuthService>(AuthService)
 
     vi.restoreAllMocks()
   })
@@ -113,16 +101,6 @@ describe('AuthResolver', () => {
           expect(err).toMatch(
             /Firstname cannot contain special characters or numbers./i,
           )
-        }
-      })
-      it('should throw error when lastName is empty', async () => {
-        const pipe = new ValidateRegisterPipe()
-        try {
-          await pipe.transform({ ...registerInput, lastName: '' }),
-            { type: 'body' }
-        } catch (err: any) {
-          expect(err).toBeInstanceOf(BadRequestException)
-          expect(err).toMatch(/Lastname cannot be empty and must be a string./i)
         }
       })
       it('should throw error when lastName is empty', async () => {
