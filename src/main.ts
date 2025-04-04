@@ -15,12 +15,12 @@ async function bootstrap() {
   const app = await NestFactory.create(GlobalModule)
 
   if (!fs.existsSync('./logs')) {
-    fs.mkdirSync('./logs');
+    fs.mkdirSync('./logs')
   }
 
   const logger = app.get(PinoLoggerService)
 
-  app.useGlobalInterceptors(new GraphqlLoggingInterceptor(logger));
+  app.useGlobalInterceptors(new GraphqlLoggingInterceptor(logger))
 
   logger.setContext('main')
   app.useLogger(logger)
