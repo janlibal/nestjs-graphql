@@ -1,5 +1,3 @@
-// src/user/resolvers/user.resolver.ts
-
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql'
 import { User as UserModel } from './model/user.model'
 import { CreateUserInput } from './inputs/create.user.intput'
