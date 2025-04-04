@@ -29,7 +29,6 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe(validationOptions))
 
-  // enable shutdown hook
   app.enableShutdownHooks()
 
   const configService = app.get(ConfigService<AllConfigType>)
