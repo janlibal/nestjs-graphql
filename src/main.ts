@@ -8,7 +8,6 @@ import { ValidationPipe } from '@nestjs/common'
 import validationOptions from './utils/validation.options'
 import { GraphQLExceptionFilter } from './filters/graphql.filter'
 import * as fs from 'fs'
-
 import { GraphqlLoggingInterceptor } from './interceptors/graphql-logging.interceptor'
 
 async function bootstrap() {
