@@ -9,7 +9,7 @@ import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 
 @Injectable()
-export class ExcludeFieldsInterceptor implements NestInterceptor {
+export class ExcludeFieldsIntercepftor implements NestInterceptor {
   constructor(private readonly fieldsToExclude: string[]) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
