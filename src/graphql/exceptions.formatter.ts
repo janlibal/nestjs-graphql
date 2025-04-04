@@ -5,10 +5,6 @@ export const formatGraphQLError = (error: any) => {
   const stack = error.extensions?.originalError.stack
     ? error.extensions?.originalError.stack.split('\n')
     : error.extensions?.originalError.stack
-  console.log(
-    'STACK: ',
-    stack && stack.length > 2 ? `${stack[0]}  ${stack[1]}` : stack,
-  )
 
   return {
     timestamp: new Date().toISOString(),
