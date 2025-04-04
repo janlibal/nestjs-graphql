@@ -34,7 +34,8 @@
     "test:e2e:docker": "docker compose -f docker-compose.test.yml --env-file env-example-relational -p tests up -d --build && docker compose -f docker-compose.test.yml -p tests exec api /opt/wait-for-it.sh -t 0 localhost:80 -- yarn run test:e2e && docker compose -f docker-compose.test.yml --env-file env-example-relational -p tests down && docker compose -f docker-compose.test.yml --env-file env-example-relational -p tests rm -svf",
     "test:watch": "vitest",
     "test:cov": "vitest run --coverage",
-    "test:debug": "vitest --inspect-brk --inspect --logHeapUsage --threads=false"
+    "test:debug": "vitest --inspect-brk --inspect --logHeapUsage --threads=false",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@apollo/server": "^4.11.3",
@@ -55,6 +56,7 @@
     "crypto": "^1.0.1",
     "env-cmd": "^10.1.0",
     "graphql": "^16.10.0",
+    "husky": "^9.1.7",
     "ioredis": "^5.6.0",
     "nestjs-pino": "^4.1.0",
     "nestjs-prisma": "^0.23.0",
@@ -62,8 +64,10 @@
     "passport-jwt": "^4.0.1",
     "pino": "^9.5.0",
     "pino-http": "^10.3.0",
+    "pino-pretty": "^13.0.0",
     "prisma": "^6.1.0",
     "reflect-metadata": "^0.2.0",
+    "rotating-file-stream": "^3.2.6",
     "runtypes": "^6.7.0"
   },
   "devDependencies": {
