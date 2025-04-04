@@ -24,8 +24,6 @@ export class GraphqlLoggingInterceptor implements NestInterceptor {
       `Incoming GraphQL ${operationType}: ${operationName}`,
     )
 
-    console.log('GQL Context:', gqlContext.getContext())
-
     return next.handle().pipe(
       tap((result) => {
         this.logger.log({ result }, `GraphQL Response for ${operationName}`)

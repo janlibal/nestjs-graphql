@@ -20,7 +20,7 @@ declare module 'http' {
         level: process.env.NODE_ENV !== 'prod' ? 'debug' : 'info',
         genReqId: (req) => req.requestId || uuid.v4(),
         transport:
-          process.env.NODE_ENV !== 'production'
+          process.env.NODE_ENV !== 'prod'
             ? {
                 target: 'pino-pretty',
                 options: {
