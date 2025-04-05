@@ -3,8 +3,15 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 async function main() {
+  await prisma.$transaction([
+    prisma.$executeRaw`TRUNCATE TABLE "Session" RESTART IDENTITY CASCADE`,
+    prisma.$executeRaw`TRUNCATE TABLE "User" RESTART IDENTITY CASCADE`,
+    prisma.$executeRaw`TRUNCATE TABLE "Role" RESTART IDENTITY CASCADE`,
+    prisma.$executeRaw`TRUNCATE TABLE "Status" RESTART IDENTITY CASCADE`,
+  ])
   await prisma.status.deleteMany()
   await prisma.role.deleteMany()
+  
   console.log('Seeding...')
 
   const role = await prisma.role.findFirst()
