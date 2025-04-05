@@ -103,8 +103,8 @@
     "webpack": "^5.79.0"
   },
   "prisma": {
-    "seed": "ts-node src/database/seed.ts",
-    "migrateOutput": "src/database/migrations/",
-    "schema": "src/database/schema.prisma"
+    "schema": "prisma/schema.prisma",
+    "migrateOutput": "src/prisma/migrations/",
+    "seed": "ts-node ./prisma/seeds/seed.ts"
   }
 }

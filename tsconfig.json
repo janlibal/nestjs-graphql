@@ -23,6 +23,6 @@
     "strict": true,
     "types": ["node", "vitest/globals"],
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "prisma/seeds/seed.ts"],
   "exclude": ["node_modules"]   
 }
