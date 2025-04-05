@@ -34,8 +34,7 @@
     "test:e2e:docker": "docker compose -f docker-compose.test.yml --env-file env-example-relational -p tests up -d --build && docker compose -f docker-compose.test.yml -p tests exec api /opt/wait-for-it.sh -t 0 localhost:80 -- yarn run test:e2e && docker compose -f docker-compose.test.yml --env-file env-example-relational -p tests down && docker compose -f docker-compose.test.yml --env-file env-example-relational -p tests rm -svf",
     "test:watch": "vitest",
     "test:cov": "vitest run --coverage",
-    "test:debug": "vitest --inspect-brk --inspect --logHeapUsage --threads=false",
-    "prepare": "husky install"
+    "test:debug": "vitest --inspect-brk --inspect --logHeapUsage --threads=false"
   },
   "dependencies": {
     "@apollo/server": "^4.11.3",
@@ -90,7 +89,6 @@
     "eslint": "^9.17.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
-    "husky": "^9.1.7",
     "lint-staged": "^15.5.0",
     "prettier": "^3.0.0",
     "source-map-support": "^0.5.21",
