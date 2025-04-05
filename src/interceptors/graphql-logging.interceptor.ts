@@ -19,19 +19,19 @@ export class GraphqlLoggingInterceptor implements NestInterceptor {
     const operationName =
       gqlContext.getContext().req.body.operationName || 'Unnamed operation'
 
-    const sanitizedVariables = this.redactSensitiveFields({ ...variables })
+    //const sanitizedVariables = this.redactSensitiveFields({ ...variables })
 
     this.logger.log(
-      { operationName, variables: sanitizedVariables },
+      { operationName, variables: variables },
       `Incoming GraphQL ${operationType}: ${operationName}`,
     )
 
     return next.handle().pipe(
       tap((result) => {
-        const sanitizedResult = this.redactSensitiveFields({ ...result })
+        //const sanitizedResult = this.redactSensitiveFields({ ...result })
 
         this.logger.log(
-          { result: sanitizedResult },
+          { result: result },
           `GraphQL Response for ${operationName}`,
         )
       }),
