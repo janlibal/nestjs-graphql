@@ -8,17 +8,17 @@ export const registerInput: AuthEmailRegisterInput = {
   firstName: 'Jan',
   lastName: 'Libal',
   email: 'jan.libal@janlibal.com',
-  password: 'Password123!',
+  password: 'Password123!'
 }
 
 export const loginData: AuthEmailLoginInput = {
   email: 'jan.libal@janlibal.com',
-  password: 'Password123!',
+  password: 'Password123!'
 }
 
 export const loginDataBad: AuthEmailLoginInput = {
   email: 'jan.libal@janlibal.com',
-  password: 'Pass',
+  password: 'Pass'
 }
 
 export const mockUserGoogle: UserEntity = {
@@ -29,7 +29,7 @@ export const mockUserGoogle: UserEntity = {
   password: 'Password123!',
   statusId: 1,
   roleId: 1,
-  provider: AuthProvidersEnum.google,
+  provider: AuthProvidersEnum.google
 }
 
 export const mockUser: UserEntity = {
@@ -40,12 +40,12 @@ export const mockUser: UserEntity = {
   password: 'Password123!',
   statusId: 1,
   roleId: 1,
-  provider: AuthProvidersEnum.email,
+  provider: AuthProvidersEnum.email
 }
 
 export const sessionData = {
   userId: mockUser.id,
-  hash: 'hash123',
+  hash: 'hash123'
 }
 
 export const mockLoginResponse: LoginResponseDto = {
@@ -60,6 +60,6 @@ export const mockLoginResponse: LoginResponseDto = {
     password: mockUser.password,
     provider: AuthProvidersEnum.email,
     status: { id: mockUser.statusId },
-    role: { id: mockUser.roleId },
-  },
+    role: { id: mockUser.roleId }
+  }
 }

@@ -7,6 +7,6 @@ import { SessionModule } from 'src/session/session.module'
 
 @Module({
   imports: [UserModule, SessionModule],
-  providers: [AuthService, AuthResolver, GqlAuthGuard],
+  providers: [AuthService, AuthResolver, GqlAuthGuard]
 })
 export class AuthModule {}

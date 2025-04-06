@@ -12,7 +12,7 @@ export class ValidateLoginPipe implements PipeTransform {
     return {
       ...value,
       email: value.email.trim().toLowerCase(),
-      password: value.password.trim(),
+      password: value.password.trim()
     }
   }
 

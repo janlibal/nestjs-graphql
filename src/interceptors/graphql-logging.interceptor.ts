@@ -23,7 +23,7 @@ export class GraphqlLoggingInterceptor implements NestInterceptor {
 
     this.logger.log(
       { operationName, variables: variables },
-      `Incoming GraphQL ${operationType}: ${operationName}`,
+      `Incoming GraphQL ${operationType}: ${operationName}`
     )
 
     return next.handle().pipe(
@@ -32,9 +32,9 @@ export class GraphqlLoggingInterceptor implements NestInterceptor {
 
         this.logger.log(
           { result: result },
-          `GraphQL Response for ${operationName}`,
+          `GraphQL Response for ${operationName}`
         )
-      }),
+      })
     )
   }
 

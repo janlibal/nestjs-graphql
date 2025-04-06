@@ -15,24 +15,24 @@ export class UserPersistence {
     return this.prisma.user.findMany({
       where: {
         firstName: {
-          in: firstNames,
-        },
+          in: firstNames
+        }
       },
       include: {
         status: true,
-        role: true,
-      },
+        role: true
+      }
     })
   }
 
   async findMany(): Promise<UserModel[]> {
     const users = await this.prisma.user.findMany({
-      include: { status: true, role: true },
+      include: { status: true, role: true }
     })
     return await Promise.all(
       users.map(async (userEntity) => {
         return await UserMapper.toDomain(userEntity)
-      }),
+      })
     )
   }
 
@@ -42,7 +42,7 @@ export class UserPersistence {
   }
 
   async findByEmail(
-    email: UserModel['email'],
+    email: UserModel['email']
   ): Promise<NullableType<UserModel>> {
     const entity = await this.prisma.user.findUnique({ where: { email } })
     return entity ? UserMapper.toDomain(entity) : null
@@ -58,21 +58,21 @@ export class UserPersistence {
     const users = await this.prisma.user.findMany({
       include: { status: true, role: true },
       skip: (paginationArgs.page - 1) * paginationArgs.limit, // Skip (page - 1) * limit
-      take: paginationArgs.limit, // Limit the number of results
+      take: paginationArgs.limit // Limit the number of results
     })
 
     return await Promise.all(
       users.map(async (userEntity) => {
         return await UserMapper.toDomain(userEntity)
-      }),
+      })
     )
   }
 
   async remove(id: UserModel['id']): Promise<void> {
     await this.prisma.user.delete({
       where: {
-        id: id,
-      },
+        id: id
+      }
     })
   }
 }

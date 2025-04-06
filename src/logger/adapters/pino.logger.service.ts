@@ -51,7 +51,7 @@ export class PinoLoggerService extends ConsoleLogger {
       this.logger.error(
         { [this.contextName]: context, trace },
         message,
-        ...args,
+        ...args
       )
     } else if (trace) {
       this.logger.error({ trace }, message, ...args)

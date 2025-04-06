@@ -9,6 +9,6 @@ import { RedisService } from './redis.service'
   controllers: [],
   providers: [redisClientFactory, RedisRepository, RedisService],
 
-  exports: [RedisService],
+  exports: [RedisService]
 })
 export class RedisModule {}

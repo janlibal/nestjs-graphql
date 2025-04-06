@@ -18,7 +18,7 @@ function makeHash() {
 
 async function comparePasswords(
   candidatePassword: string,
-  userPassword: string,
+  userPassword: string
 ): Promise<boolean> {
   return bcrypt.compare(candidatePassword, userPassword)
 }
@@ -89,6 +89,6 @@ export default {
   //generateAccessToken,
   comparePasswords,
   //peperify,
-  makeHash,
+  makeHash
   //verifyToken
 }

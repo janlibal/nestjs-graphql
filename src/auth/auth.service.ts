@@ -1,7 +1,7 @@
 import {
   Injectable,
   UnauthorizedException,
-  UnprocessableEntityException,
+  UnprocessableEntityException
 } from '@nestjs/common'
 import { User, User as UserModel } from '../users/model/user.model'
 import { JwtService } from '@nestjs/jwt'
@@ -30,25 +30,25 @@ export class AuthService {
     private userService: UserService,
     private configService: ConfigService,
     private sessionService: SessionService,
-    private redisService: RedisService,
+    private redisService: RedisService
   ) {}
 
   async validateLogin(
-    loginInput: AuthEmailLoginInput,
+    loginInput: AuthEmailLoginInput
   ): Promise<LoginResponseDto> {
     const user = await this.userService.findByEmail(loginInput.email)
     if (!user) throw new UnauthorizedException('Unauthorized!')
 
     if (user.provider !== AuthProvidersEnum.email)
       throw new UnprocessableEntityException(
-        `Has to login via provider ${user.provider}`,
+        `Has to login via provider ${user.provider}`
       )
     if (!user.password)
       throw new UnprocessableEntityException('Missing password')
 
     const isValidPassword = await crypto.comparePasswords(
       loginInput.password,
-      user.password,
+      user.password
     )
     if (!isValidPassword) throw new UnauthorizedException('Unauthorized!')
 
@@ -59,14 +59,14 @@ export class AuthService {
 
     const prefix = RedisPrefixEnum.USER
     const expiry = this.configService.getOrThrow('redis.expiry', {
-      infer: true,
+      infer: true
     })
 
     const { token, refreshToken, tokenExpires } = await this.getTokensData({
       id: user.id,
       role: user.role,
       sessionId: session.id,
-      hash,
+      hash
     })
 
     await this.redisService.createSession({ prefix, user, token, expiry })
@@ -75,7 +75,7 @@ export class AuthService {
       refreshToken,
       token,
       tokenExpires,
-      user,
+      user
     }
   }
 
@@ -86,9 +86,9 @@ export class AuthService {
       password: registerInput.password,
       email: registerInput.email,
       role: {
-        id: RoleEnum.user,
+        id: RoleEnum.user
       },
-      status: { id: StatusEnum.active },
+      status: { id: StatusEnum.active }
     })
     return true
   }
@@ -100,7 +100,7 @@ export class AuthService {
     hash: Session['hash']
   }) {
     const tokenExpiresIn = this.configService.getOrThrow('auth.expires', {
-      infer: true,
+      infer: true
     })
 
     const tokenExpires = Date.now() + ms(tokenExpiresIn)
@@ -110,33 +110,33 @@ export class AuthService {
         {
           id: data.id,
           role: data.role,
-          sessionId: data.sessionId,
+          sessionId: data.sessionId
         },
         {
           secret: this.configService.getOrThrow('auth.secret', { infer: true }),
-          expiresIn: tokenExpiresIn,
-        },
+          expiresIn: tokenExpiresIn
+        }
       ),
       await this.jwtService.signAsync(
         {
           sessionId: data.sessionId,
-          hash: data.hash,
+          hash: data.hash
         },
         {
           secret: this.configService.getOrThrow('auth.refreshSecret', {
-            infer: true,
+            infer: true
           }),
           expiresIn: this.configService.getOrThrow('auth.refreshExpires', {
-            infer: true,
-          }),
-        },
-      ),
+            infer: true
+          })
+        }
+      )
     ])
 
     return {
       token,
       refreshToken,
-      tokenExpires,
+      tokenExpires
     }
   }
 
@@ -145,7 +145,7 @@ export class AuthService {
   }
 
   async logout(
-    data: Pick<JwtRefreshPayloadType, 'sessionId' | 'userId'>,
+    data: Pick<JwtRefreshPayloadType, 'sessionId' | 'userId'>
   ): Promise<boolean> {
     await this.redisService.releaseByUserId(data)
     return this.sessionService.deleteById(data.sessionId)

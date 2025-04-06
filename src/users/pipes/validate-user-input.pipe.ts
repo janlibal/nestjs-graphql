@@ -14,7 +14,7 @@ export class ValidateUserInputPipe implements PipeTransform {
       firstName: value.firstName.trim(),
       lastName: value.lastName.trim(),
       email: value.email.trim().toLowerCase(),
-      password: value.password.trim(),
+      password: value.password.trim()
     }
   }
 

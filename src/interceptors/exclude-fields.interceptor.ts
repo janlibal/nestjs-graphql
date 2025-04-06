@@ -3,7 +3,7 @@ import {
   Injectable,
   NestInterceptor,
   ExecutionContext,
-  CallHandler,
+  CallHandler
 } from '@nestjs/common'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
@@ -24,7 +24,7 @@ export class ExcludeFieldsIntercepftor implements NestInterceptor {
           })
         }
         return data
-      }),
+      })
     )
   }
 }

@@ -8,9 +8,9 @@ import { SessionRepository } from './repository/session.repository'
   providers: [
     {
       provide: SessionRepository,
-      useClass: SessionPersistence,
-    },
+      useClass: SessionPersistence
+    }
   ],
-  exports: [SessionRepository],
+  exports: [SessionRepository]
 })
 export class SessionPersistenceModule {}

@@ -11,7 +11,7 @@ const tenMinutesInSeconds = 60 * 10
 @Injectable()
 export class RedisService {
   constructor(
-    @Inject(RedisRepository) private readonly redisRepository: RedisRepository,
+    @Inject(RedisRepository) private readonly redisRepository: RedisRepository
   ) {}
 
   async createSession(data: RedisDomain): Promise<void> {
@@ -22,7 +22,7 @@ export class RedisService {
     //const userId = conditions.userId.toString()
     return await this.redisRepository.delete(
       RedisPrefixEnum.USER,
-      conditions.userId,
+      conditions.userId
     )
   }
 

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import {
   ExecutionContext,
   CanActivate,
-  UnauthorizedException,
+  UnauthorizedException
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { GqlExecutionContext } from '@nestjs/graphql'
@@ -16,7 +16,7 @@ export class GqlAuthGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
     private redisService: RedisService,
-    private configService: ConfigService<AllConfigType>,
+    private configService: ConfigService<AllConfigType>
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const gqlContext = GqlExecutionContext.create(context)
@@ -50,7 +50,7 @@ export class GqlAuthGuard implements CanActivate {
     }
 
     const authSecret = this.configService.getOrThrow('auth.secret', {
-      infer: true,
+      infer: true
     })
 
     const data = await this.verifyToken(accessToken, authSecret)
@@ -74,7 +74,7 @@ export class GqlAuthGuard implements CanActivate {
   async verifyToken(accessToken: string, authSecret: string) {
     try {
       const data = await this.jwtService.verifyAsync(accessToken, {
-        secret: authSecret,
+        secret: authSecret
       })
       if (!data) {
         throw new UnauthorizedException('Invalid token')

@@ -33,7 +33,7 @@ export class GraphQLExceptionFilter implements GqlExceptionFilter {
     Logger.error(
       `${info.parentType.name} ${info.fieldName}`,
       exception.stack,
-      'GraphQL ExceptionFilter',
+      'GraphQL ExceptionFilter'
     )
 
     // Format the error response
@@ -41,15 +41,15 @@ export class GraphQLExceptionFilter implements GqlExceptionFilter {
       statusCode,
       message,
       type: info.parentType.name,
-      field: info.fieldName,
+      field: info.fieldName
     }
 
     // Throw a GraphQLError with the formatted error
     throw new GraphQLError(message, {
       extensions: {
         status: statusCode,
-        originalError: exception,
-      },
+        originalError: exception
+      }
     })
   }
 }

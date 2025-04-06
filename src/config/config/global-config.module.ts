@@ -9,9 +9,9 @@ import redisConfig from '../../redis/config/redis.config'
     ConfigModule.forRoot({
       isGlobal: true,
       load: [appConfig, authConfig, redisConfig],
-      envFilePath: ['.env'],
-    }),
+      envFilePath: ['.env']
+    })
   ],
-  exports: [ConfigModule],
+  exports: [ConfigModule]
 })
 export class GlobalConfigModule {}

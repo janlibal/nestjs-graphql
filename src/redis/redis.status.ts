@@ -28,5 +28,5 @@ export const redisStatus = {
   handleReady,
   handleReconnecting,
   handleEnd,
-  handleError,
+  handleError
 }

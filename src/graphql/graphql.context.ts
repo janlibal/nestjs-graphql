@@ -6,6 +6,6 @@ interface MyContext {
 
 export const graphqlContext = ({ req }: { req: Request }): MyContext => {
   return {
-    req,
+    req
   }
 }

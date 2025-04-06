@@ -12,7 +12,7 @@ import { RedisService } from '../../redis/redis.service'
 
 const mockAuthService = {
   register: vi.fn(),
-  validateLogin: vi.fn(),
+  validateLogin: vi.fn()
 }
 
 let mockRedisService: any
@@ -27,14 +27,14 @@ describe('AuthResolver', () => {
         AuthResolver,
         {
           provide: AuthService,
-          useValue: mockAuthService,
+          useValue: mockAuthService
         },
         {
           provide: RedisService,
-          useValue: mockRedisService,
+          useValue: mockRedisService
         },
-        JwtService,
-      ],
+        JwtService
+      ]
     }).compile()
 
     authResolver = module.get<AuthResolver>(AuthResolver)
@@ -65,7 +65,7 @@ describe('AuthResolver', () => {
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(
-            /BadRequestException: Firstname cannot be empty and must be a string. Firstname must be longer than 1 character./i,
+            /BadRequestException: Firstname cannot be empty and must be a string. Firstname must be longer than 1 character./i
           )
         }
       })
@@ -87,7 +87,7 @@ describe('AuthResolver', () => {
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(
-            /Firstname cannot contain special characters or numbers./i,
+            /Firstname cannot contain special characters or numbers./i
           )
         }
       })
@@ -99,7 +99,7 @@ describe('AuthResolver', () => {
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(
-            /Firstname cannot contain special characters or numbers./i,
+            /Firstname cannot contain special characters or numbers./i
           )
         }
       })
@@ -132,7 +132,7 @@ describe('AuthResolver', () => {
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(
-            /Lastname cannot contain special characters or numbers./i,
+            /Lastname cannot contain special characters or numbers./i
           )
         }
       })
@@ -144,7 +144,7 @@ describe('AuthResolver', () => {
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(
-            /Lastname cannot contain special characters or numbers./i,
+            /Lastname cannot contain special characters or numbers./i
           )
         }
       })
@@ -174,13 +174,13 @@ describe('AuthResolver', () => {
           await pipe.transform({
             ...registerInput,
             password:
-              'Password123!Password123!Password123!Password123!Password123!Password123!',
+              'Password123!Password123!Password123!Password123!Password123!Password123!'
           }),
             { type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(
-            /Passwword can contain 20 characters at the most./i,
+            /Passwword can contain 20 characters at the most./i
           )
         }
       })

@@ -22,8 +22,8 @@ import { SessionModule } from 'src/session/session.module'
     GraphqlConfigModule,
     AuthModule,
     RedisModule,
-    SessionModule,
+    SessionModule
   ],
-  providers: [GqlAuthGuard],
+  providers: [GqlAuthGuard]
 })
 export class GlobalModule {}

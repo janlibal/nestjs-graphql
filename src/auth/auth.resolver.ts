@@ -15,14 +15,14 @@ export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
   @Mutation(() => LoginResponseDto)
   async login(
-    @Args('input', new ValidateLoginPipe()) input: AuthEmailLoginInput,
+    @Args('input', new ValidateLoginPipe()) input: AuthEmailLoginInput
   ): Promise<LoginResponseDto> {
     return await this.authService.validateLogin(input)
   }
 
   @Mutation(() => Boolean)
   async register(
-    @Args('input', new ValidateRegisterPipe()) input: AuthEmailRegisterInput,
+    @Args('input', new ValidateRegisterPipe()) input: AuthEmailRegisterInput
   ): Promise<boolean> {
     return await this.authService.register(input)
   }
@@ -39,7 +39,7 @@ export class AuthResolver {
     const data = context
     return await this.authService.logout({
       sessionId: context.req.user.sessionId,
-      userId: context.req.user.id,
+      userId: context.req.user.id
     })
   }
 }

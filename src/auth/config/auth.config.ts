@@ -40,6 +40,6 @@ export default registerAs<AuthConfig>('auth', () => {
     forgotSecret: process.env.AUTH_FORGOT_SECRET,
     forgotExpires: process.env.AUTH_FORGOT_TOKEN_EXPIRES_IN,
     confirmEmailSecret: process.env.AUTH_CONFIRM_EMAIL_SECRET,
-    confirmEmailExpires: process.env.AUTH_CONFIRM_EMAIL_TOKEN_EXPIRES_IN,
+    confirmEmailExpires: process.env.AUTH_CONFIRM_EMAIL_TOKEN_EXPIRES_IN
   }
 })

@@ -10,7 +10,7 @@ const validationOptions: ValidationPipeOptions = {
       return acc
     }, [])
     return new BadRequestException(messages)
-  },
+  }
 }
 
 export default validationOptions

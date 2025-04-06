@@ -71,7 +71,7 @@ export default registerAs<RedisConfig>('redis', () => {
       ? parseInt(process.env.REDIS_EXPIRY, 10)
       : process.env.REDIS_EXPIRY
         ? parseInt(process.env.REDIS_EXPIRY, 10)
-        : 900000,
+        : 900000
     //expiry: process.env.REDIS_EXPIRY,
   }
 })

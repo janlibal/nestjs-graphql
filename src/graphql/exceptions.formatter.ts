@@ -15,7 +15,7 @@ export const formatGraphQLError = (error: any) => {
     error: originalError.error || 'Unknown error',
     statusCode: originalError.statusCode || HttpStatus.INTERNAL_SERVER_ERROR,
 
-    stack: stack.slice(0, 2),
+    stack: stack.slice(0, 2)
   }
 }
 
@@ -28,6 +28,6 @@ export const formatGraphQLError1 = (error: any) => {
     message: error.extensions.originalError.message,
     error: error.extensions.originalError.error,
     statusCode: error.extensions.originalError.statusCode,
-    stack: error.extensions.stacktrace.slice(0, 2),
+    stack: error.extensions.stacktrace.slice(0, 2)
   }
 }

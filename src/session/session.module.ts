@@ -5,6 +5,6 @@ import { SessionPersistenceModule } from './infrastructure/session.infrastructur
 @Module({
   imports: [SessionPersistenceModule],
   providers: [SessionService],
-  exports: [SessionService, SessionPersistenceModule],
+  exports: [SessionService, SessionPersistenceModule]
 })
 export class SessionModule {}

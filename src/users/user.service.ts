@@ -1,8 +1,7 @@
 import {
   ConflictException,
-  HttpStatus,
   Injectable,
-  UnprocessableEntityException,
+  UnprocessableEntityException
 } from '@nestjs/common'
 import { User } from '@prisma/client'
 import { User as UserModel } from './model/user.model'
@@ -43,7 +42,7 @@ export class UserService {
     let email: string | null = null
     if (createUserInput.email) {
       const userObject = await this.userRepository.findByEmail(
-        createUserInput.email,
+        createUserInput.email
       )
       if (userObject) {
         throw new ConflictException('User already exists')
@@ -81,7 +80,7 @@ export class UserService {
       email: email,
       provider: AuthProvidersEnum.email,
       role: role,
-      status: status,
+      status: status
     }
     return await this.userRepository.save(clonedPayload)
   }

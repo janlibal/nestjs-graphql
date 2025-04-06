@@ -6,7 +6,7 @@ import { NullableType } from 'src/utils/types/nullable.type'
 @Injectable()
 export abstract class SessionRepository {
   abstract create(
-    data: Omit<Session, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>,
+    data: Omit<Session, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>
   ): Promise<Session>
 
   abstract deleteById(id: Session['id']): Promise<boolean>
@@ -19,6 +19,6 @@ export abstract class SessionRepository {
     id: Session['id'],
     payload: Partial<
       Omit<Session, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>
-    >,
+    >
   ): Promise<Session | null>
 }

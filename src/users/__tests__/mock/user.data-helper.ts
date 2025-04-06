@@ -13,7 +13,7 @@ export function userMockDomainObjects(rawUsr: UserDomain, numObjects: number) {
       password: rawUsr.password,
       role: { id: rawUsr.role.id },
       status: { id: rawUsr.status.id },
-      provider: rawUsr.provider,
+      provider: rawUsr.provider
     }
     userArray.push(newUser)
   }
@@ -33,7 +33,7 @@ export function userMockEntityObjects(rawUsr: UserEntity, numObjects: number) {
       password: rawUsr.password,
       roleId: rawUsr.roleId,
       statusId: rawUsr.statusId,
-      provider: rawUsr.provider,
+      provider: rawUsr.provider
     }
     userArray.push(newUser)
   }

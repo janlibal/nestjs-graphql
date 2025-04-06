@@ -8,7 +8,7 @@ import {
   createUserInput,
   rawUserDomainObject,
   rawUserEntityObject,
-  userObjectHashedPwd,
+  userObjectHashedPwd
 } from './mock/user.data'
 import { userMockEntityObjects } from './mock/user.data-helper'
 import { UserRepository } from '../infrastructure/repository/user.repository'
@@ -20,7 +20,7 @@ describe('UserService', () => {
     findByEmail: vi.fn(),
     findById: vi.fn(),
     findMany: vi.fn(),
-    findByFirstNames: vi.fn(),
+    findByFirstNames: vi.fn()
   }
 
   beforeEach(async () => {
@@ -29,9 +29,9 @@ describe('UserService', () => {
         UserService,
         {
           provide: UserRepository,
-          useValue: mockUserRepository,
-        },
-      ],
+          useValue: mockUserRepository
+        }
+      ]
     }).compile()
 
     userService = module.get<UserService>(UserService)
@@ -52,7 +52,7 @@ describe('UserService', () => {
         const result = await userService.findById(rawUserDomainObject.id)
         expect(result).toEqual(rawUserDomainObject)
         expect(mockUserRepository.findById).toHaveBeenCalledWith(
-          rawUserDomainObject.id,
+          rawUserDomainObject.id
         )
       })
       it('should throw UnprocessableEntityException if user not found', async () => {
@@ -70,7 +70,7 @@ describe('UserService', () => {
         const result = await userService.findByEmail(rawUserDomainObject.email)
         expect(result).toEqual(rawUserDomainObject)
         expect(mockUserRepository.findByEmail).toHaveBeenCalledWith(
-          rawUserDomainObject.email,
+          rawUserDomainObject.email
         )
       })
     })
@@ -90,18 +90,18 @@ describe('UserService', () => {
 
         mockUserRepository.findByFirstNames.mockResolvedValue(
           userEntityObjects.filter((user) =>
-            ['Joe'].some((names) => names === user.firstName),
-          ),
+            ['Joe'].some((names) => names === user.firstName)
+          )
         )
         const result = await userService.getByFirstNames(['Joe'])
         //expect(result).toEqual(allUsers.map(a => a.firstName === 'Joe'))
         expect(result).toEqual(
           userEntityObjects.filter((user) =>
-            ['Joe'].some((names) => names === user.firstName),
-          ),
+            ['Joe'].some((names) => names === user.firstName)
+          )
         )
         expect(mockUserRepository.findByFirstNames).toHaveBeenCalledWith([
-          'Joe',
+          'Joe'
         ])
       })
     })
@@ -109,20 +109,20 @@ describe('UserService', () => {
       it('should throw ConflictException if user with email already exists', async () => {
         mockUserRepository.findByEmail.mockResolvedValue({})
         await expect(
-          userService.createUser(rawUserDomainObject),
+          userService.createUser(rawUserDomainObject)
         ).rejects.toThrowError(ConflictException)
       })
       it('should throw UnprocessableEntityException if role does not exist', async () => {
         mockUserRepository.findByEmail.mockResolvedValue(null)
         await expect(
-          userService.createUser({ ...createUserInput, role: { id: 999 } }),
+          userService.createUser({ ...createUserInput, role: { id: 999 } })
         ).rejects.toThrowError(UnprocessableEntityException)
       })
       it('should throw UnprocessableEntityException if status does not exist', async () => {
         mockUserRepository.findByEmail.mockResolvedValue(null)
 
         await expect(
-          userService.createUser({ ...createUserInput, status: { id: 999 } }),
+          userService.createUser({ ...createUserInput, status: { id: 999 } })
         ).rejects.toThrowError(UnprocessableEntityException)
       })
       it('should successfully create a user and save it', async () => {
@@ -137,14 +137,14 @@ describe('UserService', () => {
         const result = await userService.createUser(createUserInput)
 
         expect(mockUserRepository.save).toHaveBeenCalledWith(
-          expect.objectContaining(userObjectHashedPwd),
+          expect.objectContaining(userObjectHashedPwd)
         )
 
         expect(result).toEqual(rawUserDomainObject)
 
         expect(hashPasswordSpy).toHaveBeenCalled()
         expect(mockUserRepository.findByEmail).toHaveBeenCalledWith(
-          createUserInput.email,
+          createUserInput.email
         )
       })
     })

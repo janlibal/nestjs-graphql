@@ -6,5 +6,5 @@ export const usr = {
   password: await crypto.hashPassword('Password123!'),
   email: 'daniel.doe@joedoe.com',
   statusId: 1,
-  roleId: 1,
+  roleId: 1
 }
