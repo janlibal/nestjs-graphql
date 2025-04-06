@@ -6,8 +6,8 @@ import {
   sessionMockEntityObject,
   sessionObject,
 } from './mock/session.data'
-import { SessionRepository } from '../session.repository'
-import { SessionMapper } from '../mappers/session.mapper'
+import { SessionPersistence } from '../infrastructure/persistence/session.persistence'
+import { SessionMapper } from '../infrastructure/mappers/session.mapper'
 
 const mockPrismaService = {
   session: {
@@ -18,19 +18,19 @@ const mockPrismaService = {
   },
 }
 
-describe('SessionRepository', () => {
-  let sessionRepository: SessionRepository
+describe('SessionPersistence', () => {
+  let sessionPersistence: SessionPersistence
   let prismaService: PrismaService
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        SessionRepository,
+        SessionPersistence,
         { provide: PrismaService, useValue: mockPrismaService },
       ],
     }).compile()
 
-    sessionRepository = module.get<SessionRepository>(SessionRepository)
+    sessionPersistence = module.get<SessionPersistence>(SessionPersistence)
     prismaService = module.get<PrismaService>(PrismaService)
 
     vi.restoreAllMocks()
@@ -41,14 +41,14 @@ describe('SessionRepository', () => {
   })
 
   it('should be defined', () => {
-    expect(sessionRepository).toBeDefined()
+    expect(sessionPersistence).toBeDefined()
   })
 
   describe('SessionRepository', () => {
     it('deleteById()', async () => {
       vi.spyOn(prismaService.session, 'delete').mockResolvedValue(null)
 
-      await sessionRepository.deleteById(sessionMockDomainObject.id)
+      await sessionPersistence.deleteById(sessionMockDomainObject.id)
 
       expect(mockPrismaService.session.delete).toHaveBeenCalledWith({
         where: { id: sessionMockDomainObject.id },
@@ -62,7 +62,7 @@ describe('SessionRepository', () => {
         sessionMockEntityObject,
       )
 
-      const result = await sessionRepository.findById(
+      const result = await sessionPersistence.findById(
         sessionMockDomainObject.id,
       )
 
@@ -81,7 +81,7 @@ describe('SessionRepository', () => {
         userId: sessionMockDomainObject.userId,
       }
 
-      await sessionRepository.deleteByUserId(conditions)
+      await sessionPersistence.deleteByUserId(conditions)
 
       expect(mockPrismaService.session.delete).toHaveBeenCalledWith({
         include: { user: true },
@@ -98,7 +98,7 @@ describe('SessionRepository', () => {
         sessionMockEntityObject,
       )
 
-      const result = await sessionRepository.create(sessionObject)
+      const result = await sessionPersistence.create(sessionObject)
 
       expect(result).toEqual(sessionMockDomainObject)
 
