@@ -19,7 +19,7 @@ export class RedisRepository
       `${data.prefix}:${data.user.id}`,
       data.token,
       'PX',
-      data.expiry,
+      data.expiry
     )
   }
 

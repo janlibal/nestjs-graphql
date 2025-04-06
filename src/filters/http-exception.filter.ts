@@ -4,7 +4,7 @@ import {
   HttpException,
   ArgumentsHost,
   Logger,
-  HttpStatus,
+  HttpStatus
 } from '@nestjs/common'
 import { Request, Response } from 'express'
 import { GqlArgumentsHost, GqlExceptionFilter } from '@nestjs/graphql'
@@ -37,7 +37,7 @@ export class HttpExceptionFilter
       error:
         status !== HttpStatus.INTERNAL_SERVER_ERROR
           ? exception.message || exception.message || null
-          : 'Internal server error',
+          : 'Internal server error'
     }
 
     // This is for REST petitions
@@ -45,13 +45,13 @@ export class HttpExceptionFilter
       const error = {
         ...errorResponse,
         path: request.url,
-        method: request.method,
+        method: request.method
       }
 
       Logger.error(
         `${request.method} ${request.url}`,
         JSON.stringify(error),
-        'ExceptionFilter',
+        'ExceptionFilter'
       )
 
       response.status(status).json({ errors: [errorResponse] })
@@ -60,20 +60,20 @@ export class HttpExceptionFilter
       const error = {
         ...errorResponse,
         type: info.parentType,
-        field: info.fieldName,
+        field: info.fieldName
       }
 
       Logger.error(
         `${info.parentType} ${info.fieldName}`,
         JSON.stringify(error),
-        'GraphQL ExceptionFilter',
+        'GraphQL ExceptionFilter'
       )
 
       throw new GraphQLError(errorResponse.error || 'Internal server error', {
         extensions: {
           status: status,
-          originalError: exception,
-        },
+          originalError: exception
+        }
       })
     }
   }

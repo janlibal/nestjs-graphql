@@ -8,5 +8,5 @@ export const loggingRedactPaths = [
   'password',
   'provider',
   'role',
-  'status',
+  'status'
 ]

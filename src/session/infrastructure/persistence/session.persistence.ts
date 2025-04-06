@@ -12,7 +12,7 @@ export class SessionPersistence {
   async create(data: Session): Promise<Session> {
     const persistenceEntity = await SessionMapper.toPersistence(data)
     const newEntity = await this.prismaService.session.create({
-      data: persistenceEntity,
+      data: persistenceEntity
     })
     return await SessionMapper.toDomain(newEntity)
   }
@@ -25,7 +25,7 @@ export class SessionPersistence {
   async findById(id: Session['id']): Promise<NullableType<Session>> {
     const entity = await this.prismaService.session.findFirst({
       include: { user: true },
-      where: { id: id },
+      where: { id: id }
     })
     return entity ? await SessionMapper.toDomain(entity) : null
   }
@@ -33,11 +33,11 @@ export class SessionPersistence {
   async deleteByUserId(conditions: { userId: User['id'] }): Promise<void> {
     await this.prismaService.session.delete({
       include: {
-        user: true,
+        user: true
       },
       where: {
-        id: Number(conditions.userId),
-      },
+        id: Number(conditions.userId)
+      }
     })
   }
 
@@ -45,10 +45,10 @@ export class SessionPersistence {
     id: Session['id'],
     payload: Partial<
       Omit<Session, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>
-    >,
+    >
   ): Promise<Session | null> {
     const entity = await this.prismaService.session.findFirstOrThrow({
-      where: { id: Number(id) },
+      where: { id: Number(id) }
     })
     if (!entity) throw new Error('Session not found')
 
@@ -56,7 +56,7 @@ export class SessionPersistence {
     const newEntity = await this.prismaService.session.update({
       include: { user: true },
       where: { id: sessionToUpdate.id },
-      data: payload,
+      data: payload
     })
     return await SessionMapper.toDomain(newEntity)
     /*return await this.prismaService.session.update({

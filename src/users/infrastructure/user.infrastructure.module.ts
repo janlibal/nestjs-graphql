@@ -8,9 +8,9 @@ import { PrismaModule } from '../../database/prisma.module'
   providers: [
     {
       provide: UserRepository,
-      useClass: UserPersistence,
-    },
+      useClass: UserPersistence
+    }
   ],
-  exports: [UserRepository],
+  exports: [UserRepository]
 })
 export class UserPersistenceModule {}

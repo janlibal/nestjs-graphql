@@ -9,7 +9,7 @@ export const createUserInput: CreateUserInput = {
   firstName: 'Jan',
   lastName: 'Libal',
   role: { id: 1 },
-  status: { id: 1 },
+  status: { id: 1 }
 }
 
 export const userObjectHashedPwd: UserDomain = {
@@ -19,7 +19,7 @@ export const userObjectHashedPwd: UserDomain = {
   lastName: 'Libal',
   role: { id: 1 },
   status: { id: 1 },
-  provider: AuthProvidersEnum.email,
+  provider: AuthProvidersEnum.email
 }
 
 export const rawUserDomainObject: UserDomain = {
@@ -30,7 +30,7 @@ export const rawUserDomainObject: UserDomain = {
   password: 'hashedPassword123!',
   role: { id: 1 },
   status: { id: 1 },
-  provider: AuthProvidersEnum.email,
+  provider: AuthProvidersEnum.email
 }
 
 export const rawUserEntityObject: UserEntity = {
@@ -41,5 +41,5 @@ export const rawUserEntityObject: UserEntity = {
   password: 'hashedPassword123!',
   roleId: 1,
   statusId: 1,
-  provider: AuthProvidersEnum.email,
+  provider: AuthProvidersEnum.email
 }

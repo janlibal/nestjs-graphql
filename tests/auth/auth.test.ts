@@ -34,7 +34,7 @@ describe('Auth', () => {
  
                     }
                     }
-              `,
+              `
           })
           .expect(200)
         expect(response.body.data.login.user.email).toMatch(usr.email)
@@ -43,10 +43,10 @@ describe('Auth', () => {
         expect(response.body.data.login.user.status.id).toBe(usr.statusId)
         expect(response.body.data.login.user.role.id).toBe(usr.roleId)
         expect(response.body.data.login.token).toMatch(
-          /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/,
+          /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/
         )
         expect(response.body.data.login.refreshToken).toMatch(
-          /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/,
+          /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/
         )
         expect(response.body.data.login.tokenExpires).toBeDefined()
       })
@@ -75,23 +75,23 @@ describe('Auth', () => {
  
                     }
                     }
-              `,
+              `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('login')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('login')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Password cannot be empty.',
+          'Password cannot be empty.'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Password cannot be empty./i,
+          /BadRequestException: Password cannot be empty./i
         )
       })
       it('should throw error when email is invalid', async () => {
@@ -119,12 +119,12 @@ describe('Auth', () => {
  
                     }
                     }
-              `,
+              `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('login')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('login')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
@@ -133,7 +133,7 @@ describe('Auth', () => {
         expect(response.body.errors[0].message).toMatch('Email is invalid.')
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Email is invalid./i,
+          /BadRequestException: Email is invalid./i
         )
       })
       it('should throw error when email is invalid and password is empty', async () => {
@@ -161,23 +161,23 @@ describe('Auth', () => {
  
                     }
                     }
-              `,
+              `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('login')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('login')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Password cannot be empty. Email is invalid.',
+          'Password cannot be empty. Email is invalid.'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Password cannot be empty. Email is invalid./i,
+          /BadRequestException: Password cannot be empty. Email is invalid./i
         )
       })
       it('should throw error when email and password are empty', async () => {
@@ -205,23 +205,23 @@ describe('Auth', () => {
  
                     }
                     }
-              `,
+              `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('login')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('login')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Password cannot be empty. Email is invalid.',
+          'Password cannot be empty. Email is invalid.'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Password cannot be empty. Email is invalid./i,
+          /BadRequestException: Password cannot be empty. Email is invalid./i
         )
       })
     })
@@ -241,7 +241,7 @@ describe('Auth', () => {
                 password: "Password123!",
               })
             }
-          `,
+          `
           })
           .expect(200)
       })
@@ -259,23 +259,23 @@ describe('Auth', () => {
                 password: "Password123!"
               })
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Firstname cannot be empty and must be a string. Firstname must be longer than 1 character.',
+          'Firstname cannot be empty and must be a string. Firstname must be longer than 1 character.'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Firstname cannot be empty and must be a string. Firstname must be longer than 1 character./i,
+          /BadRequestException: Firstname cannot be empty and must be a string. Firstname must be longer than 1 character./i
         )
       })
       it('should throw error when firstName less than 2 characters long', async () => {
@@ -292,23 +292,23 @@ describe('Auth', () => {
                 password: "Password123!"
               }) 
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Firstname must be longer than 1 character.',
+          'Firstname must be longer than 1 character.'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Firstname must be longer than 1 character./i,
+          /BadRequestException: Firstname must be longer than 1 character./i
         )
       })
       it('should throw error when firstName contains special characters', async () => {
@@ -326,23 +326,23 @@ describe('Auth', () => {
                 
               })
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Firstname cannot contain special characters or numbers.',
+          'Firstname cannot contain special characters or numbers.'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Firstname cannot contain special characters or numbers./i,
+          /BadRequestException: Firstname cannot contain special characters or numbers./i
         )
       })
       it('should throw error when firstName consists of only numbers', async () => {
@@ -360,23 +360,23 @@ describe('Auth', () => {
                 
               })
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Firstname cannot contain special characters or numbers.',
+          'Firstname cannot contain special characters or numbers.'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Firstname cannot contain special characters or numbers./i,
+          /BadRequestException: Firstname cannot contain special characters or numbers./i
         )
       })
       it('should throw error when lastName is empty', async () => {
@@ -394,23 +394,23 @@ describe('Auth', () => {
                 
               })
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Lastname cannot be empty and must be a string.',
+          'Lastname cannot be empty and must be a string.'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Lastname cannot be empty and must be a string./i,
+          /BadRequestException: Lastname cannot be empty and must be a string./i
         )
       })
       it('should throw error when lastName less than 2 characters long', async () => {
@@ -428,23 +428,23 @@ describe('Auth', () => {
                 
               })
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Lastname must be longer than 1 character.',
+          'Lastname must be longer than 1 character.'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Lastname must be longer than 1 character./i,
+          /BadRequestException: Lastname must be longer than 1 character./i
         )
       })
       it('should throw error when lastName contains special characters', async () => {
@@ -463,23 +463,23 @@ describe('Auth', () => {
                   
               })   
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Lastname cannot contain special characters or numbers.',
+          'Lastname cannot contain special characters or numbers.'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Lastname cannot contain special characters or numbers./i,
+          /BadRequestException: Lastname cannot contain special characters or numbers./i
         )
       })
       it('should throw error when lastName consists of only numbers', async () => {
@@ -498,23 +498,23 @@ describe('Auth', () => {
                   
               })   
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Lastname cannot contain special characters or numbers.',
+          'Lastname cannot contain special characters or numbers.'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Lastname cannot contain special characters or numbers./i,
+          /BadRequestException: Lastname cannot contain special characters or numbers./i
         )
       })
       it('should throw error when password is empty', async () => {
@@ -533,23 +533,23 @@ describe('Auth', () => {
                   
               })   
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Password cannot be empty.',
+          'Password cannot be empty.'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Password cannot be empty./i,
+          /BadRequestException: Password cannot be empty./i
         )
       })
       it('should throw error when password is less than 6 characters long', async () => {
@@ -568,23 +568,23 @@ describe('Auth', () => {
                   
               })   
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Password must be at least 6 characters long.',
+          'Password must be at least 6 characters long.'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Password must be at least 6 characters long./i,
+          /BadRequestException: Password must be at least 6 characters long./i
         )
       })
       it('should throw error when password is more than 20 characters long', async () => {
@@ -603,23 +603,23 @@ describe('Auth', () => {
                   
               })   
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Passwword can contain 20 characters at the most.',
+          'Passwword can contain 20 characters at the most.'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Passwword can contain 20 characters at the most./i,
+          /BadRequestException: Passwword can contain 20 characters at the most./i
         )
       })
       it('should throw error when password is weak', async () => {
@@ -638,23 +638,23 @@ describe('Auth', () => {
                   
               })   
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Password must be at least 6 characters long. Password is too weak',
+          'Password must be at least 6 characters long. Password is too weak'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Password must be at least 6 characters long. Password is too weak/i,
+          /BadRequestException: Password must be at least 6 characters long. Password is too weak/i
         )
       })
       it('should throw error when email is invalid', async () => {
@@ -673,12 +673,12 @@ describe('Auth', () => {
                   
               })   
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
@@ -687,7 +687,7 @@ describe('Auth', () => {
         expect(response.body.errors[0].message).toMatch('Email is invalid.')
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Email is invalid./i,
+          /BadRequestException: Email is invalid./i
         )
       })
       it('should throw error when only firstName is valid', async () => {
@@ -706,23 +706,23 @@ describe('Auth', () => {
                   
               })   
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Lastname cannot be empty and must be a string. Lastname must be longer than 1 character. Password cannot be empty. Password must be at least 6 characters long. Password is too weak Email is invalid.',
+          'Lastname cannot be empty and must be a string. Lastname must be longer than 1 character. Password cannot be empty. Password must be at least 6 characters long. Password is too weak Email is invalid.'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Lastname cannot be empty and must be a string. Lastname must be longer than 1 character. Password cannot be empty. Password must be at least 6 characters long. Password is too weak Email is invalid./i,
+          /BadRequestException: Lastname cannot be empty and must be a string. Lastname must be longer than 1 character. Password cannot be empty. Password must be at least 6 characters long. Password is too weak Email is invalid./i
         )
       })
       it('should throw error when only firstName and lastName are valid', async () => {
@@ -741,23 +741,23 @@ describe('Auth', () => {
                   
               })   
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('register')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Password cannot be empty. Password must be at least 6 characters long. Password is too weak Email is invalid.',
+          'Password cannot be empty. Password must be at least 6 characters long. Password is too weak Email is invalid.'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Password cannot be empty. Password must be at least 6 characters long. Password is too weak Email is invalid./i,
+          /BadRequestException: Password cannot be empty. Password must be at least 6 characters long. Password is too weak Email is invalid./i
         )
       })
       /*it('should throw error when email already exists', async () => {

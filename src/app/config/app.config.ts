@@ -6,7 +6,7 @@ import {
   IsString,
   IsUrl,
   Max,
-  Min,
+  Min
 } from 'class-validator'
 import { AppConfig } from './app.config.type'
 
@@ -17,7 +17,7 @@ import validateConfig from '../../utils/validatate.config'
 enum Environment {
   Development = 'dev',
   Production = 'prod',
-  Test = 'test',
+  Test = 'test'
 }
 
 class EnvironmentVariablesValidator {
@@ -72,6 +72,6 @@ export default registerAs<AppConfig>('app', () => {
     dbUrl: process.env.DATABASE_URL || 'unknown',
     apiPrefix: API_PREFIX || 'api',
     fallbackLanguage: process.env.APP_FALLBACK_LANGUAGE || 'en',
-    headerLanguage: process.env.APP_HEADER_LANGUAGE || 'x-custom-lang',
+    headerLanguage: process.env.APP_HEADER_LANGUAGE || 'x-custom-lang'
   }
 })

@@ -12,11 +12,11 @@ import {
   mockUser,
   mockUserGoogle,
   registerInput,
-  sessionData,
+  sessionData
 } from './mock/auth.data'
 import {
   UnauthorizedException,
-  UnprocessableEntityException,
+  UnprocessableEntityException
 } from '@nestjs/common'
 import crypto from '../../utils/crypto'
 import { RedisPrefixEnum } from 'src/redis/enums/redis.prefix.enum'
@@ -26,15 +26,15 @@ describe('SessionService', () => {
 
   const mockUserService = {
     createUser: vi.fn(),
-    findByEmail: vi.fn(),
+    findByEmail: vi.fn()
   }
 
   const mockSessionService = {
-    create: vi.fn(),
+    create: vi.fn()
   }
 
   const mockRedisService = {
-    createSession: vi.fn(),
+    createSession: vi.fn()
   }
 
   beforeEach(async () => {
@@ -44,18 +44,18 @@ describe('SessionService', () => {
         AuthService,
         {
           provide: UserService,
-          useValue: mockUserService,
+          useValue: mockUserService
         },
         {
           provide: SessionService,
-          useValue: mockSessionService,
+          useValue: mockSessionService
         },
         {
           provide: RedisService,
-          useValue: mockRedisService,
+          useValue: mockRedisService
         },
-        JwtService,
-      ],
+        JwtService
+      ]
     }).compile()
 
     authService = module.get<AuthService>(AuthService)
@@ -82,28 +82,28 @@ describe('SessionService', () => {
       it('should throw unauthorized exception if user does not exist', async () => {
         mockUserService.findByEmail.mockResolvedValue(null)
         await expect(authService.validateLogin(registerInput)).rejects.toThrow(
-          UnauthorizedException,
+          UnauthorizedException
         )
       })
 
       it('should throw Unauthorized if user provider is not email', async () => {
         mockUserService.findByEmail.mockResolvedValue(mockUserGoogle)
         await expect(authService.validateLogin(loginData)).rejects.toThrowError(
-          UnprocessableEntityException,
+          UnprocessableEntityException
         )
       })
 
       it('should throw Unauthorized if user provider is not email', async () => {
         mockUserService.findByEmail.mockResolvedValue(mockUserGoogle)
         await expect(authService.validateLogin(loginData)).rejects.toThrowError(
-          UnprocessableEntityException,
+          UnprocessableEntityException
         )
       })
 
       it('should throw UnprocessableEntityException there is missing password', async () => {
         mockUserService.findByEmail.mockResolvedValue(mockUserGoogle)
         await expect(authService.validateLogin(loginData)).rejects.toThrowError(
-          UnprocessableEntityException,
+          UnprocessableEntityException
         )
       })
 
@@ -113,14 +113,14 @@ describe('SessionService', () => {
           .spyOn(crypto, 'comparePasswords')
           .mockResolvedValue(false)
         await expect(authService.validateLogin(loginDataBad)).rejects.toThrow(
-          UnauthorizedException,
+          UnauthorizedException
         )
         expect(comparePasswordsSpy).toHaveBeenCalledWith(
           loginDataBad.password,
-          mockUser.password,
+          mockUser.password
         )
         expect(mockUserService.findByEmail).toHaveBeenCalledWith(
-          loginDataBad.email,
+          loginDataBad.email
         )
       })
 
@@ -139,19 +139,19 @@ describe('SessionService', () => {
 
         const result = await authService.validateLogin(loginData)
         expect(result.refreshToken).toMatch(
-          /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/,
+          /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/
         )
         expect(result.token).toMatch(
-          /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/,
+          /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/
         )
         expect(mockUserService.findByEmail).toHaveBeenCalledWith(
-          loginData.email,
+          loginData.email
         )
         expect(result.tokenExpires).toBeDefined()
         expect(result.user).toEqual(mockUser)
         expect(comparePasswordsSpy).toHaveBeenCalledWith(
           loginData.password,
-          mockUser.password,
+          mockUser.password
         )
         expect(makeHashSpy).toHaveBeenCalled()
         expect(mockSessionService.create).toHaveBeenCalledWith(sessionData)
@@ -159,7 +159,7 @@ describe('SessionService', () => {
           prefix: prefix,
           user: result.user,
           token: result.token,
-          expiry: expiry,
+          expiry: expiry
         })
       })
     })

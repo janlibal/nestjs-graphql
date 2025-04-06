@@ -4,7 +4,7 @@ import { PrismaService } from '../../database/prisma.service'
 import {
   sessionMockDomainObject,
   sessionMockEntityObject,
-  sessionObject,
+  sessionObject
 } from './mock/session.data'
 import { SessionPersistence } from '../infrastructure/persistence/session.persistence'
 import { SessionMapper } from '../infrastructure/mappers/session.mapper'
@@ -14,8 +14,8 @@ const mockPrismaService = {
     create: vi.fn(),
     findUnique: vi.fn(),
     findFirst: vi.fn(),
-    delete: vi.fn(),
-  },
+    delete: vi.fn()
+  }
 }
 
 describe('SessionPersistence', () => {
@@ -26,8 +26,8 @@ describe('SessionPersistence', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         SessionPersistence,
-        { provide: PrismaService, useValue: mockPrismaService },
-      ],
+        { provide: PrismaService, useValue: mockPrismaService }
+      ]
     }).compile()
 
     sessionPersistence = module.get<SessionPersistence>(SessionPersistence)
@@ -51,7 +51,7 @@ describe('SessionPersistence', () => {
       await sessionPersistence.deleteById(sessionMockDomainObject.id)
 
       expect(mockPrismaService.session.delete).toHaveBeenCalledWith({
-        where: { id: sessionMockDomainObject.id },
+        where: { id: sessionMockDomainObject.id }
       })
 
       expect(prismaService.session.delete).toHaveBeenCalledTimes(1)
@@ -59,18 +59,18 @@ describe('SessionPersistence', () => {
 
     it('findById()', async () => {
       vi.spyOn(prismaService.session, 'findFirst').mockResolvedValue(
-        sessionMockEntityObject,
+        sessionMockEntityObject
       )
 
       const result = await sessionPersistence.findById(
-        sessionMockDomainObject.id,
+        sessionMockDomainObject.id
       )
 
       expect(result).toEqual(sessionMockDomainObject)
 
       expect(mockPrismaService.session.findFirst).toHaveBeenCalledWith({
         include: { user: true },
-        where: { id: sessionMockDomainObject.id },
+        where: { id: sessionMockDomainObject.id }
       })
     })
 
@@ -78,14 +78,14 @@ describe('SessionPersistence', () => {
       vi.spyOn(prismaService.session, 'delete').mockResolvedValue(null)
 
       const conditions = {
-        userId: sessionMockDomainObject.userId,
+        userId: sessionMockDomainObject.userId
       }
 
       await sessionPersistence.deleteByUserId(conditions)
 
       expect(mockPrismaService.session.delete).toHaveBeenCalledWith({
         include: { user: true },
-        where: { id: Number(conditions.userId) },
+        where: { id: Number(conditions.userId) }
       })
 
       expect(prismaService.session.delete).toHaveBeenCalledTimes(1)
@@ -95,7 +95,7 @@ describe('SessionPersistence', () => {
       const persistenceModel = await SessionMapper.toPersistence(sessionObject)
 
       vi.spyOn(prismaService.session, 'create').mockResolvedValue(
-        sessionMockEntityObject,
+        sessionMockEntityObject
       )
 
       const result = await sessionPersistence.create(sessionObject)
@@ -103,7 +103,7 @@ describe('SessionPersistence', () => {
       expect(result).toEqual(sessionMockDomainObject)
 
       expect(mockPrismaService.session.create).toHaveBeenCalledWith({
-        data: persistenceModel,
+        data: persistenceModel
       })
     })
   })

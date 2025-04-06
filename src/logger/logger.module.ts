@@ -26,22 +26,22 @@ declare module 'http' {
                 options: {
                   colorize: true,
                   translateTime: 'SYS:standard',
-                  ignorePaths: ['pid', 'hostname'],
-                },
+                  ignorePaths: ['pid', 'hostname']
+                }
               }
             : {
                 target: 'pino/file',
                 options: {
                   destination: rfs.createStream('app-%DATE%.log', {
                     interval: '1d',
-                    path: './logs',
-                  }),
-                },
-              },
-      },
-    }),
+                    path: './logs'
+                  })
+                }
+              }
+      }
+    })
   ],
   providers: [PinoLoggerService, FakeLoggerService],
-  exports: [PinoLoggerService, FakeLoggerService],
+  exports: [PinoLoggerService, FakeLoggerService]
 })
 export class LoggerModule {}

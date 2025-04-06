@@ -9,7 +9,7 @@ export class SessionMapper {
       userId: data.userId,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
-      deletedAt: data.deletedAt,
+      deletedAt: data.deletedAt
     }
     return persistenceEntity
   }
@@ -22,7 +22,7 @@ export class SessionMapper {
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
       deletedAt: data.deletedAt,
-      ...data,
+      ...data
     }
     return domainEntity
   }

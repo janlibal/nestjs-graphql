@@ -32,16 +32,16 @@ describe('Auth', () => {
                 role { id }
               }
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.data.createUser.firstName).toMatch('Joe')
         expect(response.body.data.createUser.lastName).toMatch('Doe')
         expect(response.body.data.createUser.email).toMatch(
-          'joe.doe@joedoe.com',
+          'joe.doe@joedoe.com'
         )
         expect(response.body.data.createUser.password).toMatch(
-          /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
+          /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/
         )
         expect(response.body.data.createUser.provider).toMatch('email')
         expect(response.body.data.createUser.status.id).toBe(1)
@@ -71,23 +71,23 @@ describe('Auth', () => {
                 role { id }
               }
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('createUser')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('createUser')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Firstname cannot be empty and must be a string. Firstname must be longer than 1 character.',
+          'Firstname cannot be empty and must be a string. Firstname must be longer than 1 character.'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Firstname cannot be empty and must be a string. Firstname must be longer than 1 character./i,
+          /BadRequestException: Firstname cannot be empty and must be a string. Firstname must be longer than 1 character./i
         )
       })
       it('should throw error when firstName less than 2 characters long', async () => {
@@ -114,23 +114,23 @@ describe('Auth', () => {
                 role { id }
               }
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('createUser')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('createUser')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Firstname must be longer than 1 character.',
+          'Firstname must be longer than 1 character.'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Firstname must be longer than 1 character./i,
+          /BadRequestException: Firstname must be longer than 1 character./i
         )
       })
       it('should throw error when firstName contains special characters', async () => {
@@ -157,23 +157,23 @@ describe('Auth', () => {
                 role { id }
               }
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('createUser')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('createUser')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Firstname cannot contain special characters or numbers.',
+          'Firstname cannot contain special characters or numbers.'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Firstname cannot contain special characters or numbers./i,
+          /BadRequestException: Firstname cannot contain special characters or numbers./i
         )
       })
       it('should throw error when firstName consists of only numbers', async () => {
@@ -200,23 +200,23 @@ describe('Auth', () => {
                 role { id }
               }
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('createUser')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('createUser')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Firstname cannot contain special characters or numbers.',
+          'Firstname cannot contain special characters or numbers.'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Firstname cannot contain special characters or numbers./i,
+          /BadRequestException: Firstname cannot contain special characters or numbers./i
         )
       })
       it('should throw error when lastName is empty', async () => {
@@ -243,23 +243,23 @@ describe('Auth', () => {
                 role { id }
               }
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('createUser')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('createUser')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Lastname cannot be empty and must be a string.',
+          'Lastname cannot be empty and must be a string.'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Lastname cannot be empty and must be a string./i,
+          /BadRequestException: Lastname cannot be empty and must be a string./i
         )
       })
       it('should throw error when lastName less than 2 characters long', async () => {
@@ -286,23 +286,23 @@ describe('Auth', () => {
                 role { id }
               }
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('createUser')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('createUser')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Lastname must be longer than 1 character.',
+          'Lastname must be longer than 1 character.'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Lastname must be longer than 1 character./i,
+          /BadRequestException: Lastname must be longer than 1 character./i
         )
       })
       it('should throw error when lastName contains special characters', async () => {
@@ -329,23 +329,23 @@ describe('Auth', () => {
                 role { id }
               }
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('createUser')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('createUser')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Lastname cannot contain special characters or numbers.',
+          'Lastname cannot contain special characters or numbers.'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Lastname cannot contain special characters or numbers./i,
+          /BadRequestException: Lastname cannot contain special characters or numbers./i
         )
       })
       it('should throw error when lastName consists of only numbers', async () => {
@@ -372,23 +372,23 @@ describe('Auth', () => {
                 role { id }
               }
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('createUser')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('createUser')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Lastname cannot contain special characters or numbers.',
+          'Lastname cannot contain special characters or numbers.'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Lastname cannot contain special characters or numbers./i,
+          /BadRequestException: Lastname cannot contain special characters or numbers./i
         )
       })
       it('should throw error when password is empty', async () => {
@@ -415,23 +415,23 @@ describe('Auth', () => {
                 role { id }
               }
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('createUser')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('createUser')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Password cannot be empty.',
+          'Password cannot be empty.'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Password cannot be empty./i,
+          /BadRequestException: Password cannot be empty./i
         )
       })
       it('should throw error when password is less than 6 characters long', async () => {
@@ -458,23 +458,23 @@ describe('Auth', () => {
                 role { id }
               }
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('createUser')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('createUser')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Password must be at least 6 characters long.',
+          'Password must be at least 6 characters long.'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Password must be at least 6 characters long./i,
+          /BadRequestException: Password must be at least 6 characters long./i
         )
       })
       it('should throw error when password is more than 20 characters long', async () => {
@@ -501,23 +501,23 @@ describe('Auth', () => {
                 role { id }
               }
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('createUser')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('createUser')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Passwword can contain 20 characters at the most.',
+          'Passwword can contain 20 characters at the most.'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Passwword can contain 20 characters at the most./i,
+          /BadRequestException: Passwword can contain 20 characters at the most./i
         )
       })
       it('should throw error when password is weak', async () => {
@@ -544,23 +544,23 @@ describe('Auth', () => {
                 role { id }
               }
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('createUser')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('createUser')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch(
-          'Password must be at least 6 characters long. Password is too weak',
+          'Password must be at least 6 characters long. Password is too weak'
         )
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Password must be at least 6 characters long. Password is too weak/i,
+          /BadRequestException: Password must be at least 6 characters long. Password is too weak/i
         )
       })
       it('should throw error when email is invalid', async () => {
@@ -587,12 +587,12 @@ describe('Auth', () => {
                 role { id }
               }
             }
-          `,
+          `
           })
           .expect(200)
         expect(response.body.errors[0].path).toMatch('createUser')
         expect(response.body.errors[0].timestamp).toMatch(
-          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
         )
         expect(response.body.errors[0].path).toMatch('createUser')
         expect(response.body.errors[0].locations[0].line).toBeDefined()
@@ -601,7 +601,7 @@ describe('Auth', () => {
         expect(response.body.errors[0].message).toMatch('Email is invalid.')
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Email is invalid./i,
+          /BadRequestException: Email is invalid./i
         )
       })
     })

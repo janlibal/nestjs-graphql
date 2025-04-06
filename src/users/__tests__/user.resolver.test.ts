@@ -8,7 +8,7 @@ import { createUserInput } from './mock/user.data'
 import { ValidateUserInputPipe } from '../pipes/validate-user-input.pipe'
 
 const mockUserService = {
-  createUser: vi.fn(),
+  createUser: vi.fn()
 }
 
 describe('UserResolver', () => {
@@ -20,9 +20,9 @@ describe('UserResolver', () => {
         UserResolver,
         {
           provide: UserService,
-          useValue: mockUserService,
-        },
-      ],
+          useValue: mockUserService
+        }
+      ]
     }).compile()
 
     userResolver = module.get<UserResolver>(UserResolver)
@@ -53,7 +53,7 @@ describe('UserResolver', () => {
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(
-            /BadRequestException: Firstname cannot be empty and must be a string. Firstname must be longer than 1 character./i,
+            /BadRequestException: Firstname cannot be empty and must be a string. Firstname must be longer than 1 character./i
           )
         }
       })
@@ -75,7 +75,7 @@ describe('UserResolver', () => {
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(
-            /Firstname cannot contain special characters or numbers./i,
+            /Firstname cannot contain special characters or numbers./i
           )
         }
       })
@@ -87,7 +87,7 @@ describe('UserResolver', () => {
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(
-            /Firstname cannot contain special characters or numbers./i,
+            /Firstname cannot contain special characters or numbers./i
           )
         }
       })
@@ -120,7 +120,7 @@ describe('UserResolver', () => {
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(
-            /Lastname cannot contain special characters or numbers./i,
+            /Lastname cannot contain special characters or numbers./i
           )
         }
       })
@@ -132,7 +132,7 @@ describe('UserResolver', () => {
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(
-            /Lastname cannot contain special characters or numbers./i,
+            /Lastname cannot contain special characters or numbers./i
           )
         }
       })
@@ -162,13 +162,13 @@ describe('UserResolver', () => {
           await pipe.transform({
             ...createUserInput,
             password:
-              'Password123!Password123!Password123!Password123!Password123!Password123!',
+              'Password123!Password123!Password123!Password123!Password123!Password123!'
           }),
             { type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(
-            /Passwword can contain 20 characters at the most./i,
+            /Passwword can contain 20 characters at the most./i
           )
         }
       })

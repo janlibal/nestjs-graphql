@@ -14,10 +14,10 @@ import { graphqlContext } from './graphql.context'
       playground: process.env.NODE_ENV !== 'prod', //true
       path: 'api/v1/graphql',
       context: graphqlContext,
-      formatError: formatGraphQLError,
-    }),
+      formatError: formatGraphQLError
+    })
   ],
   providers: [GqlAuthGuard],
-  exports: [GraphQLModule],
+  exports: [GraphQLModule]
 })
 export class GraphqlConfigModule {}

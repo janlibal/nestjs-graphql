@@ -12,7 +12,7 @@ export class UserResolver {
 
   @Mutation(() => UserModel)
   async createUser(
-    @Args('input', new ValidateUserInputPipe()) input: CreateUserInput,
+    @Args('input', new ValidateUserInputPipe()) input: CreateUserInput
   ): Promise<UserModel> {
     return await this.userService.createUser(input)
   }
@@ -20,7 +20,7 @@ export class UserResolver {
   @Query(() => [UserModel])
   async findbyFirstNames(
     @Args('firstNames', { type: () => [String] })
-    firstNames: User['firstName'][],
+    firstNames: User['firstName'][]
   ): Promise<User[]> {
     return await this.userService.getByFirstNames(firstNames)
   }
@@ -32,7 +32,7 @@ export class UserResolver {
 
   @Query(() => UserModel, { nullable: true })
   async findOne(
-    @Args('id', { type: () => String }) id: User['id'],
+    @Args('id', { type: () => String }) id: User['id']
   ): Promise<NullableType<UserModel>> {
     return await this.userService.findById(id)
   }

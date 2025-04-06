@@ -9,10 +9,10 @@ import { NotFoundException } from '@nestjs/common'
 export class AppResolver {
   @Query(() => HelloResponseDto)
   async hello(
-    @Args('name', new ValidateNamePipe()) name: String,
+    @Args('name', new ValidateNamePipe()) name: String
   ): Promise<HelloResponseDto> {
     const data = {
-      message: 'Hello World! ' + name,
+      message: 'Hello World! ' + name
     }
     return data
   }
@@ -21,10 +21,10 @@ export class AppResolver {
   @Query(() => HelloResponseDto)
   async hello2(
     @Args('name', new ValidateNamePipe()) name: String,
-    @Context() context: any,
+    @Context() context: any
   ): Promise<HelloResponseDto> {
     const data = {
-      message: 'Hello World - ' + name,
+      message: 'Hello World - ' + name
     }
     if (!data) throw new NotFoundException('Data full')
     return data

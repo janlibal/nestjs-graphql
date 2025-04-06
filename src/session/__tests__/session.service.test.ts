@@ -8,7 +8,7 @@ describe('SessionService', () => {
   let sessionService: SessionService
   const mockSessionRepository = {
     create: vi.fn(),
-    deleteById: vi.fn(),
+    deleteById: vi.fn()
   }
 
   beforeEach(async () => {
@@ -17,9 +17,9 @@ describe('SessionService', () => {
         SessionService,
         {
           provide: SessionRepository,
-          useValue: mockSessionRepository,
-        },
-      ],
+          useValue: mockSessionRepository
+        }
+      ]
     }).compile()
 
     sessionService = module.get<SessionService>(SessionService)
