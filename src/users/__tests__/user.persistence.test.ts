@@ -48,7 +48,7 @@ describe('UserPersistence', () => {
   })
 
   describe('UserRepository Methods', () => {
-    it('findByFirstNames()', async () => {
+    it('should return users containing provided firstNames', async () => {
       const userEntityObjects = userMockEntityObjects(rawUserEntityObject, 5)
       vi.spyOn(prismaService.user, 'findMany').mockResolvedValue(
         userEntityObjects
@@ -60,7 +60,7 @@ describe('UserPersistence', () => {
 
       expect(mockPrismaService.user.findMany).toHaveBeenCalled()
     })
-    it('findMany()', async () => {
+    it('should find all users', async () => {
       const userEntityObjects = userMockEntityObjects(rawUserEntityObject, 5)
       const userDomainObjects = userMockDomainObjects(rawUserDomainObject, 5)
       vi.spyOn(prismaService.user, 'findMany').mockResolvedValue(
@@ -74,7 +74,7 @@ describe('UserPersistence', () => {
       expect(mockPrismaService.user.findMany).toHaveBeenCalled()
     })
 
-    it('findById()', async () => {
+    it('should find user by provided Id', async () => {
       vi.spyOn(prismaService.user, 'findUnique').mockResolvedValue(
         rawUserEntityObject
       )
@@ -88,7 +88,7 @@ describe('UserPersistence', () => {
       })
     })
 
-    it('findByEmail()', async () => {
+    it('should find user by provided email', async () => {
       vi.spyOn(prismaService.user, 'findUnique').mockResolvedValue(
         rawUserEntityObject
       )
@@ -104,7 +104,7 @@ describe('UserPersistence', () => {
       })
     })
 
-    it('create()', async () => {
+    it('should create new user', async () => {
       const persistenceModel =
         await UserMapper.toPersistence(rawUserDomainObject)
 
@@ -121,7 +121,7 @@ describe('UserPersistence', () => {
       })
     })
 
-    it('remove()', async () => {
+    it('should delete user by provided Id', async () => {
       vi.spyOn(prismaService.user, 'delete').mockResolvedValue(null)
 
       await userPersistence.remove(rawUserDomainObject.id)

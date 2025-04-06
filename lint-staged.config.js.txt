@@ -1,0 +1,5 @@
+module.exports = {
+    // Lint and fix all TypeScript and JavaScript files in the 'src' directory
+    '**/*.{ts,js}': ['eslint --fix', 'prettier --write'],
+  }
+  

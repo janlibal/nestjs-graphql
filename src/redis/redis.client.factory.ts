@@ -1,4 +1,4 @@
-import { FactoryProvider, Injectable } from '@nestjs/common'
+import { FactoryProvider } from '@nestjs/common'
 import { Redis } from 'ioredis'
 import { redisStatus } from './redis.status'
 

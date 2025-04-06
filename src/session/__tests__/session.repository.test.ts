@@ -45,65 +45,74 @@ describe('SessionPersistence', () => {
   })
 
   describe('SessionRepository', () => {
-    it('deleteById()', async () => {
-      vi.spyOn(prismaService.session, 'delete').mockResolvedValue(null)
+    describe('deleteById()', () => {
+      it('should delete session by provided Id', async () => {
+        vi.spyOn(prismaService.session, 'delete').mockResolvedValue(null)
 
-      await sessionPersistence.deleteById(sessionMockDomainObject.id)
+        await sessionPersistence.deleteById(sessionMockDomainObject.id)
 
-      expect(mockPrismaService.session.delete).toHaveBeenCalledWith({
-        where: { id: sessionMockDomainObject.id }
-      })
+        expect(mockPrismaService.session.delete).toHaveBeenCalledWith({
+          where: { id: sessionMockDomainObject.id }
+        })
 
-      expect(prismaService.session.delete).toHaveBeenCalledTimes(1)
-    })
-
-    it('findById()', async () => {
-      vi.spyOn(prismaService.session, 'findFirst').mockResolvedValue(
-        sessionMockEntityObject
-      )
-
-      const result = await sessionPersistence.findById(
-        sessionMockDomainObject.id
-      )
-
-      expect(result).toEqual(sessionMockDomainObject)
-
-      expect(mockPrismaService.session.findFirst).toHaveBeenCalledWith({
-        include: { user: true },
-        where: { id: sessionMockDomainObject.id }
+        expect(prismaService.session.delete).toHaveBeenCalledTimes(1)
       })
     })
 
-    it('deleteByUserId()', async () => {
-      vi.spyOn(prismaService.session, 'delete').mockResolvedValue(null)
+    describe('findById()', () => {
+      it('should find session by provided Id', async () => {
+        vi.spyOn(prismaService.session, 'findFirst').mockResolvedValue(
+          sessionMockEntityObject
+        )
 
-      const conditions = {
-        userId: sessionMockDomainObject.userId
-      }
+        const result = await sessionPersistence.findById(
+          sessionMockDomainObject.id
+        )
 
-      await sessionPersistence.deleteByUserId(conditions)
+        expect(result).toEqual(sessionMockDomainObject)
 
-      expect(mockPrismaService.session.delete).toHaveBeenCalledWith({
-        include: { user: true },
-        where: { id: Number(conditions.userId) }
+        expect(mockPrismaService.session.findFirst).toHaveBeenCalledWith({
+          include: { user: true },
+          where: { id: sessionMockDomainObject.id }
+        })
       })
-
-      expect(prismaService.session.delete).toHaveBeenCalledTimes(1)
     })
 
-    it('create()', async () => {
-      const persistenceModel = await SessionMapper.toPersistence(sessionObject)
+    describe('deleteByUserId()', () => {
+      it('should delete session by provided userId', async () => {
+        vi.spyOn(prismaService.session, 'delete').mockResolvedValue(null)
 
-      vi.spyOn(prismaService.session, 'create').mockResolvedValue(
-        sessionMockEntityObject
-      )
+        const conditions = {
+          userId: sessionMockDomainObject.userId
+        }
 
-      const result = await sessionPersistence.create(sessionObject)
+        await sessionPersistence.deleteByUserId(conditions)
 
-      expect(result).toEqual(sessionMockDomainObject)
+        expect(mockPrismaService.session.delete).toHaveBeenCalledWith({
+          include: { user: true },
+          where: { id: Number(conditions.userId) }
+        })
 
-      expect(mockPrismaService.session.create).toHaveBeenCalledWith({
-        data: persistenceModel
+        expect(prismaService.session.delete).toHaveBeenCalledTimes(1)
+      })
+    })
+
+    describe('create()', () => {
+      it('should create new session for logged user', async () => {
+        const persistenceModel =
+          await SessionMapper.toPersistence(sessionObject)
+
+        vi.spyOn(prismaService.session, 'create').mockResolvedValue(
+          sessionMockEntityObject
+        )
+
+        const result = await sessionPersistence.create(sessionObject)
+
+        expect(result).toEqual(sessionMockDomainObject)
+
+        expect(mockPrismaService.session.create).toHaveBeenCalledWith({
+          data: persistenceModel
+        })
       })
     })
   })

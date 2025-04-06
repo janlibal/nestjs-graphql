@@ -1,4 +1,4 @@
-import { Catch, ExceptionFilter, ArgumentsHost } from '@nestjs/common'
+import { Catch, ArgumentsHost } from '@nestjs/common'
 import { GqlArgumentsHost, GqlExceptionFilter } from '@nestjs/graphql'
 import { GraphQLError } from 'graphql'
 import { Logger } from '@nestjs/common'
@@ -37,12 +37,12 @@ export class GraphQLExceptionFilter implements GqlExceptionFilter {
     )
 
     // Format the error response
-    const formattedError = {
+    /*const formattedError = {
       statusCode,
       message,
       type: info.parentType.name,
       field: info.fieldName
-    }
+    }*/
 
     // Throw a GraphQLError with the formatted error
     throw new GraphQLError(message, {

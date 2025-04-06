@@ -48,8 +48,7 @@ describe('UserResolver', () => {
       it('should throw error when firstName is empty', async () => {
         const pipe = new ValidateUserInputPipe()
         try {
-          await pipe.transform({ ...createUserInput, firstName: '' }),
-            { type: 'body' }
+          await pipe.transform({ ...createUserInput, firstName: '' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(
@@ -60,8 +59,7 @@ describe('UserResolver', () => {
       it('should throw error when firstName less than 2 characters long', async () => {
         const pipe = new ValidateUserInputPipe()
         try {
-          await pipe.transform({ ...createUserInput, firstName: 'J' }),
-            { type: 'body' }
+          await pipe.transform({ ...createUserInput, firstName: 'J' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(/Firstname must be longer than 1 character./i)
@@ -70,8 +68,7 @@ describe('UserResolver', () => {
       it('should throw error when firstName contains special characters', async () => {
         const pipe = new ValidateUserInputPipe()
         try {
-          await pipe.transform({ ...createUserInput, firstName: '@#@#' }),
-            { type: 'body' }
+          await pipe.transform({ ...createUserInput, firstName: '@#@#' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(
@@ -82,8 +79,7 @@ describe('UserResolver', () => {
       it('should throw error when firstName consists of only numbers', async () => {
         const pipe = new ValidateUserInputPipe()
         try {
-          await pipe.transform({ ...createUserInput, firstName: '123' }),
-            { type: 'body' }
+          await pipe.transform({ ...createUserInput, firstName: '123' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(
@@ -94,8 +90,7 @@ describe('UserResolver', () => {
       it('should throw error when lastName is empty', async () => {
         const pipe = new ValidateUserInputPipe()
         try {
-          await pipe.transform({ ...createUserInput, lastName: '' }),
-            { type: 'body' }
+          await pipe.transform({ ...createUserInput, lastName: '' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(/Lastname cannot be empty and must be a string./i)
@@ -104,8 +99,7 @@ describe('UserResolver', () => {
       it('should throw error when lastName less than 2 characters long', async () => {
         const pipe = new ValidateUserInputPipe()
         try {
-          await pipe.transform({ ...createUserInput, lastName: 'D' }),
-            { type: 'body' }
+          await pipe.transform({ ...createUserInput, lastName: 'D' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(/Lastname must be longer than 1 character./i)
@@ -115,8 +109,7 @@ describe('UserResolver', () => {
       it('should throw error when lastName contains special characters', async () => {
         const pipe = new ValidateUserInputPipe()
         try {
-          await pipe.transform({ ...createUserInput, lastName: '@#@#' }),
-            { type: 'body' }
+          await pipe.transform({ ...createUserInput, lastName: '@#@#' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(
@@ -127,8 +120,7 @@ describe('UserResolver', () => {
       it('should throw error when lastName consists of only numbers', async () => {
         const pipe = new ValidateUserInputPipe()
         try {
-          await pipe.transform({ ...createUserInput, lastName: '123' }),
-            { type: 'body' }
+          await pipe.transform({ ...createUserInput, lastName: '123' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(
@@ -139,8 +131,7 @@ describe('UserResolver', () => {
       it('should throw error when password is empty', async () => {
         const pipe = new ValidateUserInputPipe()
         try {
-          await pipe.transform({ ...createUserInput, password: '' }),
-            { type: 'body' }
+          await pipe.transform({ ...createUserInput, password: '' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(/Password cannot be empty./i)
@@ -149,8 +140,7 @@ describe('UserResolver', () => {
       it('should throw error when password is less than 6 characters long', async () => {
         const pipe = new ValidateUserInputPipe()
         try {
-          await pipe.transform({ ...createUserInput, password: 'Pas' }),
-            { type: 'body' }
+          await pipe.transform({ ...createUserInput, password: 'Pas' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(/Password must be at least 6 characters long./i)
@@ -163,8 +153,7 @@ describe('UserResolver', () => {
             ...createUserInput,
             password:
               'Password123!Password123!Password123!Password123!Password123!Password123!'
-          }),
-            { type: 'body' }
+          }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(
@@ -175,8 +164,7 @@ describe('UserResolver', () => {
       it('should throw error when password is weak', async () => {
         const pipe = new ValidateUserInputPipe()
         try {
-          await pipe.transform({ ...createUserInput, password: 'Pas' }),
-            { type: 'body' }
+          await pipe.transform({ ...createUserInput, password: 'Pas' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(/Password is too weak/i)
@@ -185,8 +173,7 @@ describe('UserResolver', () => {
       it('should throw error when email is invalid', async () => {
         const pipe = new ValidateUserInputPipe()
         try {
-          await pipe.transform({ ...createUserInput, email: 'aa@bb' }),
-            { type: 'body' }
+          await pipe.transform({ ...createUserInput, email: 'aa@bb' }) //, { type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(/Email is invalid./i)
