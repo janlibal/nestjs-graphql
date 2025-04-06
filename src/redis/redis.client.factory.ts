@@ -3,7 +3,7 @@ import { Redis } from 'ioredis'
 import { redisStatus } from './redis.status'
 
 import { ConfigService } from '@nestjs/config'
-import { AllConfigType } from 'src/config/config/config.type'
+import { AllConfigType } from '../config/config.type'
 
 export const redisClientFactory: FactoryProvider<Redis> = {
   provide: 'RedisClient',
