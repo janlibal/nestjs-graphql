@@ -17,5 +17,3 @@ echo -e "<type>[optional scope]: <description>"
 echo -e "<type>[optional scope]: <description>"
 COLOR_OFF='\033[0m'
 echo -e "${COLOR_OFF}"
-
-yarn lint-staged
