@@ -10,7 +10,6 @@ import {
 import { UserMapper } from '../infrastructure/mappers/user.mapper'
 import { UserPersistence } from '../infrastructure/persistence/user.persistence'
 
-
 const mockPrismaService = {
   user: {
     create: vi.fn(),
@@ -22,7 +21,7 @@ const mockPrismaService = {
   },
 }
 
-describe('UserRepository', () => {
+describe('UserPersistence', () => {
   let userPersistence: UserPersistence
   let prismaService: PrismaService
 
@@ -94,7 +93,9 @@ describe('UserRepository', () => {
         rawUserEntityObject,
       )
 
-      const result = await userPersistence.findByEmail(rawUserDomainObject.email)
+      const result = await userPersistence.findByEmail(
+        rawUserDomainObject.email,
+      )
 
       expect(result).toEqual(rawUserDomainObject)
 

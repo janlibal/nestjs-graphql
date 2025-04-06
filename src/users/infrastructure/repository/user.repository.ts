@@ -1,14 +1,16 @@
-import { User as UserModel } from '../../model/user.model';
+import { User as UserModel } from '../../model/user.model'
 import { User as UserEntity } from '@prisma/client'
 import { NullableType } from '../../../utils/types/nullable.type'
-import { PaginationArgs } from '../../inputs/pagination.args';
+import { PaginationArgs } from '../../inputs/pagination.args'
 
 export abstract class UserRepository {
   abstract save(
     data: Omit<UserModel, 'id' | 'createdAt' | 'deletedAt' | 'updatedAt'>,
   ): Promise<UserModel>
 
-  abstract findByEmail(email: UserModel['email']): Promise<NullableType<UserModel>>
+  abstract findByEmail(
+    email: UserModel['email'],
+  ): Promise<NullableType<UserModel>>
 
   abstract findById(id: UserModel['id']): Promise<NullableType<UserModel>>
 
