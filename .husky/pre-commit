@@ -1,5 +1,5 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
 
 GREEN='\033[0;32m'
 echo -e "${GREEN}Examples:"
@@ -17,5 +17,3 @@ echo -e "<type>[optional scope]: <description>"
 echo -e "<type>[optional scope]: <description>"
 COLOR_OFF='\033[0m'
 echo -e "${COLOR_OFF}"
-
-yarn lint-staged
