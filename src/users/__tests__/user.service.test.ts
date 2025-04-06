@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { vi, describe, beforeEach, it, expect } from 'vitest'
 import { UserService } from '../user.service'
-import { UserRepository } from '../user.repository'
+
 import hashPassword from '../../utils/crypto'
 import { ConflictException, UnprocessableEntityException } from '@nestjs/common'
 import {
@@ -11,6 +11,7 @@ import {
   userObjectHashedPwd,
 } from './mock/user.data'
 import { userMockEntityObjects } from './mock/user.data-helper'
+import { UserRepository } from '../infrastructure/repository/user.repository'
 
 describe('UserService', () => {
   let userService: UserService
@@ -18,7 +19,7 @@ describe('UserService', () => {
     save: vi.fn(),
     findByEmail: vi.fn(),
     findById: vi.fn(),
-    findAll: vi.fn(),
+    findMany: vi.fn(),
     findByFirstNames: vi.fn(),
   }
 
@@ -76,10 +77,10 @@ describe('UserService', () => {
     describe('getAll()', () => {
       it('should return all users', async () => {
         const userEntityObjects = userMockEntityObjects(rawUserEntityObject, 5)
-        mockUserRepository.findAll.mockResolvedValue(userEntityObjects)
+        mockUserRepository.findMany.mockResolvedValue(userEntityObjects)
         const result = await userService.getAll()
         expect(result).toEqual(userEntityObjects)
-        expect(mockUserRepository.findAll).toHaveBeenCalled()
+        expect(mockUserRepository.findMany).toHaveBeenCalled()
       })
     })
     describe('getByFirstNames()', () => {

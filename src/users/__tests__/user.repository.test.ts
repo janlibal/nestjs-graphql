@@ -1,13 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { vi, describe, beforeEach, it, expect } from 'vitest'
 import { PrismaService } from '../../database/prisma.service'
-import { UserRepository } from '../user.repository'
+
 import { rawUserDomainObject, rawUserEntityObject } from './mock/user.data'
 import {
   userMockDomainObjects,
   userMockEntityObjects,
 } from './mock/user.data-helper'
-import { UserMapper } from '../mapper/user.mapper'
+import { UserMapper } from '../infrastructure/mappers/user.mapper'
+import { UserPersistence } from '../infrastructure/persistence/user.persistence'
+
 
 const mockPrismaService = {
   user: {
@@ -21,18 +23,18 @@ const mockPrismaService = {
 }
 
 describe('UserRepository', () => {
-  let userRepository: UserRepository
+  let userPersistence: UserPersistence
   let prismaService: PrismaService
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        UserRepository,
+        UserPersistence,
         { provide: PrismaService, useValue: mockPrismaService },
       ],
     }).compile()
 
-    userRepository = module.get<UserRepository>(UserRepository)
+    userPersistence = module.get<UserPersistence>(UserPersistence)
     prismaService = module.get<PrismaService>(PrismaService)
 
     vi.restoreAllMocks()
@@ -43,7 +45,7 @@ describe('UserRepository', () => {
   })
 
   it('should be defined', () => {
-    expect(userRepository).toBeDefined()
+    expect(userPersistence).toBeDefined()
   })
 
   describe('UserRepository Methods', () => {
@@ -53,20 +55,20 @@ describe('UserRepository', () => {
         userEntityObjects,
       )
 
-      const result = await userRepository.findByFirstNames(['Joe1', 'Joe5'])
+      const result = await userPersistence.findByFirstNames(['Joe1', 'Joe5'])
 
       expect(result).toEqual(userEntityObjects)
 
       expect(mockPrismaService.user.findMany).toHaveBeenCalled()
     })
-    it('findAll()', async () => {
+    it('findMany()', async () => {
       const userEntityObjects = userMockEntityObjects(rawUserEntityObject, 5)
       const userDomainObjects = userMockDomainObjects(rawUserDomainObject, 5)
       vi.spyOn(prismaService.user, 'findMany').mockResolvedValue(
         userEntityObjects,
       )
 
-      const result = await userRepository.findAll()
+      const result = await userPersistence.findMany()
 
       expect(result).toEqual(userDomainObjects)
 
@@ -78,7 +80,7 @@ describe('UserRepository', () => {
         rawUserEntityObject,
       )
 
-      const result = await userRepository.findById(rawUserDomainObject.id)
+      const result = await userPersistence.findById(rawUserDomainObject.id)
 
       expect(result).toEqual(rawUserDomainObject)
 
@@ -92,7 +94,7 @@ describe('UserRepository', () => {
         rawUserEntityObject,
       )
 
-      const result = await userRepository.findByEmail(rawUserDomainObject.email)
+      const result = await userPersistence.findByEmail(rawUserDomainObject.email)
 
       expect(result).toEqual(rawUserDomainObject)
 
@@ -109,7 +111,7 @@ describe('UserRepository', () => {
         rawUserEntityObject,
       )
 
-      const result = await userRepository.save(rawUserDomainObject)
+      const result = await userPersistence.save(rawUserDomainObject)
 
       expect(result).toEqual(rawUserDomainObject)
 
@@ -121,7 +123,7 @@ describe('UserRepository', () => {
     it('remove()', async () => {
       vi.spyOn(prismaService.user, 'delete').mockResolvedValue(null)
 
-      await userRepository.remove(rawUserDomainObject.id)
+      await userPersistence.remove(rawUserDomainObject.id)
 
       expect(mockPrismaService.user.delete).toHaveBeenCalledWith({
         where: { id: String(rawUserDomainObject.id) },

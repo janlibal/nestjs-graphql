@@ -1,8 +1,8 @@
 import { Status } from 'src/statuses/status.model'
-import { AuthProvidersEnum } from '../enums/auth.provider.enum'
-import { User } from '../model/user.model'
 import { User as UserEntity, ProviderEnum as Provider } from '@prisma/client'
-import { Role } from 'src/roles/role.model'
+import { Role } from '../../../roles/role.model'
+import { AuthProvidersEnum } from '../../enums/auth.provider.enum'
+import { User } from '../../model/user.model'
 
 export class UserMapper {
   static async toPersistence(data: User): Promise<Omit<UserEntity, 'id'>> {

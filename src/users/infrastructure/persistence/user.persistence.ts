@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common'
 import { User } from '@prisma/client'
-import { User as UserModel } from './model/user.model'
-import { PrismaService } from '../database/prisma.service'
-import { UserMapper } from './mapper/user.mapper'
-import { NullableType } from '../utils/types/nullable.type'
-import { PaginationArgs } from './inputs/pagination.args'
+import { User as UserModel } from '../../model/user.model'
+import { PrismaService } from '../../../database/prisma.service'
+import { UserMapper } from '../mappers/user.mapper'
+import { PaginationArgs } from '../../inputs/pagination.args'
+import { NullableType } from '../../../utils/types/nullable.type'
 //import { PaginatedUsers } from './inputs/paginated.users'
 
 @Injectable()
-export class UserRepository {
+export class UserPersistence {
   constructor(private prisma: PrismaService) {}
 
   async findByFirstNames(firstNames: string[]): Promise<User[]> {
@@ -25,7 +25,7 @@ export class UserRepository {
     })
   }
 
-  async findAll(): Promise<UserModel[]> {
+  async findMany(): Promise<UserModel[]> {
     const users = await this.prisma.user.findMany({
       include: { status: true, role: true },
     })
