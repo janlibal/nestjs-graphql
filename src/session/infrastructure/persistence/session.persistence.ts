@@ -18,7 +18,7 @@ export class SessionPersistence {
   }
 
   async deleteById(id: Session['id']): Promise<boolean> {
-    this.prismaService.session.delete({ where: { id: id } })
+    await this.prismaService.session.delete({ where: { id: id } })
     return true
   }
 

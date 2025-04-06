@@ -60,8 +60,7 @@ describe('AuthResolver', () => {
       it('should throw error when firstName is empty', async () => {
         const pipe = new ValidateRegisterPipe()
         try {
-          await pipe.transform({ ...registerInput, firstName: '' }),
-            { type: 'body' }
+          await pipe.transform({ ...registerInput, firstName: '' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(
@@ -72,8 +71,7 @@ describe('AuthResolver', () => {
       it('should throw error when firstName less than 2 characters long', async () => {
         const pipe = new ValidateRegisterPipe()
         try {
-          await pipe.transform({ ...registerInput, firstName: 'J' }),
-            { type: 'body' }
+          await pipe.transform({ ...registerInput, firstName: 'J' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(/Firstname must be longer than 1 character./i)
@@ -82,8 +80,7 @@ describe('AuthResolver', () => {
       it('should throw error when firstName contains special characters', async () => {
         const pipe = new ValidateRegisterPipe()
         try {
-          await pipe.transform({ ...registerInput, firstName: '@#@#' }),
-            { type: 'body' }
+          await pipe.transform({ ...registerInput, firstName: '@#@#' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(
@@ -94,8 +91,7 @@ describe('AuthResolver', () => {
       it('should throw error when firstName consists of only numbers', async () => {
         const pipe = new ValidateRegisterPipe()
         try {
-          await pipe.transform({ ...registerInput, firstName: '123' }),
-            { type: 'body' }
+          await pipe.transform({ ...registerInput, firstName: '123' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(
@@ -106,8 +102,7 @@ describe('AuthResolver', () => {
       it('should throw error when lastName is empty', async () => {
         const pipe = new ValidateRegisterPipe()
         try {
-          await pipe.transform({ ...registerInput, lastName: '' }),
-            { type: 'body' }
+          await pipe.transform({ ...registerInput, lastName: '' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(/Lastname cannot be empty and must be a string./i)
@@ -116,8 +111,7 @@ describe('AuthResolver', () => {
       it('should throw error when lastName less than 2 characters long', async () => {
         const pipe = new ValidateRegisterPipe()
         try {
-          await pipe.transform({ ...registerInput, lastName: 'D' }),
-            { type: 'body' }
+          await pipe.transform({ ...registerInput, lastName: 'D' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(/Lastname must be longer than 1 character./i)
@@ -127,8 +121,7 @@ describe('AuthResolver', () => {
       it('should throw error when lastName contains special characters', async () => {
         const pipe = new ValidateRegisterPipe()
         try {
-          await pipe.transform({ ...registerInput, lastName: '@#@#' }),
-            { type: 'body' }
+          await pipe.transform({ ...registerInput, lastName: '@#@#' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(
@@ -139,8 +132,7 @@ describe('AuthResolver', () => {
       it('should throw error when lastName consists of only numbers', async () => {
         const pipe = new ValidateRegisterPipe()
         try {
-          await pipe.transform({ ...registerInput, lastName: '123' }),
-            { type: 'body' }
+          await pipe.transform({ ...registerInput, lastName: '123' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(
@@ -151,8 +143,7 @@ describe('AuthResolver', () => {
       it('should throw error when password is empty', async () => {
         const pipe = new ValidateRegisterPipe()
         try {
-          await pipe.transform({ ...registerInput, password: '' }),
-            { type: 'body' }
+          await pipe.transform({ ...registerInput, password: '' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(/Password cannot be empty./i)
@@ -161,8 +152,7 @@ describe('AuthResolver', () => {
       it('should throw error when password is less than 6 characters long', async () => {
         const pipe = new ValidateRegisterPipe()
         try {
-          await pipe.transform({ ...registerInput, password: 'Pas' }),
-            { type: 'body' }
+          await pipe.transform({ ...registerInput, password: 'Pas' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(/Password must be at least 6 characters long./i)
@@ -175,8 +165,7 @@ describe('AuthResolver', () => {
             ...registerInput,
             password:
               'Password123!Password123!Password123!Password123!Password123!Password123!'
-          }),
-            { type: 'body' }
+          }) //,{ type: 'body' }{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(
@@ -187,8 +176,7 @@ describe('AuthResolver', () => {
       it('should throw error when password is weak', async () => {
         const pipe = new ValidateRegisterPipe()
         try {
-          await pipe.transform({ ...registerInput, password: 'Pas' }),
-            { type: 'body' }
+          await pipe.transform({ ...registerInput, password: 'Pas' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(/Password is too weak/i)
@@ -197,8 +185,7 @@ describe('AuthResolver', () => {
       it('should throw error when email is invalid', async () => {
         const pipe = new ValidateRegisterPipe()
         try {
-          await pipe.transform({ ...registerInput, email: 'aa@bb' }),
-            { type: 'body' }
+          await pipe.transform({ ...registerInput, email: 'aa@bb' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(/Email is invalid./i)
@@ -215,8 +202,7 @@ describe('AuthResolver', () => {
       it('should throw error when email is invalid', async () => {
         const pipe = new ValidateLoginPipe()
         try {
-          await pipe.transform({ ...registerInput, email: 'aa@bb' }),
-            { type: 'body' }
+          await pipe.transform({ ...registerInput, email: 'aa@bb' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(/Email is invalid./i)
@@ -225,8 +211,7 @@ describe('AuthResolver', () => {
       it('should throw error when password is empty', async () => {
         const pipe = new ValidateLoginPipe()
         try {
-          await pipe.transform({ ...registerInput, password: '' }),
-            { type: 'body' }
+          await pipe.transform({ ...registerInput, password: '' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
           expect(err).toMatch(/Password cannot be empty./i)

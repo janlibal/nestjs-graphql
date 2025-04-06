@@ -34,7 +34,7 @@ describe('SessionService', () => {
   })
 
   describe('SessionService methods', () => {
-    it('create()', async () => {
+    it('should create new session', async () => {
       mockSessionRepository.create.mockResolvedValue(sessionMockDomainObject)
 
       const result = await sessionService.create(sessionObject)
@@ -44,9 +44,9 @@ describe('SessionService', () => {
       expect(mockSessionRepository.create).toHaveBeenCalledWith(sessionObject)
       expect(mockSessionRepository.create).toHaveBeenCalledTimes(1)
     })
-    it('deleteById()', () => {
+    it('should delte session by provided userId', async () => {
       mockSessionRepository.deleteById.mockResolvedValue(true)
-      sessionService.deleteById(sessionObject.id)
+      await sessionService.deleteById(sessionObject.id)
       expect(mockSessionRepository.deleteById).toHaveBeenCalled()
       expect(mockSessionRepository.deleteById).toHaveBeenCalledTimes(1)
     })

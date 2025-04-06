@@ -23,6 +23,7 @@
     "start:prod": "node dist/src/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
     "lint:fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "lint-staged": "lint-staged",
     "infra:up": "docker compose -f docker-compose.db.yml --env-file .env up -d",
     "infra:down": "docker compose -f docker-compose.db.yml down",
     "test": "vitest run",
@@ -35,7 +36,8 @@
     "test:e2e:docker": "docker compose -f docker-compose.test.yml --env-file env-example-relational -p tests up -d --build && docker compose -f docker-compose.test.yml -p tests exec api /opt/wait-for-it.sh -t 0 localhost:80 -- yarn run test:e2e && docker compose -f docker-compose.test.yml --env-file env-example-relational -p tests down && docker compose -f docker-compose.test.yml --env-file env-example-relational -p tests rm -svf",
     "test:watch": "vitest",
     "test:cov": "vitest run --coverage",
-    "test:debug": "vitest --inspect-brk --inspect --logHeapUsage --threads=false"
+    "test:debug": "vitest --inspect-brk --inspect --logHeapUsage --threads=false",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@apollo/server": "^4.11.3",
@@ -92,7 +94,9 @@
     "eslint": "^9.24.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.6",
-    "prettier": "^3.0.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^15.5.0",
+    "prettier": "^3.5.3",
     "source-map-support": "^0.5.21",
     "supertest": "^7.0.0",
     "ts-loader": "^9.4.3",
@@ -108,5 +112,9 @@
     "schema": "prisma/schema.prisma",
     "migrateOutput": "src/prisma/migrations/",
     "seed": "ts-node ./prisma/seeds/seed.ts"
+  },
+  "lint-staged": {
+    "**/*.{ts,js}": ["eslint --fix", "prettier --write"],
+    "**/*.{ts,js,test.ts}": ["vitest -c ./vitest.config.integration.ts"]
   }
 }

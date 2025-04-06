@@ -1,5 +1,5 @@
 import { HelloResponseDto } from './dto/hello-response.dto'
-import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql'
+import { Resolver, Query, Args } from '@nestjs/graphql'
 import { ValidateNamePipe } from './pipes/validate-name.pipe'
 import { UseGuards } from '@nestjs/common'
 import { GqlAuthGuard } from 'src/auth/guards/gpl-auth.guard'
@@ -9,7 +9,7 @@ import { NotFoundException } from '@nestjs/common'
 export class AppResolver {
   @Query(() => HelloResponseDto)
   async hello(
-    @Args('name', new ValidateNamePipe()) name: String
+    @Args('name', new ValidateNamePipe()) name: string
   ): Promise<HelloResponseDto> {
     const data = {
       message: 'Hello World! ' + name
@@ -20,8 +20,8 @@ export class AppResolver {
   @UseGuards(GqlAuthGuard)
   @Query(() => HelloResponseDto)
   async hello2(
-    @Args('name', new ValidateNamePipe()) name: String,
-    @Context() context: any
+    @Args('name', new ValidateNamePipe()) name: string
+    //@Context() context: any
   ): Promise<HelloResponseDto> {
     const data = {
       message: 'Hello World - ' + name
