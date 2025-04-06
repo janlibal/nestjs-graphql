@@ -7,9 +7,8 @@ import {
 import { ConfigService } from '@nestjs/config'
 import { GqlExecutionContext } from '@nestjs/graphql'
 import { JwtService } from '@nestjs/jwt'
-import { AllConfigType } from '../../config/config/config.type'
+import { AllConfigType } from '../../config/config.type'
 import { RedisService } from '../../redis/redis.service'
-import { AuthService } from '../auth.service'
 
 @Injectable()
 export class GqlAuthGuard implements CanActivate {

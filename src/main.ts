@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core'
 import { GlobalModule } from './global/global.module'
 import { ConfigService } from '@nestjs/config'
-import { AllConfigType } from './config/config/config.type'
+import { AllConfigType } from './config/config.type'
 import { API_PREFIX } from './shared/constants/global.constants'
 import { PinoLoggerService } from './logger/adapters/pino.logger.service'
 import { ValidationPipe } from '@nestjs/common'
