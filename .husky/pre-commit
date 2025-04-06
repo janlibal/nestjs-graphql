@@ -1,5 +1,5 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
 
 GREEN='\033[0;32m'
 echo -e "${GREEN}Examples:"
