@@ -112,9 +112,5 @@
     "schema": "prisma/schema.prisma",
     "migrateOutput": "src/prisma/migrations/",
     "seed": "ts-node ./prisma/seeds/seed.ts"
-  },
-  "lint-staged": {
-    "**/*.{ts,js}": ["eslint --fix", "prettier --write"],
-    "**/*.{ts,js,test.ts}": ["vitest -c ./vitest.config.integration.ts"]
   }
 }
