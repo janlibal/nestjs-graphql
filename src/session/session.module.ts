@@ -1,12 +1,10 @@
 import { Module } from '@nestjs/common'
 import { SessionService } from './session.service'
-import { SessionRepository } from './session.repository'
-import { PrismaModule } from 'nestjs-prisma'
-import { PrismaService } from '../database/prisma.service'
+import { SessionPersistenceModule } from './infrastructure/session.infrastructure.module'
 
 @Module({
-  imports: [PrismaModule],
-  providers: [SessionService, SessionRepository, PrismaService],
-  exports: [SessionService, SessionRepository],
+  imports: [SessionPersistenceModule],
+  providers: [SessionService],
+  exports: [SessionService, SessionPersistenceModule],
 })
 export class SessionModule {}

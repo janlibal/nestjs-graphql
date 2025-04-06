@@ -15,13 +15,13 @@ import { ConfigService } from '@nestjs/config'
 import { AuthEmailRegisterInput } from './inputs/auth-email-register.input'
 import { RoleEnum } from '../roles/role.enum'
 import { StatusEnum } from '../statuses/status.enum'
-import { SessionService } from '../session/session.service'
-import { Session } from '../session/model/session.model'
 import { RedisPrefixEnum } from '../redis/enums/redis.prefix.enum'
 import { RedisService } from '../redis/redis.service'
 import { NullableType } from 'src/utils/types/nullable.type'
 import { JwtPayloadType } from './strategies/types/jwt.payload.type'
 import { JwtRefreshPayloadType } from './strategies/types/jwt.refresh.payload.type'
+import { SessionService } from '../session/session.service'
+import { Session } from '../session/model/session.model'
 
 @Injectable()
 export class AuthService {

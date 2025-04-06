@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { vi, describe, beforeEach, it, expect } from 'vitest'
 import { SessionService } from '../session.service'
-import { SessionRepository } from '../session.repository'
 import { sessionMockDomainObject, sessionObject } from './mock/session.data'
+import { SessionRepository } from '../infrastructure/repository/session.repository'
 
 describe('SessionService', () => {
   let sessionService: SessionService
