@@ -37,19 +37,15 @@ export default [
       },
     },
     rules: {
-      //'@typescript-eslint/interface-name-prefix': 'off',
-      //'@typescript-eslint/explicit-function-return-type': 'off',
-      //'@typescript-eslint/explicit-module-boundary-types': 'off',
+      '@typescript-eslint/interface-name-prefix': 'off',
+      '@typescript-eslint/explicit-function-return-type': 'off',
+      '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
-      //'no-unused-vars': 'off',
+      'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': ['error'],
-      //'require-await': 'off',
       //'@typescript-eslint/require-await': 'error',
-      //'@typescript-eslint/no-floating-promises': 'error',
-
-      //'@typescript-eslint/explicit-function-return-type': 'off', // Disable explicit return types for functions (optional)
-      //'@typescript-eslint/no-explicit-any': 'warn', // Warn when using `any` type (optional)
-      //'prettier/prettier': 'error', // Make Prettier issues show as errors
+      '@typescript-eslint/no-floating-promises': 'error',
+      'prettier/prettier': 'error', // Make Prettier issues show as errors
       'no-restricted-syntax': [
         'error',
         {
