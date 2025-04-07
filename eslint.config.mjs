@@ -45,7 +45,12 @@ export default [
       '@typescript-eslint/no-unused-vars': ['error'],
       //'@typescript-eslint/require-await': 'error',
       '@typescript-eslint/no-floating-promises': 'error',
-      'prettier/prettier': 'error', // Make Prettier issues show as errors
+      'prettier/prettier': 'error',
+      '@typescript-eslint/explicit-member-accessibility': 'off',
+      '@typescript-eslint/no-parameter-properties': 'off',
+      '@typescript-eslint/ban-types': 'off',
+      '@typescript-eslint/no-var-requires': 'off',
+      //'@typescript-eslint/no-empty-function': 'warn',
       'no-restricted-syntax': [
         'error',
         {
