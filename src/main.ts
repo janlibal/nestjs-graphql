@@ -80,6 +80,13 @@ async function bootstrap() {
       { infer: true }
     )
 
+    const appName = configService.getOrThrow('app.name', { infer: true })
+    const logLevel = configService.getOrThrow('app.logLevel', { infer: true })
+    const logService = configService.getOrThrow('app.logService', {
+      infer: true
+    })
+    const isDebug = configService.getOrThrow('app.debug', { infer: true })
+
     app.enableCors()
 
     await app.listen(port, async () => {
@@ -102,6 +109,11 @@ async function bootstrap() {
       console.log(`17. Forgot expires: ${forgotExpires}`)
       console.log(`18. Confirm email secret: ${confirmEmailSecret}`)
       console.log(`19. Confirm email expires: ${confirmEmailExpires}`)
+
+      console.log(`20. appName: ${appName}`)
+      console.log(`21. logLevel: ${logLevel}`)
+      console.log(`22. logService: ${logService}`)
+      console.log(`23. debud: ${isDebug}`)
 
       logger.log(`App started on port: ${port}!`)
     })
