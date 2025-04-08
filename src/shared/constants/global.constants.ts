@@ -10,3 +10,9 @@ export const loggingRedactPaths = [
   'role',
   'status'
 ]
+
+export enum LogService {
+  CONSOLE = 'console',
+  GOOGLE_LOGGING = 'google_logging',
+  AWS_CLOUDWATCH = 'aws_cloudwatch'
+}

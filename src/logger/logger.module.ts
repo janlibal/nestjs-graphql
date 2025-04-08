@@ -1,7 +1,6 @@
 import { Global, Module } from '@nestjs/common'
 import { LoggerModule as PinoLoggerModule } from 'nestjs-pino'
 import * as uuid from 'uuid'
-import { FakeLoggerService } from './adapters/fake.logger.service'
 import { PinoLoggerService } from './adapters/pino.logger.service'
 import * as rfs from 'rotating-file-stream'
 
@@ -41,7 +40,7 @@ declare module 'http' {
       }
     })
   ],
-  providers: [PinoLoggerService, FakeLoggerService],
-  exports: [PinoLoggerService, FakeLoggerService]
+  providers: [PinoLoggerService],
+  exports: [PinoLoggerService]
 })
 export class LoggerModule {}
