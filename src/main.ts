@@ -113,7 +113,7 @@ async function bootstrap() {
       console.log(`20. appName: ${appName}`)
       console.log(`21. logLevel: ${logLevel}`)
       console.log(`22. logService: ${logService}`)
-      console.log(`23. debud: ${isDebug}`)
+      console.log(`23. isDebug?: ${isDebug}`)
 
       logger.log(`App started on port: ${port}!`)
     })

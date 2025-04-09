@@ -61,6 +61,8 @@ class EnvironmentVariablesValidator {
   @IsString()
   @IsOptional()
   LOG_SERVICE: string
+
+  DEBUG: boolean
 }
 
 export default registerAs<AppConfig>('app', () => {
