@@ -3,8 +3,7 @@ import { GenReqId, Options, ReqId } from 'pino-http'
 import { Params } from 'nestjs-pino'
 import { ConfigService } from '@nestjs/config'
 import { AllConfigType } from '../config/config.type'
-import { IncomingMessage } from 'http'
-import { ServerResponse } from 'http'
+import { IncomingMessage, ServerResponse } from 'http'
 import {
   customErrorMessage,
   customReceivedMessage,
