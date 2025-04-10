@@ -11,6 +11,7 @@ import {
   customSuccessMessage
 } from './messages'
 import { logServiceConfig } from './providers/logging.config'
+import { loggingRedactPaths } from '../shared/constants/global.constants'
 
 const genReqId: GenReqId = (
   req: IncomingMessage,
@@ -46,6 +47,10 @@ async function loggerFactory(
     customReceivedMessage,
     customErrorMessage,
     timestamp: () => `,"timestamp":"${new Date(Date.now()).toISOString()}"`,
+    redact: {
+        paths: loggingRedactPaths,
+        remove: true //censor: '**GDPR/CCPA COMPLIANT**'
+      },
     ...logServiceConfig(logService)
     /*transport:
           process.env.NODE_ENV !== 'prod'
