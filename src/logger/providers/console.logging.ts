@@ -1,5 +1,4 @@
 import { Options } from 'pino-http'
-//import * as rfs from 'rotating-file-stream' --- any of use eventually?
 
 export function consoleLoggingConfig(): Options {
   return {
