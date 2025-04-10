@@ -15,7 +15,6 @@ export function consoleLoggingConfig(): Options {
             ignorePaths: ['pid', 'hostname']
           }
         },
-
         {
           target: 'pino/file',
           level: 'debug',
@@ -24,7 +23,6 @@ export function consoleLoggingConfig(): Options {
             mkdir: true
           }
         },
-
         {
           target: 'pino/file',
           level: 'error',
