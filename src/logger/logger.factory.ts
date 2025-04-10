@@ -48,9 +48,9 @@ async function loggerFactory(
     customErrorMessage,
     timestamp: () => `,"timestamp":"${new Date(Date.now()).toISOString()}"`,
     redact: {
-        paths: loggingRedactPaths,
-        remove: true //censor: '**GDPR/CCPA COMPLIANT**'
-      },
+      paths: loggingRedactPaths,
+      remove: true //censor: '**GDPR/CCPA COMPLIANT**'
+    },
     ...logServiceConfig(logService)
     /*transport:
           process.env.NODE_ENV !== 'prod'
