@@ -7,6 +7,7 @@ export const formatGraphQLError = (error: any) => {
     : error.extensions?.originalError.stack
 
   return {
+    requestId: error.extensions?.requestId || null,
     timestamp: new Date().toISOString(),
     path: error.path,
     locations: error.locations,
@@ -20,14 +21,21 @@ export const formatGraphQLError = (error: any) => {
 }
 
 export const formatGraphQLError1 = (error: any) => {
+  const originalError = error.extensions?.originalError || {}
+  const rawStack = originalError.stack || error.stack || ''
+  const stack =
+    typeof rawStack === 'string' ? rawStack.split('\n').slice(0, 2) : []
+
   return {
     timestamp: new Date().toISOString(),
     path: error.path,
     locations: error.locations,
-    code: error.extensions.status,
-    message: error.extensions.originalError.message,
-    error: error.extensions.originalError.error,
-    statusCode: error.extensions.originalError.statusCode,
-    stack: error.extensions.stacktrace.slice(0, 2)
+    requestId: error.extensions?.requestId || null,
+    code: error.extensions?.code || 'INTERNAL_SERVER_ERROR',
+    statusCode: originalError.statusCode || HttpStatus.INTERNAL_SERVER_ERROR,
+    message:
+      originalError.message || error.message || 'An unexpected error occurred.',
+    error: originalError.error || 'Unknown error',
+    stack
   }
 }
