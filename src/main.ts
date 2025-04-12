@@ -9,29 +9,55 @@ import validationOptions from './utils/validation.options'
 import { GraphQLExceptionFilter } from './filters/graphql.filter'
 import * as fs from 'fs'
 import { GraphqlLoggingInterceptor } from './interceptors/graphql-logging.interceptor'
+import { createPinoHttpOptions } from './logger/createHttpPinoOptions'
+import pinoHttp from 'pino-http'
 
 async function bootstrap() {
   try {
-    const app = await NestFactory.create(GlobalModule)
+    const app = await NestFactory.create(GlobalModule, { bufferLogs: true })
 
     if (!fs.existsSync('./logs')) {
       fs.mkdirSync('./logs')
     }
 
-    const logger = app.get(PinoLoggerService)
+    const configService = app.get(ConfigService<AllConfigType>)
+
+    /*const logger = app.get(PinoLoggerService)
 
     app.useGlobalInterceptors(new GraphqlLoggingInterceptor(logger))
 
     logger.setContext('main')
-    app.useLogger(logger)
+    app.useLogger(logger)*/
+
+    /*const logger = app.get(PinoLoggerService);
+    const loggerOptions = createPinoHttpOptions(configService);
+    app.useLogger(logger);
+    app.useLogger(app.get(PinoLoggerService))
+
+
+    app.use(pinoHttp(loggerOptions));
+    logger.setContext('main');
+    app.useGlobalInterceptors(new GraphqlLoggingInterceptor(logger));*/
+
+    const logger = app.get(PinoLoggerService)
+    // 1. Set up the logger globally
+    app.useLogger(logger) // Use logger for general application logging
+
+    // 2. Set up PinoHttp for logging HTTP requests/responses
+    const loggerOptions = createPinoHttpOptions(configService) // Create options for pino-http
+    app.use(pinoHttp(loggerOptions)) // Middleware to log HTTP requests
+
+    // 3. Optionally set context for the logger (for example, setting the app context)
+    logger.setContext('main') // Set a specific context for the main application
+
+    // 4. Use GraphQL logging interceptor to log GraphQL-specific operations
+    app.useGlobalInterceptors(new GraphqlLoggingInterceptor(logger)) // Interceptor for GraphQL logging
 
     app.useGlobalFilters(new GraphQLExceptionFilter())
 
     app.useGlobalPipes(new ValidationPipe(validationOptions))
 
     app.enableShutdownHooks()
-
-    const configService = app.get(ConfigService<AllConfigType>)
 
     app.setGlobalPrefix(API_PREFIX)
 

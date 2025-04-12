@@ -1,10 +1,16 @@
-import { ExecutionContext, CallHandler, NestInterceptor } from '@nestjs/common'
+import {
+  ExecutionContext,
+  CallHandler,
+  NestInterceptor,
+  Injectable
+} from '@nestjs/common'
 import { Observable } from 'rxjs'
 import { tap } from 'rxjs/operators'
 import { GqlExecutionContext } from '@nestjs/graphql'
 import { PinoLoggerService } from '../logger/adapters/pino.logger.service'
 import { sensitiveKeys } from '../shared/constants/global.constants'
 
+@Injectable()
 export class GraphqlLoggingInterceptor implements NestInterceptor {
   constructor(private readonly logger: PinoLoggerService) {}
 
@@ -13,14 +19,23 @@ export class GraphqlLoggingInterceptor implements NestInterceptor {
     const { variables } = gqlContext.getArgs()
 
     const req = gqlContext.getContext().req
-    const operationName = req?.body?.operationName || 'Unnamed operation'
-    const operationType = req?.body?.query?.trim().startsWith('mutation')
-      ? 'Mutation'
-      : 'Query'
+    const body = req.body.query
+    const operationName = this.getOperationName(body)
+    const operationType =
+      body && body.toLowerCase().trim().startsWith('mutation')
+        ? 'Mutation'
+        : 'Query'
+    const operation = operationName || 'Unnamed operation'
+
+    const requestId = req?.id || 'No ID'
+
+    console.log('Incoming GraphQL Request:', gqlContext.getContext()) //GET VARIABLES!
 
     this.logger.log(
       {
-        operationName,
+        requestId,
+        operationName: operation,
+        vars: variables,
         variables: this.redactSensitiveFields(variables)
       },
       `Incoming GraphQL ${operationType}: ${operationName}`
@@ -32,12 +47,20 @@ export class GraphqlLoggingInterceptor implements NestInterceptor {
 
         this.logger.log(
           {
+            requestId,
             result: sanitizedResult
           },
           `GraphQL Response for ${operationName}`
         )
       })
     )
+  }
+
+  private getOperationName(data: string) {
+    const query = data.split(/\s+/)
+    const stringData = query[2]
+    const result = stringData.split('('[0])
+    return result[0]
   }
 
   private redactSensitiveFields(data: any): any {
@@ -60,55 +83,3 @@ export class GraphqlLoggingInterceptor implements NestInterceptor {
     return data
   }
 }
-
-/*@Injectable()
-export class GraphqlLoggingInterceptor implements NestInterceptor {
-  constructor(private readonly logger: PinoLoggerService) {}
-
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    const gqlContext = GqlExecutionContext.create(context)
-    const { variables } = gqlContext.getArgs()
-    const operationType = gqlContext.getContext().operationName
-      ? 'Query'
-      : 'Mutation'
-    const operationName =
-      gqlContext.getContext().req.body.operationName || 'Unnamed operation'
-
-    //const sanitizedVariables = this.redactSensitiveFields({ ...variables })
-
-    this.logger.log(
-      { operationName, variables: variables },
-      `Incoming GraphQL ${operationType}: ${operationName}`
-    )
-
-    return next.handle().pipe(
-      tap((result) => {
-        //const sanitizedResult = this.redactSensitiveFields({ ...result })
-
-        this.logger.log(
-          { result: result },
-          `GraphQL Response for ${operationName}`
-        )
-      })
-    )
-  }
-
-  private redactSensitiveFields(data: any): any {
-    if (data) {
-      const sensitiveFields = loggingRedactPaths
-
-      for (const field of sensitiveFields) {
-        if (data.hasOwnProperty(field)) {
-          data[field] = '[REDACTED]'
-        }
-      }
-
-      if (typeof data === 'object' && !Array.isArray(data)) {
-        Object.keys(data).forEach((key) => {
-          data[key] = this.redactSensitiveFields(data[key])
-        })
-      }
-    }
-    return data
-  }
-}*/
