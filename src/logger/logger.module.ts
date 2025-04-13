@@ -15,47 +15,5 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
   ],
   providers: [PinoLoggerService],
   exports: [PinoLoggerService]
-  //exports: [LoggerModule],
 })
 export class LoggerModule {}
-
-/*
-declare module 'http' {
-  interface IncomingMessage {
-    requestId: string
-  }
-}
-
-@Module({
-  imports: [
-    PinoLoggerModule.forRoot({
-      pinoHttp: {
-        name: 'backend',
-        level: process.env.NODE_ENV !== 'prod' ? 'debug' : 'info',
-        genReqId: (req) => req.requestId || uuid.v4(),
-        transport:
-          process.env.NODE_ENV !== 'prod'
-            ? {
-                target: 'pino-pretty',
-                options: {
-                  colorize: true,
-                  translateTime: 'SYS:standard',
-                  ignorePaths: ['pid', 'hostname']
-                }
-              }
-            : {
-                target: 'pino/file',
-                options: {
-                  destination: rfs.createStream('app-%DATE%.log', {
-                    interval: '1d',
-                    path: './logs'
-                  })
-                }
-              }
-      }
-    })
-  ],
-  providers: [PinoLoggerService],
-  exports: [PinoLoggerService]
-})
-export class LoggerModule {}*/

@@ -7,7 +7,6 @@ export const formatGraphQLError = (error: any) => {
     : error.extensions?.originalError.stack
 
   return {
-    requestId: error.extensions?.requestId || null,
     timestamp: new Date().toISOString(),
     path: error.path,
     locations: error.locations,
