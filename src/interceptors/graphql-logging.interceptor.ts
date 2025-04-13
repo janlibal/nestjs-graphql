@@ -29,7 +29,8 @@ export class GraphqlLoggingInterceptor implements NestInterceptor {
 
     const requestId = req?.id || 'No ID'
 
-    console.log('Incoming GraphQL Request:', gqlContext.getContext()) //GET VARIABLES!
+    // FIXME: Further investigate variables!
+    //console.log('Incoming GraphQL Request:', gqlContext.getContext())
 
     this.logger.log(
       {

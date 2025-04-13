@@ -22,23 +22,6 @@ async function bootstrap() {
 
     const configService = app.get(ConfigService<AllConfigType>)
 
-    /*const logger = app.get(PinoLoggerService)
-
-    app.useGlobalInterceptors(new GraphqlLoggingInterceptor(logger))
-
-    logger.setContext('main')
-    app.useLogger(logger)*/
-
-    /*const logger = app.get(PinoLoggerService);
-    const loggerOptions = createPinoHttpOptions(configService);
-    app.useLogger(logger);
-    app.useLogger(app.get(PinoLoggerService))
-
-
-    app.use(pinoHttp(loggerOptions));
-    logger.setContext('main');
-    app.useGlobalInterceptors(new GraphqlLoggingInterceptor(logger));*/
-
     const logger = app.get(PinoLoggerService)
     // 1. Set up the logger globally
     app.useLogger(logger) // Use logger for general application logging
