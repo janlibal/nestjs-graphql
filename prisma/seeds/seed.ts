@@ -7,11 +7,9 @@ async function main() {
     prisma.$executeRaw`TRUNCATE TABLE "Session" RESTART IDENTITY CASCADE`,
     prisma.$executeRaw`TRUNCATE TABLE "User" RESTART IDENTITY CASCADE`,
     prisma.$executeRaw`TRUNCATE TABLE "Role" RESTART IDENTITY CASCADE`,
-    prisma.$executeRaw`TRUNCATE TABLE "Status" RESTART IDENTITY CASCADE`,
+    prisma.$executeRaw`TRUNCATE TABLE "Status" RESTART IDENTITY CASCADE`
   ])
-  await prisma.status.deleteMany()
-  await prisma.role.deleteMany()
-  
+
   console.log('Seeding...')
 
   const role = await prisma.role.findFirst()
@@ -19,12 +17,12 @@ async function main() {
     await prisma.role.createMany({
       data: [
         {
-          role: 'admin',
+          role: 'admin'
         },
         {
-          role: 'user',
-        },
-      ],
+          role: 'user'
+        }
+      ]
     })
   }
 
@@ -33,12 +31,12 @@ async function main() {
     await prisma.status.createMany({
       data: [
         {
-          title: 'active',
+          title: 'active'
         },
         {
-          title: 'inactive',
-        },
-      ],
+          title: 'inactive'
+        }
+      ]
     })
   }
 }
