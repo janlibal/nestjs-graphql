@@ -1,7 +1,7 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql'
 import { User as UserModel } from './model/user.model'
 import { CreateUserInput } from './inputs/create.user.intput'
-import { NullableType } from 'src/utils/types/nullable.type'
+import { NullableType } from '../utils/types/nullable.type'
 import { User } from '@prisma/client'
 import { ValidateUserInputPipe } from './pipes/validate-user-input.pipe'
 import { UserService } from './user.service'

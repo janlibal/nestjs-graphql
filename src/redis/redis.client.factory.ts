@@ -9,11 +9,11 @@ export const redisClientFactory: FactoryProvider<Redis> = {
   provide: 'RedisClient',
   useFactory: (configService: ConfigService<AllConfigType>) => {
     const redisInstance = new Redis({
-      host: configService.getOrThrow('redis.redisUrl', { infer: true }), //'127.0.0.1',
-      username: configService.getOrThrow('redis.username', { infer: true }), //'default',
-      password: configService.getOrThrow('redis.password', { infer: true }), //'root',
-      db: configService.getOrThrow('redis.dbNumber', { infer: true }), //1,
-      port: configService.getOrThrow('redis.port', { infer: true }) //+6379,
+      host: configService.getOrThrow('redis.redisUrl', { infer: true }),
+      username: configService.getOrThrow('redis.username', { infer: true }),
+      password: configService.getOrThrow('redis.password', { infer: true }),
+      db: configService.getOrThrow('redis.dbNumber', { infer: true }),
+      port: configService.getOrThrow('redis.port', { infer: true })
     })
 
     redisInstance.on('connect', redisStatus.handleConnect.bind(this))

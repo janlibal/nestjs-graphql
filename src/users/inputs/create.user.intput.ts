@@ -1,6 +1,6 @@
 import { InputType, Field } from '@nestjs/graphql'
-import { RoleInput } from 'src/roles/role.input'
-import { StatusInput } from 'src/statuses/status.input'
+import { RoleInput } from '../../roles/role.input'
+import { StatusInput } from '../../statuses/status.input'
 
 @InputType()
 export class CreateUserInput {

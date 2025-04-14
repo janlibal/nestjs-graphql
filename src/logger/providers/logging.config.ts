@@ -1,5 +1,5 @@
 import { Options } from 'pino-http'
-import { LogService } from 'src/shared/constants/global.constants'
+import { LogService } from '../../shared/constants/global.constants'
 import { consoleLoggingConfig } from './console.logging'
 import { googleLoggingConfig } from './google.logging'
 import { cloudwatchLoggingConfig } from './cloudwatch.logging'

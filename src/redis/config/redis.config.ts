@@ -36,18 +36,6 @@ class EnvironmentVariablesValidator {
   @Max(900000)
   @IsOptional()
   REDIS_EXPIRY: number
-
-  //REDIS_PORT=+6379
-  //REDIS_HOST=127.0.0.1
-  //REDIS_USERNAME=default
-  //REDIS_PASSWORD=root
-  //REDIS_DB=1
-
-  //redisUrl: string
-  //username: string
-  //password: string
-  //port: number
-  //dbNumber: number
 }
 
 export default registerAs<RedisConfig>('redis', () => {
@@ -72,6 +60,5 @@ export default registerAs<RedisConfig>('redis', () => {
       : process.env.REDIS_EXPIRY
         ? parseInt(process.env.REDIS_EXPIRY, 10)
         : 900000
-    //expiry: process.env.REDIS_EXPIRY,
   }
 })
