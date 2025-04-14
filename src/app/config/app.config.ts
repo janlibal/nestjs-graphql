@@ -53,6 +53,16 @@ class EnvironmentVariablesValidator {
   @IsString()
   @IsOptional()
   APP_HEADER_LANGUAGE: string
+
+  @IsString()
+  @IsOptional()
+  LOG_LEVEL: string
+
+  @IsString()
+  @IsOptional()
+  LOG_SERVICE: string
+
+  DEBUG: boolean
 }
 
 export default registerAs<AppConfig>('app', () => {
@@ -72,6 +82,9 @@ export default registerAs<AppConfig>('app', () => {
     dbUrl: process.env.DATABASE_URL || 'unknown',
     apiPrefix: API_PREFIX || 'api',
     fallbackLanguage: process.env.APP_FALLBACK_LANGUAGE || 'en',
-    headerLanguage: process.env.APP_HEADER_LANGUAGE || 'x-custom-lang'
+    headerLanguage: process.env.APP_HEADER_LANGUAGE || 'x-custom-lang',
+    logLevel: process.env.LOG_LEVEL || 'debug',
+    logService: process.env.LOG_SERVICE || 'console',
+    debug: process.env.DEBUG && process.env.DEBUG == 'false'
   }
 })

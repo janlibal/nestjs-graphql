@@ -9,29 +9,38 @@ import validationOptions from './utils/validation.options'
 import { GraphQLExceptionFilter } from './filters/graphql.filter'
 import * as fs from 'fs'
 import { GraphqlLoggingInterceptor } from './interceptors/graphql-logging.interceptor'
+import { createPinoHttpOptions } from './logger/createHttpPinoOptions'
+import pinoHttp from 'pino-http'
 
 async function bootstrap() {
   try {
-    const app = await NestFactory.create(GlobalModule)
+    const app = await NestFactory.create(GlobalModule, { bufferLogs: true })
 
     if (!fs.existsSync('./logs')) {
       fs.mkdirSync('./logs')
     }
 
+    const configService = app.get(ConfigService<AllConfigType>)
+
     const logger = app.get(PinoLoggerService)
+    // 1. Set up the logger globally
+    app.useLogger(logger) // Use logger for general application logging
 
-    app.useGlobalInterceptors(new GraphqlLoggingInterceptor(logger))
+    // 2. Set up PinoHttp for logging HTTP requests/responses
+    const loggerOptions = createPinoHttpOptions(configService) // Create options for pino-http
+    app.use(pinoHttp(loggerOptions)) // Middleware to log HTTP requests
 
-    logger.setContext('main')
-    app.useLogger(logger)
+    // 3. Optionally set context for the logger (for example, setting the app context)
+    logger.setContext('main') // Set a specific context for the main application
+
+    // 4. Use GraphQL logging interceptor to log GraphQL-specific operations
+    app.useGlobalInterceptors(new GraphqlLoggingInterceptor(logger)) // Interceptor for GraphQL logging
 
     app.useGlobalFilters(new GraphQLExceptionFilter())
 
     app.useGlobalPipes(new ValidationPipe(validationOptions))
 
     app.enableShutdownHooks()
-
-    const configService = app.get(ConfigService<AllConfigType>)
 
     app.setGlobalPrefix(API_PREFIX)
 
@@ -80,6 +89,13 @@ async function bootstrap() {
       { infer: true }
     )
 
+    const appName = configService.getOrThrow('app.name', { infer: true })
+    const logLevel = configService.getOrThrow('app.logLevel', { infer: true })
+    const logService = configService.getOrThrow('app.logService', {
+      infer: true
+    })
+    const isDebug = configService.getOrThrow('app.debug', { infer: true })
+
     app.enableCors()
 
     await app.listen(port, async () => {
@@ -102,6 +118,11 @@ async function bootstrap() {
       console.log(`17. Forgot expires: ${forgotExpires}`)
       console.log(`18. Confirm email secret: ${confirmEmailSecret}`)
       console.log(`19. Confirm email expires: ${confirmEmailExpires}`)
+
+      console.log(`20. appName: ${appName}`)
+      console.log(`21. logLevel: ${logLevel}`)
+      console.log(`22. logService: ${logService}`)
+      console.log(`23. isDebug?: ${isDebug}`)
 
       logger.log(`App started on port: ${port}!`)
     })

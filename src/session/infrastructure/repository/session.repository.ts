@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { Session } from '../../model/session.model'
 import { User } from '../../../users/model/user.model'
-import { NullableType } from 'src/utils/types/nullable.type'
+import { NullableType } from '../../../utils/types/nullable.type'
 
 @Injectable()
 export abstract class SessionRepository {

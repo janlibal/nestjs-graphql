@@ -26,7 +26,7 @@
     "lint-staged": "lint-staged",
     "infra:up": "docker compose -f docker-compose.db.yml --env-file .env up -d",
     "infra:down": "docker compose -f docker-compose.db.yml down",
-    "test": "vitest run",
+    "test": "vitest run -c ./vitest.config.unit.ts",
     "test:unit": "vitest -c ./vitest.config.unit.ts",
     "test:unit:ui": "vitest -c ./vitest.config.unit.ts --ui",
     "test:int": "vitest -c ./vitest.config.integration.ts",
@@ -112,5 +112,9 @@
     "schema": "prisma/schema.prisma",
     "migrateOutput": "src/prisma/migrations/",
     "seed": "ts-node ./prisma/seeds/seed.ts"
-  }
+  },
+  "lint-staged": {
+    "**/*.{ts,js}": ["eslint --fix", "prettier --write"],
+    "**/*.{ts,js,test.ts}": ["vitest run --passWithNoTests"]
+  }  
 }
