@@ -87,30 +87,3 @@ export class GqlAuthGuard implements CanActivate {
     }
   }
 }
-
-/*@Injectable()
-export class GqlAuthGuard implements CanActivate {
-  
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    const ctx = context.switchToHttp();  // Switch to HTTP context, for getting headers
-    const request = ctx.getRequest();    // Get the request object from context
-    
-    const token = request.headers.authorization?.split(' ')[1];  // Extract token from 'Authorization' header
-    
-    if (!token) {
-      throw new UnauthorizedException('No token provided');
-    }
-    
-    // Pass the token to your AuthService for verification
-    const user = true //await this.authService.verifyToken(token);
-    
-    if (!user) {
-      throw new UnauthorizedException('Invalid or expired token');
-    }
-
-    // Attach the user to the request object for later access in resolvers
-    request.user = user;
-
-    return true;  // Proceed with the request
-  }
-}*/
