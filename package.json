@@ -1,10 +1,31 @@
 {
-  "name": "nestjs-graphql",
+  "name": "backend-nest-api-graphql",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Nestjs Boilerplate API",
   "private": true,
+  "homepage": "https://github.com/janlibal/nestjs-graphql",
+  "author": {
+    "name": "Jan Libal",
+    "email": "jan.libal@yahoo.com"
+  },
+  "contributors": [
+    {
+      "name": "Jan Libal",
+      "email": "jan.libal@yahoo.com"
+    }
+  ],
   "license": "UNLICENSED",
+  "engines": {
+    "node": ">= 20"
+  },
+  "keywords": [
+    "nest",
+    "nestjs",
+    "graphql",
+    "api",
+    "nestjs-boilerplate",
+    "boilerplate"
+  ],
   "scripts": {
     "prisma:generate": "prisma generate",
     "migrate:dev": "npx prisma migrate dev",
