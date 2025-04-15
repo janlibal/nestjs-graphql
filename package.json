@@ -135,7 +135,6 @@
     "seed": "ts-node ./prisma/seeds/seed.ts"
   },
   "lint-staged": {
-    "**/*.{ts,js}": ["eslint --fix --ext .ts --ignore-pattern **/*.test.ts", "prettier --write"],
-    "**/*.{ts,js,test.ts}": ["vitest run --passWithNoTests"]
-  }  
+    "**/*.{ts,js}": ["eslint --fix --ignore-pattern '**/*.test.ts'","prettier --write"]
+  }
 }

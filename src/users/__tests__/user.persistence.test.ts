@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { vi, describe, beforeEach, it, expect } from 'vitest'
+import { vi, describe, beforeEach, it, expect, afterEach } from 'vitest'
 import { PrismaService } from '../../database/prisma.service'
 
 import { rawUserDomainObject, rawUserEntityObject } from './mock/user.data'
@@ -35,11 +35,10 @@ describe('UserPersistence', () => {
 
     userPersistence = module.get<UserPersistence>(UserPersistence)
     prismaService = module.get<PrismaService>(PrismaService)
-
-    vi.restoreAllMocks()
   })
 
   afterEach(() => {
+    vi.restoreAllMocks()
     vi.clearAllMocks()
   })
 
@@ -47,7 +46,7 @@ describe('UserPersistence', () => {
     expect(userPersistence).toBeDefined()
   })
 
-  describe('UserRepository Methods', () => {
+  describe('UserPersistence Methods', () => {
     it('should return users containing provided firstNames', async () => {
       const userEntityObjects = userMockEntityObjects(rawUserEntityObject, 5)
       vi.spyOn(prismaService.user, 'findMany').mockResolvedValue(
