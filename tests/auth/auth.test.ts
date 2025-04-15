@@ -8,6 +8,204 @@ describe('Auth', () => {
   const endPoint = `${API}/${VER}/${END_POINT}`
 
   describe('Auth', () => {
+    describe('MUTATION > logout', () => {
+      let newUserApiToken: any
+      let bareToken: any
+      it('should logout user and return true', async () => {
+        await request(app)
+          .post(`/${endPoint}`)
+          .send({
+            query: `
+                mutation {
+                    login (input: {
+                        email: "daniel.doe@joedoe.com", 
+                        password: "Password123!"
+                    })
+                    {
+                       token
+                    }
+                    }
+              `
+          })
+          .expect(200)
+          .then((loginResponse) => {
+            ;(bareToken = loginResponse.body.data.login.token),
+              (newUserApiToken = 'jwt ' + bareToken)
+          })
+        const response = await request(app)
+          .post(`/${endPoint}`)
+          .set('Authorization', newUserApiToken)
+          .send({
+            query: `
+            mutation {
+              logout
+            }
+          `
+          })
+          .expect(200)
+      })
+    })
+    describe('QUERY > me', () => {
+      let newUserApiToken: any
+      let bareToken: any
+      it('should return user data', async () => {
+        await request(app)
+          .post(`/${endPoint}`)
+          .send({
+            query: `
+                mutation {
+                    login (input: {
+                        email: "daniel.doe@joedoe.com", 
+                        password: "Password123!"
+                    })
+                    {
+                       token
+                    }
+                    }
+              `
+          })
+          .expect(200)
+          .then((loginResponse) => {
+            ;(bareToken = loginResponse.body.data.login.token),
+              (newUserApiToken = 'jwt ' + bareToken)
+          })
+
+        const response = await request(app)
+          .post(`/${endPoint}`)
+          .set('Authorization', newUserApiToken)
+          .send({
+            query: `
+                query {
+                    me
+                    {
+                       id,
+                       email,
+                       firstName,
+                       lastName,
+                       role { id }
+                       status { id }
+                    }
+                    }
+              `
+          })
+          .expect(200)
+        expect(response.body.data.me.id).toMatch(
+          /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
+        )
+        expect(response.body.data.me.email).toMatch(
+          /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
+        )
+        expect(response.body.data.me.firstName).toMatch(usr.firstName)
+        expect(response.body.data.me.lastName).toMatch(usr.lastName)
+        expect(response.body.data.me.role.id).toBe(usr.roleId)
+        expect(response.body.data.me.status.id).toBe(usr.statusId)
+      })
+
+      it('should fail with no token provided', async () => {
+        const response = await request(app)
+          .post(`/${endPoint}`)
+          //.set('Authorization', newUserApiToken)
+          .send({
+            query: `
+                query {
+                    me
+                    {
+                       id,
+                       email,
+                       firstName,
+                       lastName,
+                       role { id }
+                       status { id }
+                    }
+                    }
+              `
+          })
+          .expect(200)
+        expect(response.body.errors[0].path).toMatch('me')
+        expect(response.body.errors[0].timestamp).toMatch(
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
+        )
+        expect(response.body.errors[0].path).toMatch('me')
+        expect(response.body.errors[0].locations[0].line).toBeDefined()
+        expect(response.body.errors[0].locations[0].column).toBeDefined()
+        expect(response.body.errors[0].code).toBe(401)
+        expect(response.body.errors[0].message).toMatch('No authorization!')
+        expect(response.body.errors[0].statusCode).toBe(500)
+        expect(response.body.errors[0].stack).toMatch(
+          /UnauthorizedException: No authorization!/i
+        )
+      })
+
+      it('should fail with missing jwt prefix', async () => {
+        const response = await request(app)
+          .post(`/${endPoint}`)
+          .set('Authorization', 'newUserApiToken')
+          .send({
+            query: `
+                query {
+                    me
+                    {
+                       id,
+                       email,
+                       firstName,
+                       lastName,
+                       role { id }
+                       status { id }
+                    }
+                    }
+              `
+          })
+          .expect(200)
+        expect(response.body.errors[0].path).toMatch('me')
+        expect(response.body.errors[0].timestamp).toMatch(
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
+        )
+        expect(response.body.errors[0].path).toMatch('me')
+        expect(response.body.errors[0].locations[0].line).toBeDefined()
+        expect(response.body.errors[0].locations[0].column).toBeDefined()
+        expect(response.body.errors[0].code).toBe(401)
+        expect(response.body.errors[0].message).toMatch('No jwt!')
+        expect(response.body.errors[0].statusCode).toBe(500)
+        expect(response.body.errors[0].stack).toMatch(
+          /UnauthorizedException: No jwt!/i
+        )
+      })
+
+      it('should fail when no token provided', async () => {
+        const response = await request(app)
+          .post(`/${endPoint}`)
+          .set('Authorization', 'jwt ')
+          .send({
+            query: `
+                query {
+                    me
+                    {
+                       id,
+                       email,
+                       firstName,
+                       lastName,
+                       role { id }
+                       status { id }
+                    }
+                    }
+              `
+          })
+          .expect(200)
+        expect(response.body.errors[0].path).toMatch('me')
+        expect(response.body.errors[0].timestamp).toMatch(
+          /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
+        )
+        expect(response.body.errors[0].path).toMatch('me')
+        expect(response.body.errors[0].locations[0].line).toBeDefined()
+        expect(response.body.errors[0].locations[0].column).toBeDefined()
+        expect(response.body.errors[0].code).toBe(401)
+        expect(response.body.errors[0].message).toMatch('No token provided')
+        expect(response.body.errors[0].statusCode).toBe(500)
+        expect(response.body.errors[0].stack).toMatch(
+          /UnauthorizedException: No token provided/i
+        )
+      })
+    })
     describe('MUTATION > login', () => {
       it('should return session data after successful login', async () => {
         const response = await request(app)
