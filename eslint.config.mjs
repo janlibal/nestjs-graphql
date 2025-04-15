@@ -66,15 +66,5 @@ export default [
         },
       ],
     },
-    overrides: [
-      {
-        files: ['**/*.test.ts'], // Specify the test files you want to ignore
-        rules: {
-          // Disable all linting for test files
-          'no-console': 'off',
-          '@typescript-eslint/no-unused-vars': 'off',
-        },
-      },
-    ],
   },
 ];
