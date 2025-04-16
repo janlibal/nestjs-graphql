@@ -124,7 +124,7 @@ async function bootstrap() {
       console.log(`22. logService: ${logService}`)
       console.log(`23. isDebug?: ${isDebug}`)
 
-      logger.log(`App started on port: ${port}!`)
+      logger.log(`App started on port: ${port}!!!`)
     })
   } catch (error) {
     console.log(`Error occurred while starting server ${error}`)
