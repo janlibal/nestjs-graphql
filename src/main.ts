@@ -92,7 +92,11 @@ async function bootstrap() {
     })
     const isDebug = configService.getOrThrow('app.debug', { infer: true })
 
-    app.enableCors()
+    app.enableCors({
+      origin: '*',
+      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+      credentials: true
+    })
 
     await app.listen(port, async () => {
       console.log(`1. Port: ${port}`)
