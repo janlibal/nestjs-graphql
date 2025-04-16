@@ -1,9 +1,4 @@
-import {
-  ExecutionContext,
-  CallHandler,
-  NestInterceptor,
-  Injectable
-} from '@nestjs/common'
+import { ExecutionContext, CallHandler, NestInterceptor, Injectable } from '@nestjs/common'
 import { Observable } from 'rxjs'
 import { tap } from 'rxjs/operators'
 import { GqlExecutionContext } from '@nestjs/graphql'
@@ -22,9 +17,7 @@ export class GraphqlLoggingInterceptor implements NestInterceptor {
     const body = req.body.query
     const operationName = this.getOperationName(body)
     const operationType =
-      body && body.toLowerCase().trim().startsWith('mutation')
-        ? 'Mutation'
-        : 'Query'
+      body && body.toLowerCase().trim().startsWith('mutation') ? 'Mutation' : 'Query'
     const operation = operationName || 'Unnamed operation'
 
     const requestId = req?.id || 'No ID'

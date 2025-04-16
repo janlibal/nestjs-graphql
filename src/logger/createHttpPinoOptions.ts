@@ -3,10 +3,7 @@ import { randomUUID } from 'crypto'
 import { IncomingMessage, ServerResponse } from 'http'
 import { ConfigService } from '@nestjs/config'
 
-const genReqId: GenReqId = (
-  req: IncomingMessage,
-  res: ServerResponse<IncomingMessage>
-) => {
+const genReqId: GenReqId = (req: IncomingMessage, res: ServerResponse<IncomingMessage>) => {
   const id = req.headers['x-request-id'] || randomUUID()
   req.id = id
   res.setHeader('x-request-id', id)

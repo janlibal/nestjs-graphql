@@ -10,16 +10,10 @@ async function hashPassword(password: string): Promise<string> {
 }
 
 function makeHash() {
-  return crypto
-    .createHash('sha256')
-    .update(randomStringGenerator())
-    .digest('hex')
+  return crypto.createHash('sha256').update(randomStringGenerator()).digest('hex')
 }
 
-async function comparePasswords(
-  candidatePassword: string,
-  userPassword: string
-): Promise<boolean> {
+async function comparePasswords(candidatePassword: string, userPassword: string): Promise<boolean> {
   return bcrypt.compare(candidatePassword, userPassword)
 }
 

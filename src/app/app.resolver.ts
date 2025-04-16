@@ -8,9 +8,7 @@ import { NotFoundException } from '@nestjs/common'
 @Resolver('App')
 export class AppResolver {
   @Query(() => HelloResponseDto)
-  async hello(
-    @Args('name', new ValidateNamePipe()) name: string
-  ): Promise<HelloResponseDto> {
+  async hello(@Args('name', new ValidateNamePipe()) name: string): Promise<HelloResponseDto> {
     const data = {
       message: 'Hello World! ' + name
     }

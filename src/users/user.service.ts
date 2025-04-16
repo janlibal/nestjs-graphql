@@ -1,8 +1,4 @@
-import {
-  ConflictException,
-  Injectable,
-  UnprocessableEntityException
-} from '@nestjs/common'
+import { ConflictException, Injectable, UnprocessableEntityException } from '@nestjs/common'
 import { User } from '@prisma/client'
 import { User as UserModel } from './model/user.model'
 import { AuthProvidersEnum } from './enums/auth.provider.enum'
@@ -41,9 +37,7 @@ export class UserService {
   async createUser(createUserInput: CreateUserInput): Promise<UserModel> {
     let email: string | null = null
     if (createUserInput.email) {
-      const userObject = await this.userRepository.findByEmail(
-        createUserInput.email
-      )
+      const userObject = await this.userRepository.findByEmail(createUserInput.email)
       if (userObject) {
         throw new ConflictException('User already exists')
       }
@@ -56,9 +50,7 @@ export class UserService {
     }
 
     let role: Role | undefined = undefined
-    const roleObject = Object.values(RoleEnum)
-      .map(String)
-      .includes(String(createUserInput.role.id))
+    const roleObject = Object.values(RoleEnum).map(String).includes(String(createUserInput.role.id))
     if (!roleObject) {
       throw new UnprocessableEntityException('Role does not exist')
     }

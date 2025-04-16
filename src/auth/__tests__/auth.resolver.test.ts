@@ -83,9 +83,7 @@ describe('AuthResolver', () => {
           await pipe.transform({ ...registerInput, firstName: '@#@#' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
-          expect(err).toMatch(
-            /Firstname cannot contain special characters or numbers./i
-          )
+          expect(err).toMatch(/Firstname cannot contain special characters or numbers./i)
         }
       })
       it('should throw error when firstName consists of only numbers', async () => {
@@ -94,9 +92,7 @@ describe('AuthResolver', () => {
           await pipe.transform({ ...registerInput, firstName: '123' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
-          expect(err).toMatch(
-            /Firstname cannot contain special characters or numbers./i
-          )
+          expect(err).toMatch(/Firstname cannot contain special characters or numbers./i)
         }
       })
       it('should throw error when lastName is empty', async () => {
@@ -124,9 +120,7 @@ describe('AuthResolver', () => {
           await pipe.transform({ ...registerInput, lastName: '@#@#' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
-          expect(err).toMatch(
-            /Lastname cannot contain special characters or numbers./i
-          )
+          expect(err).toMatch(/Lastname cannot contain special characters or numbers./i)
         }
       })
       it('should throw error when lastName consists of only numbers', async () => {
@@ -135,9 +129,7 @@ describe('AuthResolver', () => {
           await pipe.transform({ ...registerInput, lastName: '123' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
-          expect(err).toMatch(
-            /Lastname cannot contain special characters or numbers./i
-          )
+          expect(err).toMatch(/Lastname cannot contain special characters or numbers./i)
         }
       })
       it('should throw error when password is empty', async () => {
@@ -163,14 +155,11 @@ describe('AuthResolver', () => {
         try {
           await pipe.transform({
             ...registerInput,
-            password:
-              'Password123!Password123!Password123!Password123!Password123!Password123!'
+            password: 'Password123!Password123!Password123!Password123!Password123!Password123!'
           }) //,{ type: 'body' }{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
-          expect(err).toMatch(
-            /Passwword can contain 20 characters at the most./i
-          )
+          expect(err).toMatch(/Passwword can contain 20 characters at the most./i)
         }
       })
       it('should throw error when password is weak', async () => {

@@ -43,9 +43,7 @@ export class SessionPersistence {
 
   async update(
     id: Session['id'],
-    payload: Partial<
-      Omit<Session, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>
-    >
+    payload: Partial<Omit<Session, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>>
   ): Promise<Session | null> {
     const entity = await this.prismaService.session.findFirstOrThrow({
       where: { id: Number(id) }

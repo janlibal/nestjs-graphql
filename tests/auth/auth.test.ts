@@ -131,9 +131,7 @@ describe('Auth', () => {
         expect(response.body.errors[0].code).toBe(401)
         expect(response.body.errors[0].message).toMatch('No authorization!')
         expect(response.body.errors[0].statusCode).toBe(500)
-        expect(response.body.errors[0].stack).toMatch(
-          /UnauthorizedException: No authorization!/i
-        )
+        expect(response.body.errors[0].stack).toMatch(/UnauthorizedException: No authorization!/i)
       })
 
       it('should fail with missing jwt prefix', async () => {
@@ -166,9 +164,7 @@ describe('Auth', () => {
         expect(response.body.errors[0].code).toBe(401)
         expect(response.body.errors[0].message).toMatch('No jwt!')
         expect(response.body.errors[0].statusCode).toBe(500)
-        expect(response.body.errors[0].stack).toMatch(
-          /UnauthorizedException: No jwt!/i
-        )
+        expect(response.body.errors[0].stack).toMatch(/UnauthorizedException: No jwt!/i)
       })
 
       it('should fail when no token provided', async () => {
@@ -201,9 +197,7 @@ describe('Auth', () => {
         expect(response.body.errors[0].code).toBe(401)
         expect(response.body.errors[0].message).toMatch('No token provided')
         expect(response.body.errors[0].statusCode).toBe(500)
-        expect(response.body.errors[0].stack).toMatch(
-          /UnauthorizedException: No token provided/i
-        )
+        expect(response.body.errors[0].stack).toMatch(/UnauthorizedException: No token provided/i)
       })
     })
     describe('MUTATION > login', () => {
@@ -284,9 +278,7 @@ describe('Auth', () => {
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
-        expect(response.body.errors[0].message).toMatch(
-          'Password cannot be empty.'
-        )
+        expect(response.body.errors[0].message).toMatch('Password cannot be empty.')
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
           /BadRequestException: Password cannot be empty./i
@@ -330,9 +322,7 @@ describe('Auth', () => {
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch('Email is invalid.')
         expect(response.body.errors[0].statusCode).toBe(500)
-        expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Email is invalid./i
-        )
+        expect(response.body.errors[0].stack).toMatch(/BadRequestException: Email is invalid./i)
       })
       it('should throw error when email is invalid and password is empty', async () => {
         const response = await request(app)
@@ -637,9 +627,7 @@ describe('Auth', () => {
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
-        expect(response.body.errors[0].message).toMatch(
-          'Lastname must be longer than 1 character.'
-        )
+        expect(response.body.errors[0].message).toMatch('Lastname must be longer than 1 character.')
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
           /BadRequestException: Lastname must be longer than 1 character./i
@@ -742,9 +730,7 @@ describe('Auth', () => {
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
-        expect(response.body.errors[0].message).toMatch(
-          'Password cannot be empty.'
-        )
+        expect(response.body.errors[0].message).toMatch('Password cannot be empty.')
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
           /BadRequestException: Password cannot be empty./i
@@ -884,9 +870,7 @@ describe('Auth', () => {
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch('Email is invalid.')
         expect(response.body.errors[0].statusCode).toBe(500)
-        expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Email is invalid./i
-        )
+        expect(response.body.errors[0].stack).toMatch(/BadRequestException: Email is invalid./i)
       })
       it('should throw error when only firstName is valid', async () => {
         const response = await request(app)

@@ -71,9 +71,7 @@ describe('UserResolver', () => {
           await pipe.transform({ ...createUserInput, firstName: '@#@#' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
-          expect(err).toMatch(
-            /Firstname cannot contain special characters or numbers./i
-          )
+          expect(err).toMatch(/Firstname cannot contain special characters or numbers./i)
         }
       })
       it('should throw error when firstName consists of only numbers', async () => {
@@ -82,9 +80,7 @@ describe('UserResolver', () => {
           await pipe.transform({ ...createUserInput, firstName: '123' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
-          expect(err).toMatch(
-            /Firstname cannot contain special characters or numbers./i
-          )
+          expect(err).toMatch(/Firstname cannot contain special characters or numbers./i)
         }
       })
       it('should throw error when lastName is empty', async () => {
@@ -112,9 +108,7 @@ describe('UserResolver', () => {
           await pipe.transform({ ...createUserInput, lastName: '@#@#' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
-          expect(err).toMatch(
-            /Lastname cannot contain special characters or numbers./i
-          )
+          expect(err).toMatch(/Lastname cannot contain special characters or numbers./i)
         }
       })
       it('should throw error when lastName consists of only numbers', async () => {
@@ -123,9 +117,7 @@ describe('UserResolver', () => {
           await pipe.transform({ ...createUserInput, lastName: '123' }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
-          expect(err).toMatch(
-            /Lastname cannot contain special characters or numbers./i
-          )
+          expect(err).toMatch(/Lastname cannot contain special characters or numbers./i)
         }
       })
       it('should throw error when password is empty', async () => {
@@ -151,14 +143,11 @@ describe('UserResolver', () => {
         try {
           await pipe.transform({
             ...createUserInput,
-            password:
-              'Password123!Password123!Password123!Password123!Password123!Password123!'
+            password: 'Password123!Password123!Password123!Password123!Password123!Password123!'
           }) //,{ type: 'body' }
         } catch (err: any) {
           expect(err).toBeInstanceOf(BadRequestException)
-          expect(err).toMatch(
-            /Passwword can contain 20 characters at the most./i
-          )
+          expect(err).toMatch(/Passwword can contain 20 characters at the most./i)
         }
       })
       it('should throw error when password is weak', async () => {

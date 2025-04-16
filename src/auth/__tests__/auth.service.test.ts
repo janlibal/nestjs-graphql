@@ -14,10 +14,7 @@ import {
   registerInput,
   sessionData
 } from './mock/auth.data'
-import {
-  UnauthorizedException,
-  UnprocessableEntityException
-} from '@nestjs/common'
+import { UnauthorizedException, UnprocessableEntityException } from '@nestjs/common'
 import crypto from '../../utils/crypto'
 import { RedisPrefixEnum } from 'src/redis/enums/redis.prefix.enum'
 
@@ -109,31 +106,18 @@ describe('SessionService', () => {
 
       it('should throw error for invalid password', async () => {
         mockUserService.findByEmail.mockResolvedValue(mockUser)
-        const comparePasswordsSpy = vi
-          .spyOn(crypto, 'comparePasswords')
-          .mockResolvedValue(false)
-        await expect(authService.validateLogin(loginDataBad)).rejects.toThrow(
-          UnauthorizedException
-        )
-        expect(comparePasswordsSpy).toHaveBeenCalledWith(
-          loginDataBad.password,
-          mockUser.password
-        )
-        expect(mockUserService.findByEmail).toHaveBeenCalledWith(
-          loginDataBad.email
-        )
+        const comparePasswordsSpy = vi.spyOn(crypto, 'comparePasswords').mockResolvedValue(false)
+        await expect(authService.validateLogin(loginDataBad)).rejects.toThrow(UnauthorizedException)
+        expect(comparePasswordsSpy).toHaveBeenCalledWith(loginDataBad.password, mockUser.password)
+        expect(mockUserService.findByEmail).toHaveBeenCalledWith(loginDataBad.email)
       })
 
       it('should return user data after successful login', async () => {
         const prefix = RedisPrefixEnum.USER
         const expiry = 900000
         mockUserService.findByEmail.mockResolvedValue(mockUser)
-        const comparePasswordsSpy = vi
-          .spyOn(crypto, 'comparePasswords')
-          .mockResolvedValue(true)
-        const makeHashSpy = vi
-          .spyOn(crypto, 'makeHash')
-          .mockReturnValue('hash123')
+        const comparePasswordsSpy = vi.spyOn(crypto, 'comparePasswords').mockResolvedValue(true)
+        const makeHashSpy = vi.spyOn(crypto, 'makeHash').mockReturnValue('hash123')
         mockSessionService.create.mockResolvedValue(sessionData)
         mockRedisService.createSession.mockResolvedValue(true)
 
@@ -141,18 +125,11 @@ describe('SessionService', () => {
         expect(result.refreshToken).toMatch(
           /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/
         )
-        expect(result.token).toMatch(
-          /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/
-        )
-        expect(mockUserService.findByEmail).toHaveBeenCalledWith(
-          loginData.email
-        )
+        expect(result.token).toMatch(/^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/)
+        expect(mockUserService.findByEmail).toHaveBeenCalledWith(loginData.email)
         expect(result.tokenExpires).toBeDefined()
         expect(result.user).toEqual(mockUser)
-        expect(comparePasswordsSpy).toHaveBeenCalledWith(
-          loginData.password,
-          mockUser.password
-        )
+        expect(comparePasswordsSpy).toHaveBeenCalledWith(loginData.password, mockUser.password)
         expect(makeHashSpy).toHaveBeenCalled()
         expect(mockSessionService.create).toHaveBeenCalledWith(sessionData)
         expect(mockRedisService.createSession).toHaveBeenCalledWith({
