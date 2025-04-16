@@ -24,9 +24,7 @@ describe('App', () => {
           `
           })
           .expect(200)
-        expect(response.body.data.hello.message).toMatch(
-          `Hello World! ${mockName}`
-        )
+        expect(response.body.data.hello.message).toMatch(`Hello World! ${mockName}`)
       })
     })
   })

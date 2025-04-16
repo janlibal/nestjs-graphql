@@ -8,9 +8,7 @@ export abstract class UserRepository {
     data: Omit<UserModel, 'id' | 'createdAt' | 'deletedAt' | 'updatedAt'>
   ): Promise<UserModel>
 
-  abstract findByEmail(
-    email: UserModel['email']
-  ): Promise<NullableType<UserModel>>
+  abstract findByEmail(email: UserModel['email']): Promise<NullableType<UserModel>>
 
   abstract findById(id: UserModel['id']): Promise<NullableType<UserModel>>
 

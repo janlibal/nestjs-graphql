@@ -3,10 +3,7 @@ import { vi, describe, beforeEach, it, expect, afterEach } from 'vitest'
 import { PrismaService } from '../../database/prisma.service'
 
 import { rawUserDomainObject, rawUserEntityObject } from './mock/user.data'
-import {
-  userMockDomainObjects,
-  userMockEntityObjects
-} from './mock/user.data-helper'
+import { userMockDomainObjects, userMockEntityObjects } from './mock/user.data-helper'
 import { UserMapper } from '../infrastructure/mappers/user.mapper'
 import { UserPersistence } from '../infrastructure/persistence/user.persistence'
 
@@ -27,10 +24,7 @@ describe('UserPersistence', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        UserPersistence,
-        { provide: PrismaService, useValue: mockPrismaService }
-      ]
+      providers: [UserPersistence, { provide: PrismaService, useValue: mockPrismaService }]
     }).compile()
 
     userPersistence = module.get<UserPersistence>(UserPersistence)
@@ -50,9 +44,7 @@ describe('UserPersistence', () => {
     describe('findByFirstNames()', () => {
       it('should return users containing provided firstNames', async () => {
         const userEntityObjects = userMockEntityObjects(rawUserEntityObject, 5)
-        vi.spyOn(prismaService.user, 'findMany').mockResolvedValue(
-          userEntityObjects
-        )
+        vi.spyOn(prismaService.user, 'findMany').mockResolvedValue(userEntityObjects)
 
         const result = await userPersistence.findByFirstNames(['Joe1', 'Joe5'])
 
@@ -65,9 +57,7 @@ describe('UserPersistence', () => {
       it('should find all users', async () => {
         const userEntityObjects = userMockEntityObjects(rawUserEntityObject, 5)
         const userDomainObjects = userMockDomainObjects(rawUserDomainObject, 5)
-        vi.spyOn(prismaService.user, 'findMany').mockResolvedValue(
-          userEntityObjects
-        )
+        vi.spyOn(prismaService.user, 'findMany').mockResolvedValue(userEntityObjects)
 
         const result = await userPersistence.findMany()
 
@@ -78,9 +68,7 @@ describe('UserPersistence', () => {
     })
     describe('findById', () => {
       it('should find user by provided Id', async () => {
-        vi.spyOn(prismaService.user, 'findUnique').mockResolvedValue(
-          rawUserEntityObject
-        )
+        vi.spyOn(prismaService.user, 'findUnique').mockResolvedValue(rawUserEntityObject)
 
         const result = await userPersistence.findById(rawUserDomainObject.id)
 
@@ -94,13 +82,9 @@ describe('UserPersistence', () => {
 
     describe('findByEmail', () => {
       it('should find user by provided email', async () => {
-        vi.spyOn(prismaService.user, 'findUnique').mockResolvedValue(
-          rawUserEntityObject
-        )
+        vi.spyOn(prismaService.user, 'findUnique').mockResolvedValue(rawUserEntityObject)
 
-        const result = await userPersistence.findByEmail(
-          rawUserDomainObject.email
-        )
+        const result = await userPersistence.findByEmail(rawUserDomainObject.email)
 
         expect(result).toEqual(rawUserDomainObject)
 
@@ -112,12 +96,9 @@ describe('UserPersistence', () => {
 
     describe('create()', () => {
       it('should create new user', async () => {
-        const persistenceModel =
-          await UserMapper.toPersistence(rawUserDomainObject)
+        const persistenceModel = await UserMapper.toPersistence(rawUserDomainObject)
 
-        vi.spyOn(prismaService.user, 'create').mockResolvedValue(
-          rawUserEntityObject
-        )
+        vi.spyOn(prismaService.user, 'create').mockResolvedValue(rawUserEntityObject)
 
         const result = await userPersistence.save(rawUserDomainObject)
 

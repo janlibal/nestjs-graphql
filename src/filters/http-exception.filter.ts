@@ -11,9 +11,7 @@ import { GqlArgumentsHost, GqlExceptionFilter } from '@nestjs/graphql'
 import { GraphQLResolveInfo, GraphQLError } from 'graphql'
 
 @Catch()
-export class HttpExceptionFilter
-  implements ExceptionFilter, GqlExceptionFilter
-{
+export class HttpExceptionFilter implements ExceptionFilter, GqlExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp()
     const response = ctx.getResponse<Response>()
@@ -22,9 +20,7 @@ export class HttpExceptionFilter
     const gqlHost = GqlArgumentsHost.create(host)
     const info = gqlHost.getInfo<GraphQLResolveInfo>()
 
-    const status = exception.getStatus
-      ? exception.getStatus()
-      : HttpStatus.INTERNAL_SERVER_ERROR
+    const status = exception.getStatus ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR
 
     if (status === HttpStatus.INTERNAL_SERVER_ERROR) {
       // tslint:disable-next-line: no-console
@@ -48,11 +44,7 @@ export class HttpExceptionFilter
         method: request.method
       }
 
-      Logger.error(
-        `${request.method} ${request.url}`,
-        JSON.stringify(error),
-        'ExceptionFilter'
-      )
+      Logger.error(`${request.method} ${request.url}`, JSON.stringify(error), 'ExceptionFilter')
 
       response.status(status).json({ errors: [errorResponse] })
     } else {

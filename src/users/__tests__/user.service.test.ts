@@ -51,9 +51,7 @@ describe('UserService', () => {
         mockUserRepository.findById.mockResolvedValue(rawUserDomainObject)
         const result = await userService.findById(rawUserDomainObject.id)
         expect(result).toEqual(rawUserDomainObject)
-        expect(mockUserRepository.findById).toHaveBeenCalledWith(
-          rawUserDomainObject.id
-        )
+        expect(mockUserRepository.findById).toHaveBeenCalledWith(rawUserDomainObject.id)
       })
       it('should throw UnprocessableEntityException if user not found', async () => {
         mockUserRepository.findById.mockResolvedValue(null)
@@ -69,9 +67,7 @@ describe('UserService', () => {
         mockUserRepository.findByEmail.mockResolvedValue(rawUserDomainObject)
         const result = await userService.findByEmail(rawUserDomainObject.email)
         expect(result).toEqual(rawUserDomainObject)
-        expect(mockUserRepository.findByEmail).toHaveBeenCalledWith(
-          rawUserDomainObject.email
-        )
+        expect(mockUserRepository.findByEmail).toHaveBeenCalledWith(rawUserDomainObject.email)
       })
     })
     describe('getAll()', () => {
@@ -89,28 +85,22 @@ describe('UserService', () => {
         const userEntityObjects = userMockEntityObjects(rawUserEntityObject, 5)
 
         mockUserRepository.findByFirstNames.mockResolvedValue(
-          userEntityObjects.filter((user) =>
-            ['Joe'].some((names) => names === user.firstName)
-          )
+          userEntityObjects.filter((user) => ['Joe'].some((names) => names === user.firstName))
         )
         const result = await userService.getByFirstNames(['Joe'])
         //expect(result).toEqual(allUsers.map(a => a.firstName === 'Joe'))
         expect(result).toEqual(
-          userEntityObjects.filter((user) =>
-            ['Joe'].some((names) => names === user.firstName)
-          )
+          userEntityObjects.filter((user) => ['Joe'].some((names) => names === user.firstName))
         )
-        expect(mockUserRepository.findByFirstNames).toHaveBeenCalledWith([
-          'Joe'
-        ])
+        expect(mockUserRepository.findByFirstNames).toHaveBeenCalledWith(['Joe'])
       })
     })
     describe('createUser', () => {
       it('should throw ConflictException if user with email already exists', async () => {
         mockUserRepository.findByEmail.mockResolvedValue({})
-        await expect(
-          userService.createUser(rawUserDomainObject)
-        ).rejects.toThrowError(ConflictException)
+        await expect(userService.createUser(rawUserDomainObject)).rejects.toThrowError(
+          ConflictException
+        )
       })
       it('should throw UnprocessableEntityException if role does not exist', async () => {
         mockUserRepository.findByEmail.mockResolvedValue(null)
@@ -143,9 +133,7 @@ describe('UserService', () => {
         expect(result).toEqual(rawUserDomainObject)
 
         expect(hashPasswordSpy).toHaveBeenCalled()
-        expect(mockUserRepository.findByEmail).toHaveBeenCalledWith(
-          createUserInput.email
-        )
+        expect(mockUserRepository.findByEmail).toHaveBeenCalledWith(createUserInput.email)
       })
     })
   })

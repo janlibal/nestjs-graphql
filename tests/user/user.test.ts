@@ -37,9 +37,7 @@ describe('Auth', () => {
           .expect(200)
         expect(response.body.data.createUser.firstName).toMatch('Joe')
         expect(response.body.data.createUser.lastName).toMatch('Doe')
-        expect(response.body.data.createUser.email).toMatch(
-          'joe.doe@joedoe.com'
-        )
+        expect(response.body.data.createUser.email).toMatch('joe.doe@joedoe.com')
         expect(response.body.data.createUser.password).toMatch(
           /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/
         )
@@ -297,9 +295,7 @@ describe('Auth', () => {
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
-        expect(response.body.errors[0].message).toMatch(
-          'Lastname must be longer than 1 character.'
-        )
+        expect(response.body.errors[0].message).toMatch('Lastname must be longer than 1 character.')
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
           /BadRequestException: Lastname must be longer than 1 character./i
@@ -426,9 +422,7 @@ describe('Auth', () => {
         expect(response.body.errors[0].locations[0].line).toBeDefined()
         expect(response.body.errors[0].locations[0].column).toBeDefined()
         expect(response.body.errors[0].code).toBe(400)
-        expect(response.body.errors[0].message).toMatch(
-          'Password cannot be empty.'
-        )
+        expect(response.body.errors[0].message).toMatch('Password cannot be empty.')
         expect(response.body.errors[0].statusCode).toBe(500)
         expect(response.body.errors[0].stack).toMatch(
           /BadRequestException: Password cannot be empty./i
@@ -600,9 +594,7 @@ describe('Auth', () => {
         expect(response.body.errors[0].code).toBe(400)
         expect(response.body.errors[0].message).toMatch('Email is invalid.')
         expect(response.body.errors[0].statusCode).toBe(500)
-        expect(response.body.errors[0].stack).toMatch(
-          /BadRequestException: Email is invalid./i
-        )
+        expect(response.body.errors[0].stack).toMatch(/BadRequestException: Email is invalid./i)
       })
     })
   })

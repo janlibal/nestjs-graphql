@@ -40,9 +40,7 @@ export class UserMapper {
     return domainEntity
   }
 
-  private static mapProviderToPersistence(
-    provider: AuthProvidersEnum
-  ): Provider {
+  private static mapProviderToPersistence(provider: AuthProvidersEnum): Provider {
     switch (provider) {
       case AuthProvidersEnum.email:
         return Provider.email

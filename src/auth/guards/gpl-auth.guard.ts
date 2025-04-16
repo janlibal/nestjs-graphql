@@ -1,9 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import {
-  ExecutionContext,
-  CanActivate,
-  UnauthorizedException
-} from '@nestjs/common'
+import { ExecutionContext, CanActivate, UnauthorizedException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { GqlExecutionContext } from '@nestjs/graphql'
 import { JwtService } from '@nestjs/jwt'
@@ -31,11 +27,7 @@ export class GqlAuthGuard implements CanActivate {
       throw new UnauthorizedException('No authorization!')
     }
 
-    if (
-      !authorization ||
-      Array.isArray(authorization) ||
-      typeof authorization !== 'string'
-    )
+    if (!authorization || Array.isArray(authorization) || typeof authorization !== 'string')
       throw new UnauthorizedException('Invalid headers!')
 
     const [jwt, accessToken] = authorization.split(' ')
@@ -60,8 +52,7 @@ export class GqlAuthGuard implements CanActivate {
 
     const isTokenFromCacheSameAsTokenFromHeaders = redisObject === accessToken
 
-    if (!isTokenFromCacheSameAsTokenFromHeaders)
-      throw new UnauthorizedException('Nice try')
+    if (!isTokenFromCacheSameAsTokenFromHeaders) throw new UnauthorizedException('Nice try')
 
     // Attach the user to the request context for later use
 

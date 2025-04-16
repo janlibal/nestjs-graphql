@@ -4,9 +4,7 @@ import { RedisRepositoryInterface } from './interfaces/redis.repository.interfac
 import { RedisDomain } from './domain/redis.domain'
 
 @Injectable()
-export class RedisRepository
-  implements OnModuleDestroy, RedisRepositoryInterface
-{
+export class RedisRepository implements OnModuleDestroy, RedisRepositoryInterface {
   constructor(@Inject('RedisClient') private readonly redisClient: Redis) {}
 
   onModuleDestroy(): void {
@@ -15,12 +13,7 @@ export class RedisRepository
 
   // NEW AND IN USE:
   async createUserWithExpiry(data: RedisDomain): Promise<void> {
-    await this.redisClient.set(
-      `${data.prefix}:${data.user.id}`,
-      data.token,
-      'PX',
-      data.expiry
-    )
+    await this.redisClient.set(`${data.prefix}:${data.user.id}`, data.token, 'PX', data.expiry)
   }
 
   //UPDATED AND IN USE:

@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  UnauthorizedException,
-  UnprocessableEntityException
-} from '@nestjs/common'
+import { Injectable, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common'
 import { User, User as UserModel } from '../users/model/user.model'
 import { JwtService } from '@nestjs/jwt'
 import crypto from '../utils/crypto'
@@ -33,23 +29,15 @@ export class AuthService {
     private redisService: RedisService
   ) {}
 
-  async validateLogin(
-    loginInput: AuthEmailLoginInput
-  ): Promise<LoginResponseDto> {
+  async validateLogin(loginInput: AuthEmailLoginInput): Promise<LoginResponseDto> {
     const user = await this.userService.findByEmail(loginInput.email)
     if (!user) throw new UnauthorizedException('Unauthorized!')
 
     if (user.provider !== AuthProvidersEnum.email)
-      throw new UnprocessableEntityException(
-        `Has to login via provider ${user.provider}`
-      )
-    if (!user.password)
-      throw new UnprocessableEntityException('Missing password')
+      throw new UnprocessableEntityException(`Has to login via provider ${user.provider}`)
+    if (!user.password) throw new UnprocessableEntityException('Missing password')
 
-    const isValidPassword = await crypto.comparePasswords(
-      loginInput.password,
-      user.password
-    )
+    const isValidPassword = await crypto.comparePasswords(loginInput.password, user.password)
     if (!isValidPassword) throw new UnauthorizedException('Unauthorized!')
 
     const hash = crypto.makeHash()
@@ -144,9 +132,7 @@ export class AuthService {
     return this.userService.findById(userJwtPayload.id)
   }
 
-  async logout(
-    data: Pick<JwtRefreshPayloadType, 'sessionId' | 'userId'>
-  ): Promise<boolean> {
+  async logout(data: Pick<JwtRefreshPayloadType, 'sessionId' | 'userId'>): Promise<boolean> {
     await this.redisService.releaseByUserId(data)
     return this.sessionService.deleteById(data.sessionId)
   }

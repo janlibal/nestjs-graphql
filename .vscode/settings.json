@@ -1,0 +1,29 @@
+{
+    "files.eol": "\n",
+    "typescript.preferences.importModuleSpecifier": "relative",
+
+     // Do not show compiled JavaScript files in the file tree
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/*.log": true,
+    ".eslintcache": true
+  },
+  // Custom Application window title ❤️
+  "window.title": "janlibal - backend-nest-api-graphql",
+  // These should be set up through .editorconfig, but just in case...
+  "editor.wordWrapColumn": 100,
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  // Disable built-in JS validator due to unsupported language syntax being used
+  "javascript.validate.enable": false,
+  "javascript.format.enable": false,
+  "typescript.format.enable": false,
+  // Enable ESLint and its auto-fixer
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  },
+  "eslint.lintTask.enable": true,
+  "eslint.lintTask.options": "."
+}

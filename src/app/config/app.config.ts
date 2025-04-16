@@ -1,13 +1,5 @@
 import { registerAs } from '@nestjs/config'
-import {
-  IsEnum,
-  IsInt,
-  IsOptional,
-  IsString,
-  IsUrl,
-  Max,
-  Min
-} from 'class-validator'
+import { IsEnum, IsInt, IsOptional, IsString, IsUrl, Max, Min } from 'class-validator'
 import { AppConfig } from './app.config.type'
 
 import { API_PREFIX } from '../../shared/constants/global.constants'

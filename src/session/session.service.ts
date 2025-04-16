@@ -8,9 +8,7 @@ import { User } from '../users/model/user.model'
 export class SessionService {
   constructor(private readonly sessionRepository: SessionRepository) {}
 
-  create(
-    data: Omit<Session, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>
-  ): Promise<Session> {
+  create(data: Omit<Session, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>): Promise<Session> {
     return this.sessionRepository.create(data)
   }
 
@@ -28,9 +26,7 @@ export class SessionService {
 
   update(
     id: Session['id'],
-    payload: Partial<
-      Omit<Session, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>
-    >
+    payload: Partial<Omit<Session, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>>
   ): Promise<Session | null> {
     return this.sessionRepository.update(id, payload)
   }

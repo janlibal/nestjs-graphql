@@ -24,10 +24,7 @@ describe('SessionPersistence', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        SessionPersistence,
-        { provide: PrismaService, useValue: mockPrismaService }
-      ]
+      providers: [SessionPersistence, { provide: PrismaService, useValue: mockPrismaService }]
     }).compile()
 
     sessionPersistence = module.get<SessionPersistence>(SessionPersistence)
@@ -61,13 +58,9 @@ describe('SessionPersistence', () => {
 
     describe('findById()', () => {
       it('should find session by provided Id', async () => {
-        vi.spyOn(prismaService.session, 'findFirst').mockResolvedValue(
-          sessionMockEntityObject
-        )
+        vi.spyOn(prismaService.session, 'findFirst').mockResolvedValue(sessionMockEntityObject)
 
-        const result = await sessionPersistence.findById(
-          sessionMockDomainObject.id
-        )
+        const result = await sessionPersistence.findById(sessionMockDomainObject.id)
 
         expect(result).toEqual(sessionMockDomainObject)
 
@@ -99,12 +92,9 @@ describe('SessionPersistence', () => {
 
     describe('create()', () => {
       it('should create new session for logged user', async () => {
-        const persistenceModel =
-          await SessionMapper.toPersistence(sessionObject)
+        const persistenceModel = await SessionMapper.toPersistence(sessionObject)
 
-        vi.spyOn(prismaService.session, 'create').mockResolvedValue(
-          sessionMockEntityObject
-        )
+        vi.spyOn(prismaService.session, 'create').mockResolvedValue(sessionMockEntityObject)
 
         const result = await sessionPersistence.create(sessionObject)
 

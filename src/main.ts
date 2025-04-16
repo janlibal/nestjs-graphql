@@ -80,14 +80,10 @@ async function bootstrap() {
     const forgotExpires = configService.getOrThrow('auth.forgotExpires', {
       infer: true
     })
-    const confirmEmailSecret = configService.getOrThrow(
-      'auth.confirmEmailSecret',
-      { infer: true }
-    )
-    const confirmEmailExpires = configService.getOrThrow(
-      'auth.confirmEmailExpires',
-      { infer: true }
-    )
+    const confirmEmailSecret = configService.getOrThrow('auth.confirmEmailSecret', { infer: true })
+    const confirmEmailExpires = configService.getOrThrow('auth.confirmEmailExpires', {
+      infer: true
+    })
 
     const appName = configService.getOrThrow('app.name', { infer: true })
     const logLevel = configService.getOrThrow('app.logLevel', { infer: true })

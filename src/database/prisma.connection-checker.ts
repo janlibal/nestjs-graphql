@@ -40,10 +40,7 @@ export async function keepAliveCheck() {
       await prisma.$queryRaw`SELECT 1` // Simple query to check if the connection is alive
       console.log('Connection is alive!')
     } catch (error: any) {
-      console.error(
-        'Connection lost, attempting to reconnect...',
-        error.message
-      )
+      console.error('Connection lost, attempting to reconnect...', error.message)
       try {
         await prisma.$disconnect() // Disconnect if the connection is broken
         await connectWithRetry() // Attempt to reconnect
