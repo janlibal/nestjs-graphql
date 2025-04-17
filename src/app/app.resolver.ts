@@ -27,9 +27,4 @@ export class AppResolver {
     if (!data) throw new NotFoundException('Data full')
     return data
   }
-
-  @Query(() => String)
-  async test(): Promise<string> {
-    return 'data'
-  }
 }
