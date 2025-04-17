@@ -18,11 +18,11 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "resolveJsonModule": true,
-    "moduleResolution": "node", 
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "strict": true,
     "types": ["node", "vitest/globals"],
   },
-  "include": ["src/**/*.ts", "prisma/seeds/seed.ts"],
-  "exclude": ["node_modules"]   
+  "include": ["src/**/*.ts", "tests/**/*.ts",  "prisma/seeds/seed.ts"],
+  "exclude": ["node_modules"]
 }
