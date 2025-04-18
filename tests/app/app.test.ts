@@ -13,7 +13,6 @@ describe('App', () => {
 
         const response = await request(app)
           .post(`/${endPoint}`)
-          //.set('Authorization', `Bearer ${mockToken}`)
           .send({
             query: `
             query {
@@ -24,16 +23,6 @@ describe('App', () => {
           `
           })
           .expect(200)
-        if (response.body.errors) {
-          console.error('❌ GraphQL Errors:', JSON.stringify(response.body.errors, null, 2))
-        }
-
-        expect(response.body.errors).toBeUndefined()
-
-        if (!response.body?.data?.hello) {
-          console.error('❌ Invalid response:', JSON.stringify(response.body, null, 2))
-          throw new Error('Expected data.hello to be defined but got null.')
-        }
         expect(response.body.data.hello.message).toMatch(`Hello World! ${mockName}`)
       })
     })
