@@ -5,6 +5,11 @@ services:
       dockerfile: relational.e2e.Dockerfile
     env_file:
       - .env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "-X", "POST", "-H", "Content-Type: application/json", "--data", '{"query":"{__typename}"}', "http://localhost:80/api/v1/graphql"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
     depends_on:
       - postgres
     networks:
@@ -30,6 +35,23 @@ services:
     networks:
       - api-network
 
+  redis:
+    image: redis:latest
+    container_name: redis
+    env_file:
+      - .env
+    command: redis-server --requirepass root
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+    restart: unless-stopped
+    volumes:
+      - redis:/data
+    networks:
+      - api-network
+    #environment:
+    #  - ALLOW_EMPTY_PASSWORD=yes
+    #  - 'REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL'
+
 volumes:
 #  postgres:
 #    name: boilerplate-db
@@ -38,4 +60,3 @@ volumes:
 networks:
   api-network:
     driver: bridge
-  

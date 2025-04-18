@@ -37,7 +37,6 @@ type LoginResponseDto {
 type Query {
   hello(name: String!): HelloResponseDto!
   hello2(name: String!): HelloResponseDto!
-  test: String!
   findbyFirstNames(firstNames: [String!]!): [User!]!
   findAll: [User!]
   findOne(id: String!): User
