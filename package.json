@@ -27,7 +27,7 @@
     "boilerplate"
   ],
   "scripts": {
-    "prisma:generate": "prisma generate",
+    "prisma:generate": "npx prisma generate",
     "migrate:dev": "npx prisma migrate dev",
     "migrate:deploy": "prisma migrate deploy",
     "seed:dev": "npx prisma db seed",
