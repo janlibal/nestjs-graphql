@@ -2,7 +2,7 @@ FROM node:22.11.0-alpine
 LABEL maintainer="jan.libal@yahoo.com"
 LABEL build_date="2024-11-26"
 
-RUN apk add --no-cache bash
+RUN apk add --no-cache bash curl
 RUN yarn global add @nestjs/cli typescript ts-node
 
 ARG NODE_ENV="prod"
@@ -17,8 +17,11 @@ COPY ./wait-for-it.sh /opt/wait-for-it.sh
 RUN chmod +x /opt/wait-for-it.sh
 COPY ./startup.relational.ci.sh /opt/startup.relational.ci.sh
 RUN chmod +x /opt/startup.relational.ci.sh
+COPY ./wait-for-graphql.sh /opt/wait-for-graphql.sh
+RUN chmod +x /opt/wait-for-graphql.sh
 RUN sed -i 's/\r//g' /opt/wait-for-it.sh
 RUN sed -i 's/\r//g' /opt/startup.relational.ci.sh
+RUN sed -i 's/\r//g' /opt/wait-for-graphql.sh
 
 WORKDIR /usr/src/app
 RUN echo "" > .env

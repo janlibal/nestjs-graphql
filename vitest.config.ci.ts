@@ -1,5 +1,5 @@
 import { defineConfig } from 'vitest/config'
-import swc from 'unplugin-swc';
+import swc from 'unplugin-swc'
 
 export default defineConfig({
   test: {
@@ -11,7 +11,5 @@ export default defineConfig({
     setupFiles: ['tests/helpers/setup.ts'],
     watch: false
   },
-  plugins: [
-    swc.vite({module: { type: 'es6' },}),
-  ],
+  plugins: [swc.vite({ module: { type: 'es6' } })]
 })

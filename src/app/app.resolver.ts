@@ -2,7 +2,7 @@ import { HelloResponseDto } from './dto/hello-response.dto'
 import { Resolver, Query, Args } from '@nestjs/graphql'
 import { ValidateNamePipe } from './pipes/validate-name.pipe'
 import { UseGuards } from '@nestjs/common'
-import { GqlAuthGuard } from 'src/auth/guards/gpl-auth.guard'
+import { GqlAuthGuard } from '../auth/guards/gpl-auth.guard'
 import { NotFoundException } from '@nestjs/common'
 
 @Resolver('App')
@@ -26,10 +26,5 @@ export class AppResolver {
     }
     if (!data) throw new NotFoundException('Data full')
     return data
-  }
-
-  @Query(() => String)
-  async test(): Promise<string> {
-    return 'data'
   }
 }

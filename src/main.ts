@@ -16,6 +16,7 @@ async function bootstrap() {
   try {
     const app = await NestFactory.create(GlobalModule, { bufferLogs: true })
 
+    // Make sure './logs' folder exists, and if not, create one
     if (!fs.existsSync('./logs')) {
       fs.mkdirSync('./logs')
     }

@@ -27,7 +27,7 @@
     "boilerplate"
   ],
   "scripts": {
-    "prisma:generate": "prisma generate",
+    "prisma:generate": "npx prisma generate",
     "migrate:dev": "npx prisma migrate dev",
     "migrate:deploy": "prisma migrate deploy",
     "seed:dev": "npx prisma db seed",
@@ -90,7 +90,8 @@
     "prisma": "^6.1.0",
     "reflect-metadata": "^0.2.0",
     "rotating-file-stream": "^3.2.6",
-    "runtypes": "^6.7.0"
+    "runtypes": "^6.7.0",
+    "rxjs": "^7.5"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.0",
@@ -135,6 +136,9 @@
     "seed": "ts-node ./prisma/seeds/seed.ts"
   },
   "lint-staged": {
-    "**/*.{ts,js}": ["eslint --fix","prettier --write"]
+    "**/*.{ts,js}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   }
 }
