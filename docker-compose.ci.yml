@@ -5,6 +5,8 @@ services:
       dockerfile: relational.e2e.Dockerfile
     env_file:
       - .env
+    ports:
+      - ${APP_PORT}:${APP_PORT}
     healthcheck:
       test: ["CMD", "curl", "-f", "-X", "POST", "-H", "Content-Type: application/json", "--data", '{"query":"{__typename}"}', "http://localhost:80/api/v1/graphql"]
       interval: 10s
