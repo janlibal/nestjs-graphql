@@ -3,10 +3,9 @@ import { describe, it, expect } from 'vitest'
 import { API, APP_URL, END_POINT, VER } from '../utils/constants'
 import { prepareUser } from '../helpers/mock.data'
 
-describe('Auth', async () => {
+describe('Auth', () => {
   const app = APP_URL
   const endPoint = `${API}/${VER}/${END_POINT}`
-  const usr = await prepareUser()
 
   describe('Auth', () => {
     describe('MUTATION > logout', () => {
@@ -47,9 +46,10 @@ describe('Auth', async () => {
       })
     })
     describe('QUERY > me', () => {
-      let newUserApiToken: any
-      let bareToken: any
       it('should return user data', async () => {
+        let newUserApiToken: any
+        let bareToken: any
+        const usr = await prepareUser()
         await request(app)
           .post(`/${endPoint}`)
           .send({
@@ -203,6 +203,7 @@ describe('Auth', async () => {
     })
     describe('MUTATION > login', () => {
       it('should return session data after successful login', async () => {
+        const usr = await prepareUser()
         const response = await request(app)
           .post(`/${endPoint}`)
           //.set('Authorization', `Bearer ${mockToken}`)
