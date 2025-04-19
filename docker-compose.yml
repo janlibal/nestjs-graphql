@@ -1,21 +1,68 @@
 name: nestjs-vitest
 services:
+  api:
+    container_name: application
+    image: "ghcr.io/janlibal/nestjs-graphql:latest"
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    networks:
+      - api-network
   postgres:
-    container_name: nest-vitest-db
+    container_name: postgres
     image: janlibal/pg-multipledb # postgres:16.3-alpine
-    restart: always
-    env_file:
-      - .env
     ports:
       - ${DB_PORT}:${DB_PORT}
     environment:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-      #POSTGRES_DB: ${DB_NAME}
+      #POSTGRES_DB: ${DATABASE_NAME}
       POSTGRES_MULTIPLE_DATABASES: ${MULTIPLE_DATABASES}
+    restart: unless-stopped
+    #env_file:
+    #  - .env
     volumes:
       - postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${DB_USERNAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - api-network
+  redis:
+    image: redis:latest
+    container_name: redis
+    command: redis-server --requirepass root
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+    restart: unless-stopped
+    volumes:
+      - redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "root", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - api-network
+    #environment:
+    #  - ALLOW_EMPTY_PASSWORD=yes
+    #  - 'REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL'
 
 volumes:
   postgres:
+    name: boilerplate-db
+  redis:
     driver: local
+
+networks:
+  api-network:
+    driver: bridge
