@@ -1,37 +1,41 @@
 import request from 'supertest'
 import { describe, it, expect } from 'vitest'
 import { API, APP_URL, END_POINT, VER } from '../utils/constants'
+import { userData } from '../helpers/mock.data'
 
 describe('Auth', () => {
   const app = APP_URL
   const endPoint = `${API}/${VER}/${END_POINT}`
 
   describe('Auth', () => {
-    /*describe('MUTATION > logout', () => {
+    describe('MUTATION > logout', () => {
       let newUserApiToken: any
       let bareToken: any
       it('should logout user and return true', async () => {
-        await request(app)
+        const loginResponse = await request(app)
           .post(`/${endPoint}`)
           .send({
             query: `
-                mutation {
-                    login (input: {
-                        email: "daniel.doe@joedoe.com",
-                        password: "Password123!"
-                    })
-                    {
-                       token
-                    }
-                    }
-              `
+            mutation {
+                login (input: {
+                    email: "daniel.doe@joedoe.com",
+                    password: "Password123!"
+                })
+                {
+                   token
+                }
+            }
+          `
           })
           .expect(200)
-          .then((loginResponse) => {
-            bareToken = loginResponse.body.data.login.token
-            newUserApiToken = 'jwt ' + bareToken
-          })
-        await request(app)
+        expect(loginResponse.body.data.login.token).toMatch(
+          /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/
+        )
+
+        bareToken = loginResponse.body.data.login.token
+        newUserApiToken = 'jwt ' + bareToken
+
+        const logoutResponse = await request(app)
           .post(`/${endPoint}`)
           .set('Authorization', newUserApiToken)
           .send({
@@ -42,13 +46,14 @@ describe('Auth', () => {
           `
           })
           .expect(200)
+        expect(logoutResponse.body.data.logout).toBe(true)
       })
-    })*/
+    })
     describe('QUERY > me', () => {
-      /*it('should return user data', async () => {
-        let newUserApiToken: any
-        let bareToken: any
-        await request(app)
+      let newUserApiToken: any
+      let bareToken: any
+      it('should return user data', async () => {
+        const loginResponse = await request(app)
           .post(`/${endPoint}`)
           .send({
             query: `
@@ -64,10 +69,11 @@ describe('Auth', () => {
               `
           })
           .expect(200)
-          .then((loginResponse) => {
-            bareToken = loginResponse.body.data.login.token
-            newUserApiToken = 'jwt ' + bareToken
-          })
+        expect(loginResponse.body.data.login.token).toMatch(
+          /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/
+        )
+        bareToken = loginResponse.body.data.login.token
+        newUserApiToken = 'jwt ' + bareToken
 
         const response = await request(app)
           .post(`/${endPoint}`)
@@ -98,7 +104,7 @@ describe('Auth', () => {
         expect(response.body.data.me.lastName).toMatch(userData.lastName)
         expect(response.body.data.me.role.id).toBe(userData.roleId)
         expect(response.body.data.me.status.id).toBe(userData.statusId)
-      })*/
+      })
 
       it('should fail with no token provided', async () => {
         const response = await request(app)
@@ -200,7 +206,7 @@ describe('Auth', () => {
       })
     })
     describe('MUTATION > login', () => {
-      /*it('should return session data after successful login', async () => {
+      it('should return session data after successful login', async () => {
         const response = await request(app)
           .post(`/${endPoint}`)
           //.set('Authorization', `Bearer ${mockToken}`)
@@ -240,7 +246,7 @@ describe('Auth', () => {
           /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/
         )
         expect(response.body.data.login.tokenExpires).toBeDefined()
-      })*/
+      })
       it('should throw error when password is empty', async () => {
         const response = await request(app)
           .post(`/${endPoint}`)
