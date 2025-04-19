@@ -13,7 +13,10 @@ services:
       timeout: 5s
       retries: 10
     depends_on:
-      - postgres
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
     networks:
       - api-network
 
@@ -31,6 +34,11 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       #POSTGRES_DB: ${DATABASE_NAME}
       POSTGRES_MULTIPLE_DATABASES: ${MULTIPLE_DATABASES}
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${DB_USERNAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     #restart: unless-stopped
     #volumes:
     #  - postgres:/var/lib/postgresql/data
@@ -46,6 +54,11 @@ services:
     ports:
       - ${REDIS_PORT}:${REDIS_PORT}
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "root", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
     volumes:
       - redis:/data
     networks:
