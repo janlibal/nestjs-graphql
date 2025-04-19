@@ -5,8 +5,6 @@ services:
     image: "ghcr.io/janlibal/nestjs-graphql:latest"
     ports:
       - ${APP_PORT}:${APP_PORT}
-    depends_on:
-      - postgres
     restart: unless-stopped
     depends_on:
       redis:
