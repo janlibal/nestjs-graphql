@@ -3,7 +3,7 @@ services:
     container_name: app-ci
     build:
       context: .
-      dockerfile: relational.e2e.Dockerfile
+      dockerfile: relational.ci.Dockerfile
     env_file:
       - .env
     ports:

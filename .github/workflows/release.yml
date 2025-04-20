@@ -11,7 +11,7 @@ on:
   # Triggered on every successful Build action
   workflow_run:
     workflows: ["E2E Tests"]
-    branches: [ unknown ]
+    branches: [ main ]
     types:
       - completed
   # Manual trigger for rollback to specific release or redeploy latest
