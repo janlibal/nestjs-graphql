@@ -66,8 +66,15 @@ services:
 
 volumes:
   postgres:
-    name: boilerplate-db
+    name: prod-db
+    labels:
+      purpose: database
+      environment: prod
   redis:
+  name: redis
+    labels:
+      purpose: in-mem-cache
+      environment: ci
     driver: local
 
 networks:
