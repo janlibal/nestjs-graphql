@@ -1,12 +1,14 @@
 FROM node:22.11.0-alpine
 LABEL maintainer="jan.libal@yahoo.com"
-LABEL build_date="2024-11-26"
+LABEL build_date="2025-04-19"
 
-RUN apk add --no-cache bash
-RUN yarn global add @nestjs/cli typescript ts-node
+RUN apk add --no-cache bash && \
+    yarn global add @nestjs/cli typescript ts-node
 
 ARG NODE_ENV="test"
 ENV NODE_ENV="${NODE_ENV}"
+
+WORKDIR /usr/src/app
 
 COPY package*.json /tmp/app/
 RUN cd /tmp/app && yarn install
@@ -20,8 +22,7 @@ RUN chmod +x /opt/startup.relational.test.sh
 RUN sed -i 's/\r//g' /opt/wait-for-it.sh
 RUN sed -i 's/\r//g' /opt/startup.relational.test.sh
 
-WORKDIR /usr/src/app
-RUN echo "" > .env
+#RUN echo "" > .env
 #??RUN if [ ! -f .env ]; then cp env-example-relational .env; fi
 #RUN yarn run prisma:generate
 

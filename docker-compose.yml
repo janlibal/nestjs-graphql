@@ -1,4 +1,4 @@
-name: nestjs-vitest
+name: backend-prod
 services:
   api:
     container_name: application
@@ -13,6 +13,9 @@ services:
         condition: service_healthy
     networks:
       - api-network
+    labels:
+      - "com.janlibal=app-prod"
+      - "environment=prod"
   postgres:
     container_name: postgres
     image: janlibal/pg-multipledb # postgres:16.3-alpine
@@ -35,6 +38,9 @@ services:
       retries: 5
     networks:
       - api-network
+    labels:
+      - "com.janlibal=app-prod"
+      - "environment=prod"
   redis:
     image: redis:latest
     container_name: redis
@@ -51,9 +57,12 @@ services:
       retries: 5
     networks:
       - api-network
-    #environment:
+    labels:
+      - "com.janlibal=app-prod"
+      - "environment=prod"
+    environment:
     #  - ALLOW_EMPTY_PASSWORD=yes
-    #  - 'REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL'
+      - 'REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL'
 
 volumes:
   postgres:
@@ -63,4 +72,5 @@ volumes:
 
 networks:
   api-network:
+    name: backend-prod-network
     driver: bridge
