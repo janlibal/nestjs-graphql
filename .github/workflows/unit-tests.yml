@@ -4,7 +4,6 @@ name: Unit Tests
     branches:
       - feature/*
       - dev
-      - cicd
 jobs:
   changes_checker:
     runs-on: ubuntu-latest
