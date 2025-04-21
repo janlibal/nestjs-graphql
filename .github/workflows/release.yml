@@ -67,3 +67,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       # Build and push new docker image, skip for manual redeploy other than 'latest'
+      - name: The echo-it finish!
+        run: |
+          echo "The echoed finished message."
