@@ -71,7 +71,7 @@ volumes:
       purpose: database
       environment: prod
   redis:
-  name: redis
+    name: redis
     labels:
       purpose: in-mem-cache
       environment: ci
