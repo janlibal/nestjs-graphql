@@ -72,7 +72,6 @@ jobs:
         if: ${{ github.event.inputs.version == '' || github.event.inputs.version == 'latest' }}
         with:
           no-cache: true
-          node-version: 22
           file: Dockerfile
           context: .
           push: true
