@@ -71,6 +71,7 @@ jobs:
         uses: docker/build-push-action@v3
         if: ${{ github.event.inputs.version == '' || github.event.inputs.version == 'latest' }}
         with:
+          node-version: 22
           file: Dockerfile
           context: .
           push: true
