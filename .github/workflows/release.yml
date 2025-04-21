@@ -11,7 +11,7 @@ on:
   # Triggered on every successful Build action
   workflow_run:
     workflows: ["E2E Tests"]
-    branches: [ main ]
+    branches: [ unknown ]
     types:
       - completed
   # Manual trigger for rollback to specific release or redeploy latest
@@ -71,7 +71,7 @@ jobs:
         uses: docker/build-push-action@v3
         if: ${{ github.event.inputs.version == '' || github.event.inputs.version == 'latest' }}
         with:
-          no-cache: true
+          node-version: 22
           file: Dockerfile
           context: .
           push: true
