@@ -11,6 +11,9 @@ import * as fs from 'fs'
 import { GraphqlLoggingInterceptor } from './interceptors/graphql-logging.interceptor'
 import { createPinoHttpOptions } from './logger/createHttpPinoOptions'
 import pinoHttp from 'pino-http'
+import helmet from 'helmet'
+import rateLimit from 'express-rate-limit'
+import cookieParser from 'cookie-parser'
 
 async function bootstrap() {
   try {
@@ -22,6 +25,8 @@ async function bootstrap() {
     }
 
     const configService = app.get(ConfigService<AllConfigType>)
+
+    app.enableShutdownHooks()
 
     const logger = app.get(PinoLoggerService)
     // 1. Set up the logger globally
@@ -41,12 +46,31 @@ async function bootstrap() {
 
     app.useGlobalPipes(new ValidationPipe(validationOptions))
 
-    app.enableShutdownHooks()
+    app.use(
+      helmet({
+        contentSecurityPolicy: {
+          directives: {
+            upgradeInsecureRequests: null
+          }
+        }
+      })
+    )
+
+    app.use(compression())
+
+    app.use(
+      rateLimit({
+        windowMs: 15 * 60 * 1000, // 15 minutes
+        max: 100 // limit each IP to 100 requests per windowMs
+      })
+    )
+
+    app.use(cookieParser())
 
     app.setGlobalPrefix(API_PREFIX)
 
     const port = configService.getOrThrow('app.port', { infer: true })
-    /*const nodeEnv = configService.getOrThrow('app.nodeEnv', { infer: true })
+    const nodeEnv = configService.getOrThrow('app.nodeEnv', { infer: true })
     const pkgInfo = configService.getOrThrow('app.name', { infer: true })
     const dbUrl = configService.getOrThrow('app.dbUrl', { infer: true })
     const apiPrefix = configService.getOrThrow('app.apiPrefix', { infer: true })
@@ -91,7 +115,7 @@ async function bootstrap() {
     const logService = configService.getOrThrow('app.logService', {
       infer: true
     })
-    const isDebug = configService.getOrThrow('app.debug', { infer: true })*/
+    const isDebug = configService.getOrThrow('app.debug', { infer: true })
 
     app.enableCors({
       origin: '*',
@@ -100,7 +124,7 @@ async function bootstrap() {
     })
 
     await app.listen(port, async () => {
-      /*console.log(`1. Port: ${port}`)
+      console.log(`1. Port: ${port}`)
       console.log(`2. NodeEnv: ${nodeEnv}`)
       console.log(`3. pkgInfo: ${pkgInfo}`)
       console.log(`4. dbUrl: ${dbUrl}`)
@@ -123,7 +147,7 @@ async function bootstrap() {
       console.log(`20. appName: ${appName}`)
       console.log(`21. logLevel: ${logLevel}`)
       console.log(`22. logService: ${logService}`)
-      console.log(`23. isDebug?: ${isDebug}`)*/
+      console.log(`23. isDebug?: ${isDebug}`)
 
       logger.log(`App started on port: ${port}`)
     })
@@ -135,3 +159,6 @@ bootstrap().catch((e) => {
   console.log(`Error while starting server ${e}`)
   throw e
 })
+function compression(): any {
+  throw new Error('Function not implemented.')
+}
