@@ -14,6 +14,7 @@ import pinoHttp from 'pino-http'
 import helmet from 'helmet'
 import rateLimit from 'express-rate-limit'
 import cookieParser from 'cookie-parser'
+import compression from 'compression'
 
 async function bootstrap() {
   try {
@@ -159,6 +160,3 @@ bootstrap().catch((e) => {
   console.log(`Error while starting server ${e}`)
   throw e
 })
-function compression(): any {
-  throw new Error('Function not implemented.')
-}

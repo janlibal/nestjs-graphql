@@ -9,8 +9,6 @@ services:
     build:
       context: .
       dockerfile: relational.test.Dockerfile
-    env_file:
-      - env-example-relational
     ports:
       - ${APP_PORT}:${APP_PORT}
     volumes:
@@ -30,8 +28,6 @@ services:
   postgres:
     container_name: postgres
     image: janlibal/pg-multipledb # postgres:16.3-alpine
-    env_file:
-      - env-example-relational
     ports:
       - ${DB_PORT}:${DB_PORT}
     environment:
@@ -67,8 +63,6 @@ services:
   redis:
     container_name: redis
     image: redis:latest
-    env_file:
-      - env-example-relational
     command: redis-server --requirepass root
     ports:
       - ${REDIS_PORT}:${REDIS_PORT}
@@ -91,12 +85,12 @@ services:
 
 volumes:
   postgres:
-    name: dev-db
+    name: test-db
     labels:
       purpose: database
       environment: test
   redis:
-    name: redis
+    name: test-redis
     labels:
       purpose: in-mem-cache
       environment: test
