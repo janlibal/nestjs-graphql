@@ -70,7 +70,7 @@ async function bootstrap() {
     app.setGlobalPrefix(API_PREFIX)
 
     const port = configService.getOrThrow('app.port', { infer: true })
-    const nodeEnv = configService.getOrThrow('app.nodeEnv', { infer: true })
+    /*const nodeEnv = configService.getOrThrow('app.nodeEnv', { infer: true })
     const pkgInfo = configService.getOrThrow('app.name', { infer: true })
     const dbUrl = configService.getOrThrow('app.dbUrl', { infer: true })
     const apiPrefix = configService.getOrThrow('app.apiPrefix', { infer: true })
@@ -115,7 +115,7 @@ async function bootstrap() {
     const logService = configService.getOrThrow('app.logService', {
       infer: true
     })
-    const isDebug = configService.getOrThrow('app.debug', { infer: true })
+    const isDebug = configService.getOrThrow('app.debug', { infer: true })*/
 
     app.enableCors({
       origin: '*',
@@ -124,7 +124,7 @@ async function bootstrap() {
     })
 
     await app.listen(port, async () => {
-      console.log(`1. Port: ${port}`)
+      /*console.log(`1. Port: ${port}`)
       console.log(`2. NodeEnv: ${nodeEnv}`)
       console.log(`3. pkgInfo: ${pkgInfo}`)
       console.log(`4. dbUrl: ${dbUrl}`)
@@ -147,7 +147,7 @@ async function bootstrap() {
       console.log(`20. appName: ${appName}`)
       console.log(`21. logLevel: ${logLevel}`)
       console.log(`22. logService: ${logService}`)
-      console.log(`23. isDebug?: ${isDebug}`)
+      console.log(`23. isDebug?: ${isDebug}`)*/
 
       logger.log(`App started on port: ${port}`)
     })
