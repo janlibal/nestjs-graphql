@@ -91,7 +91,7 @@ services:
 
 volumes:
   postgres:
-    name: test-db
+    name: dev-db
     labels:
       purpose: database
       environment: test
