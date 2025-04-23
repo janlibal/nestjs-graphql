@@ -23,7 +23,7 @@ RUN sed -i 's/\r//g' /opt/wait-for-it.sh
 RUN sed -i 's/\r//g' /opt/startup.relational.test.sh
 
 RUN echo "" > .env
-RUN cp env-example-relational .env
+RUN cp .env.test .env
 #RUN if [ ! -f .env ]; then cp env-example-relational .env; fi
 
 #RUN yarn run rebuild
