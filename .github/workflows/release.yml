@@ -131,7 +131,7 @@ jobs:
       # Deploy Docker image with your application using `docker compose up app` remotely
       - name: Recreate .env file from secret
         run: |
-          echo "${{ secrets.ENV_TEST_FILE_BASE64 }}" | base64 --decode > .env
+          echo "${{ secrets.ENV_PROD_FILE_BASE64 }}" | base64 --decode > .env
       - name: remote docker-compose up via ssh
         uses: appleboy/ssh-action@v0.1.5
         env:
