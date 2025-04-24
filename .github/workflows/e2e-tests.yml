@@ -37,8 +37,8 @@ jobs:
           fi
   run_e2e:
     runs-on: ubuntu-latest
-    needs: changes_checker  # This ensures that this job runs only after `changes_checker`
-    if: ${{ needs.changes_checker.outputs.run_tests == 'true' }}  # Only run this job if tests should be run
+    #needs: changes_checker  # This ensures that this job runs only after `changes_checker`
+    #if: ${{ needs.changes_checker.outputs.run_tests == 'true' }}  # Only run this job if tests should be run
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4

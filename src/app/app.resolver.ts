@@ -27,8 +27,4 @@ export class AppResolver {
     if (!data) throw new NotFoundException('Data full')
     return data
   }
-
-  test(): string {
-    return 'test'
-  }
 }
