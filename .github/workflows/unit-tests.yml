@@ -36,6 +36,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Recreate .env file from secret
+        run: |
+          echo "${{ secrets.ENV_TEST_FILE_BASE64 }}" | base64 --decode > .env
+
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
