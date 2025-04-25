@@ -129,12 +129,10 @@ jobs:
           source: "./docker-compose.yml"
           target: "~/.deploy/${{ github.event.repository.name }}/"
       # Deploy Docker image with your application using `docker compose up app` remotely
-      - name: Recreate .env file from secret
-        run: |
-          echo "${{ secrets.ENV_PROD_FILE_BASE64 }}" | base64 --decode > /home/${{ secrets.EC2_USERNAME }}/.deploy/${{ github.event.repository.name }}/.env
       - name: remote docker-compose up via ssh
         uses: appleboy/ssh-action@v0.1.5
         env:
+          ENV_B64: ${{ secrets.ENV_PROD_FILE_BASE64 }}
           APPTOKEN: ${{ secrets.GITHUB_TOKEN }}
           USERNAME: ${{ secrets.EC2_USERNAME }}
         with:
@@ -146,6 +144,7 @@ jobs:
           script: |
             echo $APPTOKEN | docker login ghcr.io -u $USERNAME --password-stdin
             cd ~/.deploy/${{ github.event.repository.name }}
+            echo "$ENV_B64" | base64 --decode > ~/.deploy/${{ github.event.repository.name }}/.env
             sudo docker-compose -f ./docker-compose.yml down
             sudo docker-compose -f ./docker-compose.yml rm -f
             sudo docker-compose -f ./docker-compose.yml up -d
