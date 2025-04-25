@@ -13,8 +13,6 @@ services:
         condition: service_healthy
     networks:
       - api-network
-    volumes:
-      - .:/usr/src/app
     labels:
       - "com.janlibal=app-prod"
       - "environment=prod"
