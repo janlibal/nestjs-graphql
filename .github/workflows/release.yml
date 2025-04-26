@@ -76,6 +76,8 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/${{ env.image_repository_name }}:${{ env.TAG_NAME }}
+          build-args: |
+            ENV_FILE_CONTENT=${{ secrets.ENV_PROD_FILE_BASE64 }}
   deploy_via_ssh:
     needs: push_to_registry
     runs-on: ubuntu-22.04
@@ -126,7 +128,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           port: 22
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-          source: "./docker-compose.yml,./.env"
+          source: "./docker-compose.yml"
           target: "~/.deploy/${{ github.event.repository.name }}/"
       # Deploy Docker image with your application using `docker compose up app` remotely
       - name: remote docker-compose up via ssh
@@ -143,6 +145,7 @@ jobs:
           script: |
             echo $APPTOKEN | docker login ghcr.io -u $USERNAME --password-stdin
             cd ~/.deploy/${{ github.event.repository.name }}
+            echo "${{ secrets.ENV_PROD_FILE_BASE64 }}" | base64 --decode > ~/.deploy/${{ github.event.repository.name }}/.env
             sudo docker-compose -f ./docker-compose.yml down
             sudo docker-compose -f ./docker-compose.yml rm -f
             sudo docker-compose -f ./docker-compose.yml up -d
