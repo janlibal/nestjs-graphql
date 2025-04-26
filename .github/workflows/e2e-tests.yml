@@ -59,6 +59,6 @@ jobs:
         with:
           name: prod-logs
           path: prod.log
-      - name: 🧹 Cleanup .env file
+      - name: Cleanup .env file
         if: always()
         run: rm -f .env
