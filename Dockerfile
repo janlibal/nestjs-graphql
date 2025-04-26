@@ -5,9 +5,9 @@ LABEL build_date="2026-04-26"
 # Build Stage
 FROM node:22.11.0-alpine AS build
 
+COPY package*.json /usr/src/app/
 WORKDIR /usr/src/app
 
-COPY package*.json ./
 RUN yarn install --frozen-lockfile
 
 COPY . .
