@@ -1,5 +1,7 @@
-
 FROM node:23.11.0-slim AS deps
+LABEL stage="deps"
+LABEL maintainer="jan.libal@yahoo.com"
+LABEL build_date="2025-04-20"
 
 WORKDIR /usr/src/app
 
@@ -13,8 +15,14 @@ RUN \
   fi
 
 FROM node:23.11.0-slim AS builder
+LABEL stage="builder"
+LABEL maintainer="jan.libal@yahoo.com"
+LABEL build_date="2025-04-20"
 
-RUN apt-get update && apt-get install -y bash && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends bash openssl && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/src/app
 
@@ -37,6 +45,9 @@ RUN \
   fi
 
 FROM node:23.11.0-slim AS runner
+LABEL stage="runner"
+LABEL maintainer="jan.libal@yahoo.com"
+LABEL build_date="2025-04-20"
 
 WORKDIR /usr/src/app
 
