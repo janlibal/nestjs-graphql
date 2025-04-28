@@ -10,7 +10,7 @@ RUN yarn global add @nestjs/cli typescript ts-node
 
 COPY package*.json /usr/src/app/
 
-RUN yarn install --frozen-lockfile --production
+RUN yarn install --frozen-lockfile
 
 COPY . /usr/src/app/
 
