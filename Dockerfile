@@ -23,13 +23,6 @@ COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY . .
 
 RUN \
-  if [ -f package-lock.json ]; then npm run build; \
-  elif [ -f yarn.lock ]; then yarn run build; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
-
-RUN \
   if [ -f package-lock.json ]; then npm run prisma:generate && npm run rebuild; \
   elif [ -f yarn.lock ]; then yarn run prisma:generate && yarn run rebuild; \
   elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run prisma:generate && pnpm run rebuild; \
