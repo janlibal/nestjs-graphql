@@ -40,8 +40,6 @@ FROM node:23.11.0-slim AS runner
 
 WORKDIR /usr/src/app
 
-USER node
-
 COPY --from=builder --chown=node:node /usr/src/app/dist ./dist
 COPY --from=builder --chown=node:node /usr/src/app/node_modules ./node_modules
 
@@ -53,5 +51,9 @@ sed -i 's/\r//g' /opt/wait-for-it.sh /opt/startup.relational.prod.sh
 
 ARG ENV_FILE_CONTENT
 RUN echo "$ENV_FILE_CONTENT" | base64 -d > .env && chown node:node .env
+
+RUN chown -R node:node /usr/src/app/*
+
+USER node
 
 CMD ["/opt/startup.relational.prod.sh"]
