@@ -1,4 +1,4 @@
-FROM node:22.11.0-alpine AS build
+FROM node:23.11.0-slim AS build
 LABEL maintainer="jan.libal@yahoo.com"
 LABEL build_date="2025-04-19"
 
@@ -18,7 +18,7 @@ RUN yarn run prisma:generate
 RUN yarn run rebuild
 
 
-FROM node:22.11.0-alpine AS runtime
+FROM node:23.11.0-slim AS runtime
 LABEL maintainer="jan.libal@yahoo.com"
 LABEL build_date="2025-04-19"
 
