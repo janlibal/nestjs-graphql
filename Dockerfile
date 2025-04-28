@@ -40,4 +40,7 @@ RUN echo "$ENV_FILE_CONTENT" | base64 -d > .env
 ARG NODE_ENV="prod"
 ENV NODE_ENV="${NODE_ENV}"
 
+RUN chown -R node:node /usr/src/app/*
+USER node
+
 CMD ["/opt/startup.relational.prod.sh"]
