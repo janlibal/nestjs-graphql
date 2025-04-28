@@ -1,31 +1,35 @@
-FROM node:22.11.0-alpine
-LABEL maintainer="jan.libal@yahoo.com"
-LABEL build_date="2025-04-19"
+FROM node:22.11.0-alpine AS build
 
-RUN apk add --no-cache bash && \
-    yarn global add @nestjs/cli typescript ts-node
+RUN apk add --no-cache bash
+
+RUN yarn global add @nestjs/cli typescript ts-node
+
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+RUN yarn install
+
+COPY . .
+
+RUN echo "" > .env && cp .env.test .env
+
+# (Optional) If you build or compile TypeScript ahead of time, do it here
+# RUN yarn run build
+
+FROM node:22.11.0-alpine AS runtime
+
+RUN apk add --no-cache bash
 
 ARG NODE_ENV="test"
 ENV NODE_ENV="${NODE_ENV}"
 
 WORKDIR /usr/src/app
 
-COPY package*.json /tmp/app/
-RUN cd /tmp/app && yarn install
+COPY --from=build /usr/src/app /usr/src/app
 
-COPY . /usr/src/app
-#??RUN cp -a /tmp/app/node_modules /usr/src/app
 COPY ./wait-for-it.sh /opt/wait-for-it.sh
-RUN chmod +x /opt/wait-for-it.sh
 COPY ./startup.relational.test.sh /opt/startup.relational.test.sh
-RUN chmod +x /opt/startup.relational.test.sh
-RUN sed -i 's/\r//g' /opt/wait-for-it.sh
-RUN sed -i 's/\r//g' /opt/startup.relational.test.sh
-
-RUN echo "" > .env
-RUN cp .env.test .env
-#RUN if [ ! -f .env ]; then cp env-example-relational .env; fi
-
-#RUN yarn run rebuild
+RUN chmod +x /opt/wait-for-it.sh /opt/startup.relational.test.sh && \
+    sed -i 's/\r//g' /opt/wait-for-it.sh /opt/startup.relational.test.sh
 
 CMD ["/opt/startup.relational.test.sh"]
