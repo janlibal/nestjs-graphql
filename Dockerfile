@@ -1,46 +1,79 @@
-FROM node:23.11.0-slim AS build
-LABEL maintainer="jan.libal@yahoo.com"
-LABEL build_date="2025-04-19"
+# ---------- Stage 1: Dependency installation ----------
+    FROM node:23.11.0-slim AS deps
 
-RUN apk add --no-cache bash
+    WORKDIR /usr/src/app
 
-WORKDIR /usr/src/app
+    # Copy only the lockfiles and package descriptor
+    COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 
-RUN yarn global add @nestjs/cli typescript ts-node
+    # Install dependencies based on the lockfile
+    RUN \
+      if [ -f package-lock.json ]; then npm ci; \
+      elif [ -f yarn.lock ]; then yarn install --frozen-lockfile; \
+      elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm install --frozen-lockfile; \
+      else echo "Lockfile not found." && exit 1; \
+      fi
 
-COPY package*.json /usr/src/app/
+    # ---------- Stage 2: Build ----------
+    FROM node:23.11.0-slim AS builder
 
-RUN yarn install --frozen-lockfile
+    # Use apt instead of apk since this is Debian-based
+    RUN apt-get update && apt-get install -y bash && rm -rf /var/lib/apt/lists/*
 
-COPY . /usr/src/app/
+    WORKDIR /usr/src/app
 
-RUN yarn run prisma:generate
-RUN yarn run rebuild
+    # Copy installed deps
+    COPY --from=deps /app/node_modules ./node_modules
 
+    # Copy rest of the app
+    COPY . .
 
-FROM node:23.11.0-slim AS runtime
-LABEL maintainer="jan.libal@yahoo.com"
-LABEL build_date="2025-04-19"
+    # Build the project (based on lockfile)
+    RUN \
+      if [ -f package-lock.json ]; then npm run build; \
+      elif [ -f yarn.lock ]; then yarn run build; \
+      elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
+      else echo "Lockfile not found." && exit 1; \
+      fi
 
-WORKDIR /usr/src/app
+    # Generate Prisma artifacts and rebuild if needed
+    RUN \
+      if [ -f package-lock.json ]; then npm run prisma:generate && npm run rebuild; \
+      elif [ -f yarn.lock ]; then yarn run prisma:generate && yarn run rebuild; \
+      elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run prisma:generate && pnpm run rebuild; \
+      else echo "Lockfile not found." && exit 1; \
+      fi
 
-RUN apk add --no-cache bash
+    # Reinstall prod dependencies (clean install)
+    RUN \
+      if [ -f package-lock.json ]; then npm ci --omit=dev && npm cache clean --force; \
+      elif [ -f yarn.lock ]; then yarn install --frozen-lockfile --production; \
+      elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm install --frozen-lockfile --prod; \
+      else echo "Lockfile not found." && exit 1; \
+      fi
 
-COPY --from=build /usr/src/app /usr/src/app
+    # ---------- Stage 3: Runtime ----------
+    FROM node:23.11.0-slim AS runner
 
-COPY ./wait-for-it.sh /opt/wait-for-it.sh
-COPY ./startup.relational.prod.sh /opt/startup.relational.prod.sh
+    WORKDIR /usr/src/app
 
-RUN chmod +x /opt/wait-for-it.sh /opt/startup.relational.prod.sh && \
-    sed -i 's/\r//g' /opt/wait-for-it.sh /opt/startup.relational.prod.sh
+    # Use non-root user for better security
+    RUN chown -R node:node /usr/src/app/*
+    USER node
 
-ARG ENV_FILE_CONTENT
-RUN echo "$ENV_FILE_CONTENT" | base64 -d > .env
+    # Copy only runtime code and dependencies
+    COPY --from=builder --chown=node:node /usr/src/app/dist ./dist
+    COPY --from=builder --chown=node:node /usr/src/app/node_modules ./node_modules
 
-ARG NODE_ENV="prod"
-ENV NODE_ENV="${NODE_ENV}"
+    # Copy and prepare startup scripts
+    COPY --chown=node:node ./wait-for-it.sh /opt/wait-for-it.sh
+    COPY --chown=node:node ./startup.relational.prod.sh /opt/startup.relational.prod.sh
 
-RUN chown -R node:node /usr/src/app/*
-USER node
+    RUN chmod +x /opt/wait-for-it.sh /opt/startup.relational.prod.sh && \
+        sed -i 's/\r//g' /opt/wait-for-it.sh /opt/startup.relational.prod.sh
 
-CMD ["/opt/startup.relational.prod.sh"]
+    # Inject the .env file content
+    ARG ENV_FILE_CONTENT
+    RUN echo "$ENV_FILE_CONTENT" | base64 -d > .env && chown node:node .env
+
+    CMD ["/opt/startup.relational.prod.sh"]
