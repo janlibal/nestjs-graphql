@@ -9,6 +9,7 @@ services:
     build:
       context: .
       dockerfile: relational.test.Dockerfile
+    image: app-test:latest
     ports:
       - ${APP_PORT}:${APP_PORT}
     volumes:
