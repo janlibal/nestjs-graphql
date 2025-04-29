@@ -21,8 +21,11 @@ LABEL build_date="2025-04-20"
 
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends bash openssl && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install -y --no-install-recommends \
+    bash \
+    openssl \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/src/app
 
@@ -50,6 +53,15 @@ LABEL maintainer="jan.libal@yahoo.com"
 LABEL build_date="2025-04-20"
 
 WORKDIR /usr/src/app
+
+USER root
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    bash \
+    openssl \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder --chown=node:node /usr/src/app/dist ./dist
 COPY --from=builder --chown=node:node /usr/src/app/node_modules ./node_modules
