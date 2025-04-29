@@ -1,4 +1,9 @@
 FROM node:23.11.0-slim AS deps
+LABEL com.janlibal.image.title="nestjs-graphql" \
+      com.janlibal.image.version="1.0.0" \
+      com.janlibal.image.authors="Jan Libal <jan.libal@yahoo.com>" \
+      com.janlibal.image.description="backend-nest-api-graphql" \
+      com.janlibal.image.licenses="MIT"
 LABEL stage="deps"
 LABEL maintainer="jan.libal@yahoo.com"
 LABEL build_date="2025-04-20"
