@@ -1,12 +1,13 @@
-# Step 1: Dependencies Stage
+# Stage 1: Dependencies
 FROM node:23.11.0-slim AS deps
 LABEL stage="deps"
 
 WORKDIR /usr/src/app
 
-# Copy package manager files and install dependencies
+# Copy only lock and manifest files to install dependencies
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 
+# Install dependencies based on lock file
 RUN \
   if [ -f package-lock.json ]; then npm ci; \
   elif [ -f yarn.lock ]; then yarn install --frozen-lockfile; \
@@ -14,28 +15,27 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
-# Step 2: Builder Stage
+# Stage 2: Builder
 FROM node:23.11.0-slim AS builder
 LABEL stage="builder"
 
-# Install required build dependencies
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
+# Install build dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
     bash \
+    curl \
     openssl \
     ca-certificates \
-    curl \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/src/app
 
-# Copy node_modules from deps stage
+# Copy installed deps from deps stage
 COPY --from=deps /usr/src/app/node_modules ./node_modules
 
-# Copy the rest of the application code
+# Copy app source
 COPY . .
 
-# Build Prisma client and rebuild the app (adjust based on package manager)
+# Build Prisma and app
 RUN \
   if [ -f package-lock.json ]; then npm run prisma:generate && npm run rebuild; \
   elif [ -f yarn.lock ]; then yarn run prisma:generate && yarn run rebuild; \
@@ -43,7 +43,7 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
-# Install production dependencies (omit dev dependencies)
+# Optional: clean dev deps (depends on your CI needs)
 RUN \
   if [ -f package-lock.json ]; then npm ci --omit=dev && npm cache clean --force; \
   elif [ -f yarn.lock ]; then yarn install --frozen-lockfile --production; \
@@ -51,45 +51,34 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
-# Step 3: Runtime Stage
+# Stage 3: Runtime
 FROM node:23.11.0-slim AS runner
 LABEL stage="runner"
 
-# Install runtime dependencies
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    bash \
-    openssl \
-    ca-certificates \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
-
 WORKDIR /usr/src/app
 
-# Set up the app to run as the `node` user
-USER root
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    bash \
+    curl \
+    openssl \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copy the compiled app and dependencies from the builder stage
-COPY --from=builder --chown=node:node /usr/src/app/dist ./dist
-COPY --from=builder --chown=node:node /usr/src/app/node_modules ./node_modules
+# Copy built app and runtime deps
+COPY --from=builder /usr/src/app /usr/src/app
 
-# Copy necessary startup and wait-for scripts
-COPY --chown=node:node ./wait-for-graphql.sh /opt/wait-for-graphql.sh
-COPY --chown=node:node ./wait-for-it.sh /opt/wait-for-it.sh
-COPY --chown=node:node ./startup.relational.ci.sh /opt/startup.relational.ci.sh
+# Copy CI-specific scripts
+COPY ./wait-for-it.sh /opt/wait-for-it.sh
+COPY ./wait-for-graphql.sh /opt/wait-for-graphql.sh
+COPY ./startup.relational.ci.sh /opt/startup.relational.ci.sh
 
-# Make scripts executable and clean up line endings
+# Make scripts executable and fix line endings
 RUN chmod +x /opt/wait-for-it.sh /opt/wait-for-graphql.sh /opt/startup.relational.ci.sh && \
-    sed -i 's/\r//g' /opt/wait-for-it.sh /opt/startup.relational.ci.sh /opt/wait-for-graphql.sh
+    sed -i 's/\r//g' /opt/wait-for-it.sh /opt/wait-for-graphql.sh /opt/startup.relational.ci.sh
 
-# Set environment variable from passed ENV_FILE_CONTENT
-ARG ENV_FILE_CONTENT
-RUN echo "$ENV_FILE_CONTENT" | base64 -d > .env && chown node:node .env
+# Set environment
+ARG NODE_ENV="prod"
+ENV NODE_ENV="${NODE_ENV}"
 
-# Ensure ownership and permissions for the app files
-RUN chown -R node:node /usr/src/app/*
-
-USER node
-
-# Run the app using the production startup script
 CMD ["/opt/startup.relational.ci.sh"]
