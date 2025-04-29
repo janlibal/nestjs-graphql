@@ -1,15 +1,10 @@
+# Step 1: Dependencies Stage
 FROM node:23.11.0-slim AS deps
-LABEL com.janlibal.image.title="nestjs-graphql" \
-      com.janlibal.image.version="1.0.0" \
-      com.janlibal.image.authors="Jan Libal <jan.libal@yahoo.com>" \
-      com.janlibal.image.description="backend-nest-api-graphql" \
-      com.janlibal.image.licenses="MIT"
 LABEL stage="deps"
-LABEL maintainer="jan.libal@yahoo.com"
-LABEL build_date="2025-04-20"
 
 WORKDIR /usr/src/app
 
+# Copy package manager files and install dependencies
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 
 RUN \
@@ -19,25 +14,28 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
+# Step 2: Builder Stage
 FROM node:23.11.0-slim AS builder
 LABEL stage="builder"
-LABEL maintainer="jan.libal@yahoo.com"
-LABEL build_date="2025-04-20"
 
-
+# Install required build dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     bash \
     openssl \
     ca-certificates \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/src/app
 
+# Copy node_modules from deps stage
 COPY --from=deps /usr/src/app/node_modules ./node_modules
 
+# Copy the rest of the application code
 COPY . .
 
+# Build Prisma client and rebuild the app (adjust based on package manager)
 RUN \
   if [ -f package-lock.json ]; then npm run prisma:generate && npm run rebuild; \
   elif [ -f yarn.lock ]; then yarn run prisma:generate && yarn run rebuild; \
@@ -45,6 +43,7 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
+# Install production dependencies (omit dev dependencies)
 RUN \
   if [ -f package-lock.json ]; then npm ci --omit=dev && npm cache clean --force; \
   elif [ -f yarn.lock ]; then yarn install --frozen-lockfile --production; \
@@ -52,76 +51,45 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
+# Step 3: Runtime Stage
 FROM node:23.11.0-slim AS runner
 LABEL stage="runner"
-LABEL maintainer="jan.libal@yahoo.com"
-LABEL build_date="2025-04-20"
 
-WORKDIR /usr/src/app
-
-USER root
-
+# Install runtime dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     bash \
     openssl \
     ca-certificates \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
+WORKDIR /usr/src/app
+
+# Set up the app to run as the `node` user
+USER root
+
+# Copy the compiled app and dependencies from the builder stage
 COPY --from=builder --chown=node:node /usr/src/app/dist ./dist
 COPY --from=builder --chown=node:node /usr/src/app/node_modules ./node_modules
 
+# Copy necessary startup and wait-for scripts
+COPY --chown=node:node ./wait-for-graphql.sh /opt/wait-for-graphql.sh
 COPY --chown=node:node ./wait-for-it.sh /opt/wait-for-it.sh
 COPY --chown=node:node ./startup.relational.ci.sh /opt/startup.relational.ci.sh
-COPY --chown=node:node ./wait-for-graphql.sh /opt/wait-for-graphql.sh
 
+# Make scripts executable and clean up line endings
 RUN chmod +x /opt/wait-for-it.sh /opt/wait-for-graphql.sh /opt/startup.relational.ci.sh && \
-sed -i 's/\r//g' /opt/wait-for-it.sh /opt/startup.relational.ci.sh /opt/wait-for-graphql.sh
+    sed -i 's/\r//g' /opt/wait-for-it.sh /opt/startup.relational.ci.sh /opt/wait-for-graphql.sh
 
+# Set environment variable from passed ENV_FILE_CONTENT
 ARG ENV_FILE_CONTENT
 RUN echo "$ENV_FILE_CONTENT" | base64 -d > .env && chown node:node .env
 
+# Ensure ownership and permissions for the app files
 RUN chown -R node:node /usr/src/app/*
 
 USER node
 
+# Run the app using the production startup script
 CMD ["/opt/startup.relational.ci.sh"]
-# FROM node:22.11.0-alpine AS build
-# LABEL maintainer="jan.libal@yahoo.com"
-# LABEL build_date="2025-04-20"
-
-# RUN apk add --no-cache bash curl
-
-# WORKDIR /usr/src/app
-
-# RUN yarn global add @nestjs/cli typescript ts-node
-
-# COPY package*.json /usr/src/app/
-
-# RUN yarn install --frozen-lockfile
-
-# COPY . /usr/src/app/
-
-# RUN yarn run prisma:generate
-# RUN yarn run rebuild
-
-# FROM node:22.11.0-alpine AS runtime
-
-# WORKDIR /usr/src/app
-
-# RUN apk add --no-cache bash curl
-
-# COPY --from=build /usr/src/app /usr/src/app
-
-# COPY ./wait-for-it.sh /opt/wait-for-it.sh
-# COPY ./wait-for-graphql.sh /opt/wait-for-graphql.sh
-# COPY ./startup.relational.ci.sh /opt/startup.relational.ci.sh
-
-# RUN chmod +x /opt/wait-for-it.sh /opt/wait-for-graphql.sh /opt/startup.relational.ci.sh
-
-# RUN sed -i 's/\r//g' /opt/wait-for-it.sh /opt/startup.relational.ci.sh /opt/wait-for-graphql.sh
-
-# ARG NODE_ENV="prod"
-# ENV NODE_ENV="${NODE_ENV}"
-
-# CMD ["/opt/startup.relational.ci.sh"]
