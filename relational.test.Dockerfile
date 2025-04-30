@@ -37,8 +37,8 @@ COPY . .
 
 RUN echo "" > .env && cp .env.test .env
 
-FROM node:23.11.0-slim AS test-runner
-LABEL stage="test-runner"
+FROM node:23.11.0-slim AS runner
+LABEL stage="runner"
 LABEL maintainer="jan.libal@yahoo.com"
 LABEL build_date="2025-04-20"
 
@@ -57,5 +57,7 @@ COPY ./startup.relational.test.sh /opt/startup.relational.test.sh
 
 RUN chmod +x /opt/wait-for-it.sh /opt/startup.relational.test.sh && \
     sed -i 's/\r//g' /opt/wait-for-it.sh /opt/startup.relational.test.sh
+
+RUN npx prisma generate
 
 CMD ["/opt/startup.relational.test.sh"]
