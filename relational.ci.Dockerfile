@@ -76,10 +76,6 @@ RUN chmod +x /opt/wait-for-it.sh /opt/wait-for-graphql.sh /opt/startup.relationa
 ARG ENV_FILE_CONTENT
 RUN echo "$ENV_FILE_CONTENT" | base64 -d > .env && chown node:node .env
 
-RUN chown -R node:node /usr/src/app/*
-
-USER node
-
 CMD ["/opt/startup.relational.ci.sh"]
 
 
