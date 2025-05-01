@@ -1,6 +1,62 @@
+# FROM node:23.11.0-alpine AS deps
+# LABEL com.janlibal.image.stage="deps" \
+#       com.janlibal.image.title="backend-nest-api-graphql" \
+#       com.janlibal.image.created="2025-05-01" \
+#       com.janlibal.image.authors="Jan Libal <jan.libal@yahoo.com>"
+
+# WORKDIR /usr/src/app
+
+# RUN apk add --no-cache bash
+
+# COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+
+# RUN yarn install --frozen-lockfile
+
+# FROM node:23.11.0-alpine AS builder
+# LABEL com.janlibal.image.stage="builder" \
+#       com.janlibal.image.title="backend-nest-api-graphql" \
+#       com.janlibal.image.created="2025-05-01" \
+#       com.janlibal.image.authors="Jan Libal <jan.libal@yahoo.com>"
+
+# RUN apk add --no-cache bash
+
+# WORKDIR /usr/src/app
+
+# COPY --from=deps /usr/src/app/node_modules ./node_modules
+
+# COPY . .
+
+# RUN yarn run prisma:generate
+# RUN yarn run rebuild
+
+# FROM node:23.11.0-alpine AS runner
+# LABEL com.janlibal.image.stage="runner" \
+#       com.janlibal.image.title="backend-nest-api-graphql" \
+#       com.janlibal.image.created="2025-05-01" \
+#       com.janlibal.image.authors="Jan Libal <jan.libal@yahoo.com>"
+
+# WORKDIR /usr/src/app
+
+# RUN apk add --no-cache bash
+
+# COPY --from=builder /usr/src/app/dist ./dist
+# COPY --from=builder /usr/src/app/node_modules ./node_modules
+# COPY --from=builder /usr/src/app/package.json ./package.json
+# COPY --from=builder /usr/src/app/yarn.lock ./yarn.lock
+# COPY --from=builder /usr/src/app/prisma ./prisma
+# COPY --from=builder /usr/src/app/tests ./tests
+
+# COPY ./wait-for-it.sh /opt/wait-for-it.sh
+# COPY ./wait-for-graphql.sh /opt/wait-for-graphql.sh
+# COPY ./startup.relational.prod.sh /opt/startup.relational.ci.sh
+
+# RUN chmod +x /opt/wait-for-it.sh /opt/wait-for-graphql.sh /opt/startup.relational.ci.sh && \
+# sed -i 's/\r//g' /opt/wait-for-it.sh /opt/startup.relational.ci.sh
+
+# CMD ["/opt/startup.relational.ci.sh"]
+
+
 FROM node:22.11.0-alpine AS build
-LABEL maintainer="jan.libal@yahoo.com"
-LABEL build_date="2025-04-20"
 
 RUN apk add --no-cache bash curl
 
