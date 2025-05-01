@@ -30,7 +30,7 @@
     "prisma:generate": "npx prisma generate",
     "migrate:dev": "npx prisma migrate dev",
     "migrate:deploy": "prisma migrate deploy",
-    "seed:dev": "npx prisma db seed",
+    "seed": "npx prisma db seed",
     "seed:prod": "node dist/prisma/seeds/seed.js",
     "generate-schema": "cat src/*/*/*.prisma > src/database/schema.prisma",
     "clean": "rm -rf ./dist",

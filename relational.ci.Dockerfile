@@ -1,5 +1,8 @@
-FROM node:23.11.0-slim AS deps
-LABEL stage="deps"
+FROM node:23.11.0-alpine AS deps
+LABEL com.janlibal.image.stage="deps" \
+      com.janlibal.image.title="backend-nest-api-graphql" \
+      com.janlibal.image.created="2025-05-01" \
+      com.janlibal.image.authors="Jan Libal <jan.libal@yahoo.com>"
 
 WORKDIR /usr/src/app
 
@@ -12,15 +15,13 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
-FROM node:23.11.0-slim AS builder
-LABEL stage="builder"
+FROM node:23.11.0-alpine AS builder
+LABEL com.janlibal.image.stage="builder" \
+      com.janlibal.image.title="backend-nest-api-graphql" \
+      com.janlibal.image.created="2025-05-01" \
+      com.janlibal.image.authors="Jan Libal <jan.libal@yahoo.com>"
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    bash \
-    openssl \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache bash
 
 WORKDIR /usr/src/app
 
@@ -43,17 +44,15 @@ RUN \
   fi
 
 
-FROM node:23.11.0-slim AS runner
-LABEL stage="runner"
+FROM node:23.11.0-alpine AS runner
+LABEL com.janlibal.image.stage="runner" \
+      com.janlibal.image.title="backend-nest-api-graphql" \
+      com.janlibal.image.created="2025-05-01" \
+      com.janlibal.image.authors="Jan Libal <jan.libal@yahoo.com>"
 
 WORKDIR /usr/src/app
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    bash \
-    openssl \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache bash
 
 COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/src/app/node_modules ./node_modules
