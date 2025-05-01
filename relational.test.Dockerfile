@@ -11,12 +11,7 @@ RUN apk add --no-cache bash && \
 
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 
-RUN \
-  if [ -f package-lock.json ]; then npm ci; \
-  elif [ -f yarn.lock ]; then yarn install --frozen-lockfile; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm install --frozen-lockfile; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
+RUN yarn install --frozen-lockfile
 
 FROM node:23.11.0-alpine AS builder
 LABEL com.janlibal.image.stage="builder" \
