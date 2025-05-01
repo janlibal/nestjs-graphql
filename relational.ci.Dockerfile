@@ -59,6 +59,8 @@ COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app/package.json ./package.json
 COPY --from=builder /usr/src/app/yarn.lock ./yarn.lock
+COPY --from=builder /usr/src/app/prisma ./prisma
+COPY --from=builder /usr/src/app/tests ./tests
 
 COPY ./wait-for-it.sh /opt/wait-for-it.sh
 COPY ./wait-for-graphql.sh /opt/wait-for-graphql.sh
