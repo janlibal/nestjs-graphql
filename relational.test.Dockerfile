@@ -1,7 +1,13 @@
 FROM node:23.11.0-slim AS deps
-LABEL stage="deps"
-LABEL maintainer="jan.libal@yahoo.com"
-LABEL build_date="2025-04-20"
+LABEL com.janlibal.image.stage="deps" \
+      com.janlibal.image.title="Backend-Nestjs-Graphql-API" \
+      com.janlibal.image.description="A simple web service built with Node.js" \
+      com.janlibal.image.version="1.0.0" \
+      com.janlibal.image.url="https://github.com/janlibal/nestjs-graphql" \
+      com.janlibal.image.source="https://github.com/janlibal/nestjs-graphql.git" \
+      com.janlibal.image.build_data="2025-05-01" \
+      com.janlibal.image.authors="Jan Libal <jan.libal@yahoo.com>" \
+      com.janlibal.image.licenses="MIT"
 
 WORKDIR /usr/src/app
 
@@ -26,9 +32,15 @@ RUN \
   fi
 
 FROM node:23.11.0-slim AS builder
-LABEL stage="builder"
-LABEL maintainer="jan.libal@yahoo.com"
-LABEL build_date="2025-04-20"
+LABEL com.janlibal.image.stage="builder" \
+      com.janlibal.image.title="Backend-Nestjs-Graphql-API" \
+      com.janlibal.image.description="A simple web service built with Node.js" \
+      com.janlibal.image.version="1.0.0" \
+      com.janlibal.image.url="https://github.com/janlibal/nestjs-graphql" \
+      com.janlibal.image.source="https://github.com/janlibal/nestjs-graphql.git" \
+      com.janlibal.image.build_data="2025-05-01" \
+      com.janlibal.image.authors="Jan Libal <jan.libal@yahoo.com>" \
+      com.janlibal.image.licenses="MIT"
 
 WORKDIR /usr/src/app
 
@@ -38,9 +50,15 @@ COPY . .
 RUN echo "" > .env && cp .env.test .env
 
 FROM node:23.11.0-slim AS runner
-LABEL stage="runner"
-LABEL maintainer="jan.libal@yahoo.com"
-LABEL build_date="2025-04-20"
+LABEL com.janlibal.image.stage="runner" \
+      com.janlibal.image.title="Backend-Nestjs-Graphql-API" \
+      com.janlibal.image.description="A simple web service built with Node.js" \
+      com.janlibal.image.version="1.0.0" \
+      com.janlibal.image.url="https://github.com/janlibal/nestjs-graphql" \
+      com.janlibal.image.source="https://github.com/janlibal/nestjs-graphql.git" \
+      com.janlibal.image.build_data="2025-05-01" \
+      com.janlibal.image.authors="Jan Libal <jan.libal@yahoo.com>" \
+      com.janlibal.image.licenses="MIT"
 
 WORKDIR /usr/src/app
 
@@ -58,6 +76,7 @@ COPY ./startup.relational.test.sh /opt/startup.relational.test.sh
 RUN chmod +x /opt/wait-for-it.sh /opt/startup.relational.test.sh && \
     sed -i 's/\r//g' /opt/wait-for-it.sh /opt/startup.relational.test.sh
 
+# Redundant?
 RUN npx prisma generate
 
 CMD ["/opt/startup.relational.test.sh"]
