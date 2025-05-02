@@ -24,7 +24,6 @@ services:
     labels:
       - "com.janlibal=app-prod"
       - "environment=prod"
-
   postgres:
     container_name: postgres
     image: janlibal/pg-multipledb # postgres:16.3-alpine

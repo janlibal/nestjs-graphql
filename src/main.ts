@@ -12,7 +12,7 @@ import { GraphqlLoggingInterceptor } from './interceptors/graphql-logging.interc
 import { createPinoHttpOptions } from './logger/createHttpPinoOptions'
 import pinoHttp from 'pino-http'
 import helmet from 'helmet'
-import rateLimit from 'express-rate-limit'
+//import rateLimit from 'express-rate-limit'
 import cookieParser from 'cookie-parser'
 import compression from 'compression'
 
@@ -59,12 +59,12 @@ async function bootstrap() {
 
     app.use(compression())
 
-    app.use(
+    /*app.use(
       rateLimit({
         windowMs: 15 * 60 * 1000, // 15 minutes
         max: 100 // limit each IP to 100 requests per windowMs
       })
-    )
+    )*/
 
     app.use(cookieParser())
 
