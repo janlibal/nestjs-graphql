@@ -23,7 +23,7 @@ WORKDIR /usr/src/app
 
 RUN apk add --no-cache bash
 
-COPY --from=deps /usr/src/app/node_modules /usr/src/app
+COPY --from=deps /usr/src/app/node_modules /usr/src/app/node_modules
 
 COPY . /usr/src/app/
 
@@ -40,13 +40,12 @@ WORKDIR /usr/src/app
 
 RUN apk add --no-cache bash curl
 
-# COPY --from=builder /usr/src/app/dist /usr/src/app/dist
-# COPY --from=builder /usr/src/app/node_modules /usr/src/app/node_modules
-# COPY --from=builder /usr/src/app/package.json /usr/src/app/package.json
-# COPY --from=builder /usr/src/app/yarn.lock /usr/src/app/yarn.lock
-# COPY --from=builder /usr/src/app/prisma /usr/src/app/prisma
-# COPY --from=builder /usr/src/app/tests /usr/src/app/tests
-COPY --from=builder /usr/src/app /usr/src/app
+COPY --from=builder /usr/src/app/dist /usr/src/app/dist
+COPY --from=builder /usr/src/app/node_modules /usr/src/app/node_modules
+COPY --from=builder /usr/src/app/package.json /usr/src/app/package.json
+COPY --from=builder /usr/src/app/yarn.lock /usr/src/app/yarn.lock
+COPY --from=builder /usr/src/app/prisma /usr/src/app/prisma
+COPY --from=builder /usr/src/app/tests /usr/src/app/tests
 
 COPY ./wait-for-it.sh /opt/wait-for-it.sh
 COPY ./wait-for-graphql.sh /opt/wait-for-graphql.sh
