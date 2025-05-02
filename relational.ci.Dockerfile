@@ -6,9 +6,10 @@
 
 # WORKDIR /usr/src/app
 
-# RUN apk add --no-cache bash
+# RUN apk add --no-cache bash curl && \
+#      yarn global add @nestjs/cli typescript ts-node
 
-# COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+# COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* /usr/src/app/
 
 # RUN yarn install --frozen-lockfile
 
@@ -18,13 +19,13 @@
 #       com.janlibal.image.created="2025-05-01" \
 #       com.janlibal.image.authors="Jan Libal <jan.libal@yahoo.com>"
 
-# RUN apk add --no-cache bash
-
 # WORKDIR /usr/src/app
 
-# COPY --from=deps /usr/src/app/node_modules ./node_modules
+# RUN apk add --no-cache bash
 
-# COPY . .
+# COPY --from=deps /usr/src/app/node_modules /usr/src/app/node_modules
+
+# COPY . /usr/src/app/
 
 # RUN yarn run prisma:generate
 # RUN yarn run rebuild
@@ -37,14 +38,14 @@
 
 # WORKDIR /usr/src/app
 
-# RUN apk add --no-cache bash
+# RUN apk add --no-cache bash curl
 
-# COPY --from=builder /usr/src/app/dist ./dist
-# COPY --from=builder /usr/src/app/node_modules ./node_modules
-# COPY --from=builder /usr/src/app/package.json ./package.json
-# COPY --from=builder /usr/src/app/yarn.lock ./yarn.lock
-# COPY --from=builder /usr/src/app/prisma ./prisma
-# COPY --from=builder /usr/src/app/tests ./tests
+# COPY --from=builder /usr/src/app/dist /usr/src/app/dist
+# COPY --from=builder /usr/src/app/node_modules /usr/src/app/node_modules
+# COPY --from=builder /usr/src/app/package.json /usr/src/app/package.json
+# COPY --from=builder /usr/src/app/yarn.lock /usr/src/app/yarn.lock
+# COPY --from=builder /usr/src/app/prisma /usr/src/app/prisma
+# COPY --from=builder /usr/src/app/tests /usr/src/app/tests
 
 # COPY ./wait-for-it.sh /opt/wait-for-it.sh
 # COPY ./wait-for-graphql.sh /opt/wait-for-graphql.sh
@@ -52,6 +53,9 @@
 
 # RUN chmod +x /opt/wait-for-it.sh /opt/wait-for-graphql.sh /opt/startup.relational.ci.sh && \
 # sed -i 's/\r//g' /opt/wait-for-it.sh /opt/startup.relational.ci.sh
+
+# ARG NODE_ENV="prod"
+# ENV NODE_ENV="${NODE_ENV}"
 
 # CMD ["/opt/startup.relational.ci.sh"]
 
