@@ -25,7 +25,7 @@ RUN apk add --no-cache bash
 
 COPY --from=deps /usr/src/app/node_modules /usr/src/app
 
-COPY . .
+COPY . /usr/src/app/
 
 RUN yarn run prisma:generate
 RUN yarn run rebuild
