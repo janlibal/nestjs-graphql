@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: relational.ci.Dockerfile
-      #target: runtime
+      target: runner
     image: test-runner:latest
     env_file:
       - .env
