@@ -1,26 +1,4 @@
 services:
-  test:
-     container_name: test-runner
-     build:
-       context: .
-       dockerfile: relational.ci.Dockerfile
-       target: runner
-     image: test-runner:latest
-     env_file:
-       - .env
-     depends_on:
-       api:
-         condition: service_healthy
-     command: >
-       /bin/sh -c "
-         /opt/wait-for-it.sh api:${APP_PORT} --timeout=60 --strict &&
-         /opt/wait-for-graphql.sh http://api:${APP_PORT}/api/v1/graphql --timeout=60 --strict &&
-         yarn run test:e2e:ci"
-     networks:
-       - api-network
-     labels:
-       - "com.janlibal=app-prod"
-       - "environment=prod"
   api:
     container_name: app-ci
     build:
