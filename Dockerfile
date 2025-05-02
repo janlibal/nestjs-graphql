@@ -1,8 +1,5 @@
 FROM node:23.11.0-alpine AS deps
-LABEL com.janlibal.image.stage="deps" \
-      com.janlibal.image.title="backend-nest-api-graphql" \
-      com.janlibal.image.created="2025-05-01" \
-      com.janlibal.image.authors="Jan Libal <jan.libal@yahoo.com>"
+
 
 WORKDIR /usr/src/app
 
