@@ -21,11 +21,8 @@ on:
         default: latest
         description: Tag you want to release.
         required: true
-env:
-  SHOULD_DEPLOY: ${{ github.event.workflow_run.conclusion == 'success' && contains(github.event.workflow_run.head_commit.message, '[deploy]') }}
 jobs:
   echo_it:
-    if: env.SHOULD_DEPLOY == 'true'
     runs-on: ubuntu-latest
     name: Starting echo-it job
     steps:
@@ -33,7 +30,6 @@ jobs:
         run: |
           echo "The echoed message."
   push_to_registry:
-    if: env.SHOULD_DEPLOY == 'true'
     needs: echo_it
     runs-on: ubuntu-22.04
     name: Starting push-to-registry job
@@ -83,7 +79,6 @@ jobs:
           build-args: |
             ENV_FILE_CONTENT=${{ secrets.ENV_PROD_FILE_BASE64 }}
   deploy_via_ssh:
-    if: env.SHOULD_DEPLOY == 'true'
     needs: push_to_registry
     runs-on: ubuntu-22.04
     name: Starting deployment via ssh

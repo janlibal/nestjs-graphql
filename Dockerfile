@@ -1,9 +1,6 @@
 FROM node:23.11.0-alpine AS deps
 
-
 WORKDIR /usr/src/app
-
-RUN apk add --no-cache bash
 
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 
@@ -15,11 +12,6 @@ RUN \
   fi
 
 FROM node:23.11.0-alpine AS builder
-LABEL com.janlibal.image.stage="builder" \
-      com.janlibal.image.title="backend-nest-api-graphql" \
-      com.janlibal.image.created="2025-05-01" \
-      com.janlibal.image.authors="Jan Libal <jan.libal@yahoo.com>"
-
 
 RUN apk add --no-cache bash
 
@@ -43,10 +35,7 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
-FROM node:23.11.0-slim AS runner
-LABEL stage="runner"
-LABEL maintainer="jan.libal@yahoo.com"
-LABEL build_date="2025-04-20"
+FROM node:23.11.0-alpine AS runner
 
 WORKDIR /usr/src/app
 
