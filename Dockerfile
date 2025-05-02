@@ -6,6 +6,8 @@ LABEL com.janlibal.image.stage="deps" \
 
 WORKDIR /usr/src/app
 
+RUN apk add --no-cache bash
+
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 
 RUN \
