@@ -49,7 +49,7 @@ jobs:
           echo "${{ secrets.ENV_TEST_FILE_BASE64 }}" | base64 --decode > .env
       - name: Run e2e tests
         id: relational
-        run: docker compose -f docker-compose.ci.yml --env-file .env -p ci-relational up --build --exit-code-from test
+        run: docker compose -f docker-compose.ci.yml --env-file .env -p ci-relational up --build --exit-code-from api
       - name: Copy prod.log from container to host
         if: ${{ failure() && steps.relational.conclusion == 'failure' }}
         run: docker cp ci-relational-api-1:/usr/src/app/prod.log .
