@@ -1,127 +1,62 @@
-name: Release
-permissions:
-  packages: write
-  contents: write
-  pull-requests: write
-  issues: read
+name: Deploy
 on:
-  # Triggered on new GitHub Release
-  release:
-    types: [published]
-  # Triggered on every successful Build action
-  workflow_run:
-    workflows: ["E2E Tests"]
-    branches: [ unknown ]
-    types:
-      - completed
-  # Manual trigger for rollback to specific release or redeploy latest
   workflow_dispatch:
     inputs:
       version:
-        default: latest
-        description: Tag you want to release.
+        description: 'Tag/version to deploy (default: latest)'
+        required: false
+        default: 'latest'
+      environment:
+        description: 'Environment (e.g. production, staging)'
         required: true
+        default: 'prod'
+      confirm_deploy:
+        description: 'Type "yes" to confirm deployment'
+        required: true
+        default: 'no'
+
 jobs:
-  echo_it:
-    runs-on: ubuntu-latest
-    name: Starting echo-it job
-    steps:
-      - name: The echo-it message!
-        run: |
-          echo "The echoed message."
-  push_to_registry:
-    needs: echo_it
+  deploy:
+    name: Deploy via SSH
     runs-on: ubuntu-22.04
-    name: Starting push-to-registry job
-    if: ${{ github.event.workflow_run.conclusion != 'failure' }}
+
+    # Only run if confirm_deploy == "yes"
+    if: ${{ github.event.inputs.confirm_deploy == 'yes' }}
+
     steps:
-      # Checkout latest or specific tag
-      - name: checkout
-        if: ${{ github.event.inputs.version == '' || github.event.inputs.version == 'latest' }}
-        uses: actions/checkout@v3
-        with:
-          node-version: 22
-      - name: checkout tag
-        if: ${{ github.event.inputs.version != '' && github.event.inputs.version != 'latest' }}
-        uses: actions/checkout@v3
-        with:
-          ref: refs/tags/${{ github.event.inputs.version }}
-          node-version: 22
-      # Assign environment variables used in subsequent steps
-      - name: Env variable assignment
-        run: echo "image_repository_name=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
-      # TAG_NAME defaults to 'latest' if not a release or manual deployment
-      - name: Assign version
+      - name: Validate confirmation
+        run: echo "Deployment confirmed. Proceeding..."
+
+      - name: Assign environment variables
         run: |
-          echo "TAG_NAME=latest" >> $GITHUB_ENV
-          if [ "${{ github.event.release.tag_name }}" != "" ]; then
-            echo "TAG_NAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
-          fi;
-          if [ "${{ github.event.inputs.version }}" != "" ]; then
-            echo "TAG_NAME=${{ github.event.inputs.version }}" >> $GITHUB_ENV
-          fi;
+          echo "TAG_NAME=${{ github.event.inputs.version || 'latest' }}" >> $GITHUB_ENV
+          echo "image_repository_name=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+          echo "domain=${{ secrets.HOST }}" >> $GITHUB_ENV
+          echo "letsencrypt_email=${{ secrets.LETSENCRYPT_EMAIL }}" >> $GITHUB_ENV
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.inputs.version || 'main' }}
+
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      # Build and push new docker image, skip for manual redeploy other than 'latest'
-      - name: Build and push Docker images
+
+      - name: Build and Push Docker Image
         uses: docker/build-push-action@v3
-        if: ${{ github.event.inputs.version == '' || github.event.inputs.version == 'latest' }}
         with:
-          node-version: 22
-          file: Dockerfile
           context: .
+          file: Dockerfile
           push: true
           tags: ghcr.io/${{ env.image_repository_name }}:${{ env.TAG_NAME }}
           build-args: |
             ENV_FILE_CONTENT=${{ secrets.ENV_PROD_FILE_BASE64 }}
-  deploy_via_ssh:
-    needs: push_to_registry
-    runs-on: ubuntu-22.04
-    name: Starting deployment via ssh
-    if: ${{ github.event.workflow_run.conclusion != 'failure' }}
-    steps:
-      # Checkout latest or specific tag
-      - name: checkout
-        if: ${{ github.event.inputs.version == '' || github.event.inputs.version == 'latest' }}
-        uses: actions/checkout@v3
-        with:
-          node-version: 22
-      - name: checkout tag
-        if: ${{ github.event.inputs.version != '' && github.event.inputs.version != 'latest' }}
-        uses: actions/checkout@v3
-        with:
-          ref: refs/tags/${{ github.event.inputs.version }}
-          node-version: 22
-      - name: repository name fix and env
-        run: |
-          echo "image_repository_name=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
-          echo "domain=${{ secrets.HOST }}" >> $GITHUB_ENV
-          echo "letsencrypt_email=${{ secrets.LETSENCRYPT_EMAIL }}" >> $GITHUB_ENV
-          echo "TAG_NAME=latest" >> $GITHUB_ENV
-          if [ "${{ github.event.release.tag_name }}" != "" ]; then
-            echo "TAG_NAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
-          fi;
-          if [ "${{ github.event.inputs.version }}" != "" ]; then
-            echo "TAG_NAME=${{ github.event.inputs.version }}" >> $GITHUB_ENV
-          fi;
-      # Copy docker-compose and .env files to target server
-      #- name: Create .env file
-      #  run: |
-      #    echo "Generating .env file"
 
-      #    echo "# Autogenerated .env file" > .env
-      #    echo "HOST_DOMAIN=${{ secrets.HOST }}" >> .env
-      #    echo "LETSENCRYPT_EMAIL=${{ secrets.LETSENCRYPT_EMAIL }}" >> .env
-
-      #    echo "IMAGE_REPO=${{ env.image_repository_name }}" >> .env
-      #    echo "RELEASE_VERSION=${{ env.TAG_NAME }}" >> .env
-       # Copy docker-compose and .env files to target server
-      - name: copy files to target server via scp
-        #uses: appleboy/scp-action@v0.1.3
+      - name: Copy docker-compose.yml to server
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -130,8 +65,8 @@ jobs:
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           source: "./docker-compose.yml"
           target: "~/.deploy/${{ github.event.repository.name }}/"
-      # Deploy Docker image with your application using `docker compose up app` remotely
-      - name: remote docker-compose up via ssh
+
+      - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.5
         env:
           APPTOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -145,11 +80,11 @@ jobs:
           script: |
             echo $APPTOKEN | docker login ghcr.io -u $USERNAME --password-stdin
             cd ~/.deploy/${{ github.event.repository.name }}
-            echo "${{ secrets.ENV_PROD_FILE_BASE64 }}" | base64 --decode > ~/.deploy/${{ github.event.repository.name }}/.env
-            sudo docker-compose -f ./docker-compose.yml down
-            sudo docker-compose -f ./docker-compose.yml rm -f
-            sudo docker-compose -f ./docker-compose.yml up -d
+            echo "${{ secrets.ENV_PROD_FILE_BASE64 }}" | base64 --decode > .env
+            sudo docker-compose -f docker-compose.yml down
+            sudo docker-compose -f docker-compose.yml rm -f
+            sudo docker-compose -f docker-compose.yml up -d
             sudo docker image prune -af
-      - name: The message of completion
-        run: |
-          echo "We have made it this far"
+
+      - name: Confirm Completion
+        run: echo "Deployment finished for version ${{ env.TAG_NAME }}"
