@@ -19,37 +19,30 @@ on:
         description: 'Type "yes" to confirm deployment'
         required: true
         default: 'no'
-
 jobs:
   deploy:
     name: Deploy via SSH
     runs-on: ubuntu-22.04
-
     if: ${{ github.event.inputs.confirm_deploy == 'yes' }}
-
     steps:
       - name: Validate confirmation
         run: echo "Deployment confirmed. Proceeding..."
-
       - name: Assign environment variables
         run: |
           echo "TAG_NAME=${{ github.event.inputs.version || 'latest' }}" >> $GITHUB_ENV
           echo "image_repository_name=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
           echo "domain=${{ secrets.HOST }}" >> $GITHUB_ENV
           echo "letsencrypt_email=${{ secrets.LETSENCRYPT_EMAIL }}" >> $GITHUB_ENV
-
       - name: Checkout code
         uses: actions/checkout@v3
         with:
           ref: ${{ github.event.inputs.version || 'main' }}
-
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v3
         with:
@@ -59,7 +52,6 @@ jobs:
           tags: ghcr.io/${{ env.image_repository_name }}:${{ env.TAG_NAME }}
           build-args: |
             ENV_FILE_CONTENT=${{ secrets.ENV_PROD_FILE_BASE64 }}
-
       - name: Copy docker-compose.yml to server
         uses: appleboy/scp-action@master
         with:
@@ -69,7 +61,6 @@ jobs:
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           source: "./docker-compose.yml"
           target: "~/.deploy/${{ github.event.repository.name }}/"
-
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.5
         env:
@@ -89,6 +80,5 @@ jobs:
             sudo docker-compose -f docker-compose.yml rm -f
             sudo docker-compose -f docker-compose.yml up -d
             sudo docker image prune -af
-
       - name: Confirm Completion
         run: echo "Deployment finished for version ${{ env.TAG_NAME }}"
