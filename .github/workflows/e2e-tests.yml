@@ -36,8 +36,8 @@ jobs:
   run_e2e:
     name: Run E2E Tests
     runs-on: ubuntu-latest
-    needs: changes_checker
-    if: ${{ needs.changes_checker.outputs.run_tests == 'true' }}
+    #needs: changes_checker
+    #if: ${{ needs.changes_checker.outputs.run_tests == 'true' }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
