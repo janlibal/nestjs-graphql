@@ -1,6 +1,8 @@
 FROM node:22.11.0-alpine AS build
-LABEL maintainer="jan.libal@yahoo.com"
-LABEL build_date="2025-04-20"
+LABEL com.janlibal.image.stage="build" \
+      com.janlibal.image.title="backend-nest-api-graphql" \
+      com.janlibal.image.created="2025-05-01" \
+      com.janlibal.image.authors="Jan Libal <jan.libal@yahoo.com>"
 
 RUN apk add --no-cache bash curl
 
@@ -18,6 +20,10 @@ RUN yarn run prisma:generate
 RUN yarn run rebuild
 
 FROM node:22.11.0-alpine AS runtime
+LABEL com.janlibal.image.stage="runtime" \
+      com.janlibal.image.title="backend-nest-api-graphql" \
+      com.janlibal.image.created="2025-05-01" \
+      com.janlibal.image.authors="Jan Libal <jan.libal@yahoo.com>"
 
 WORKDIR /usr/src/app
 

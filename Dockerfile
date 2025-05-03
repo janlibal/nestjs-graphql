@@ -1,4 +1,8 @@
 FROM node:23.11.0-alpine AS deps
+LABEL com.janlibal.image.stage="deps" \
+      com.janlibal.image.title="backend-nest-api-graphql" \
+      com.janlibal.image.created="2025-05-01" \
+      com.janlibal.image.authors="Jan Libal <jan.libal@yahoo.com>"
 
 WORKDIR /usr/src/app
 
@@ -12,6 +16,10 @@ RUN \
   fi
 
 FROM node:23.11.0-alpine AS builder
+LABEL com.janlibal.image.stage="builder" \
+      com.janlibal.image.title="backend-nest-api-graphql" \
+      com.janlibal.image.created="2025-05-01" \
+      com.janlibal.image.authors="Jan Libal <jan.libal@yahoo.com>"
 
 RUN apk add --no-cache bash
 
@@ -36,6 +44,10 @@ RUN \
   fi
 
 FROM node:23.11.0-alpine AS runner
+LABEL com.janlibal.image.stage="runner" \
+      com.janlibal.image.title="backend-nest-api-graphql" \
+      com.janlibal.image.created="2025-05-01" \
+      com.janlibal.image.authors="Jan Libal <jan.libal@yahoo.com>"
 
 WORKDIR /usr/src/app
 
