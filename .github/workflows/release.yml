@@ -1,4 +1,9 @@
 name: Deploy
+permissions:
+  packages: write
+  contents: write
+  pull-requests: write
+  issues: read
 on:
   workflow_dispatch:
     inputs:
