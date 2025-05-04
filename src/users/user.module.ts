@@ -6,6 +6,6 @@ import { UserResolver } from './user.resolver'
 @Module({
   imports: [UserPersistenceModule],
   providers: [UserResolver, UserService],
-  exports: [UserService, UserPersistenceModule]
+  exports: [UserService]
 })
 export class UserModule {}

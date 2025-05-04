@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { vi, describe, beforeEach, it, expect } from 'vitest'
+import { vi, describe, beforeEach, it, afterEach, expect } from 'vitest'
 import { UserService } from '../user.service'
 
 import hashPassword from '../../utils/crypto'
