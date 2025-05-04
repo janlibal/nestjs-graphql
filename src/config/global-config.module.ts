@@ -11,7 +11,6 @@ import redisConfig from '../redis/config/redis.config'
       load: [appConfig, authConfig, redisConfig],
       envFilePath: ['.env']
     })
-  ],
-  exports: [ConfigModule]
+  ]
 })
 export class GlobalConfigModule {}

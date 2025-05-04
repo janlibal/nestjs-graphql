@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common'
-import { PrismaModule } from 'nestjs-prisma'
 import { AppModule } from '../app/app.module'
 import { LoggerModule } from '../logger/logger.module'
 import { JwtModule } from '@nestjs/jwt'
@@ -10,6 +9,7 @@ import { AuthModule } from '../auth/auth.module'
 import { GqlAuthGuard } from '../auth/guards/gpl-auth.guard'
 import { RedisModule } from '../redis/redis.module'
 import { SessionModule } from 'src/session/session.module'
+import { PrismaModule } from '../database/prisma.module'
 
 @Module({
   imports: [

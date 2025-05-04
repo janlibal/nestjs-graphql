@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common'
 import { GraphQLModule } from '@nestjs/graphql'
 import { ApolloDriver } from '@nestjs/apollo'
 import { join } from 'path'
-import { GqlAuthGuard } from 'src/auth/guards/gpl-auth.guard'
 import { formatGraphQLError } from './exceptions.formatter'
 import { graphqlContext } from './graphql.context'
 
@@ -16,8 +15,6 @@ import { graphqlContext } from './graphql.context'
       context: graphqlContext,
       formatError: formatGraphQLError
     })
-  ],
-  providers: [GqlAuthGuard],
-  exports: [GraphQLModule]
+  ]
 })
 export class GraphqlConfigModule {}

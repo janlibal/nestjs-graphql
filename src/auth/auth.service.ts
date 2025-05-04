@@ -87,7 +87,7 @@ export class AuthService {
     sessionId: Session['id']
     hash: Session['hash']
   }) {
-    const tokenExpiresIn = this.configService.getOrThrow('auth.expires', {
+    const tokenExpiresIn = this.configService.getOrThrow<number>('auth.expires', {
       infer: true
     })
 
@@ -101,7 +101,7 @@ export class AuthService {
           sessionId: data.sessionId
         },
         {
-          secret: this.configService.getOrThrow('auth.secret', { infer: true }),
+          secret: this.configService.getOrThrow<string>('auth.secret', { infer: true }),
           expiresIn: tokenExpiresIn
         }
       ),
@@ -111,10 +111,10 @@ export class AuthService {
           hash: data.hash
         },
         {
-          secret: this.configService.getOrThrow('auth.refreshSecret', {
+          secret: this.configService.getOrThrow<string>('auth.refreshSecret', {
             infer: true
           }),
-          expiresIn: this.configService.getOrThrow('auth.refreshExpires', {
+          expiresIn: this.configService.getOrThrow<number>('auth.refreshExpires', {
             infer: true
           })
         }

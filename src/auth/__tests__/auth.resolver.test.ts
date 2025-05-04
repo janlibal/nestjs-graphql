@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { vi, describe, beforeEach, it, expect } from 'vitest'
+import { vi, describe, beforeEach, it, expect, afterEach } from 'vitest'
 import { AuthService } from '../auth.service'
 import { JwtService } from '@nestjs/jwt'
 import { GlobalConfigModule } from '../../config/global-config.module'

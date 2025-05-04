@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { vi, describe, beforeEach, it, expect } from 'vitest'
+import { vi, describe, beforeEach, it, expect, afterEach } from 'vitest'
 import { PrismaService } from '../../database/prisma.service'
 import {
   sessionMockDomainObject,

@@ -14,7 +14,7 @@ export function createPinoHttpOptions(
   configService: ConfigService
 ): Options<IncomingMessage, ServerResponse> {
   return {
-    level: configService.get('app.logLevel', { infer: true }) || 'debug',
+    level: configService.get<string>('app.logLevel', { infer: true }) || 'debug',
     genReqId: genReqId,
     customProps: (req) => ({
       requestId: req.id
