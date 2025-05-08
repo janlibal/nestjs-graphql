@@ -76,7 +76,6 @@ jobs:
             echo $APPTOKEN | docker login ghcr.io -u $USERNAME --password-stdin
             cd ~/.deploy/${{ github.event.repository.name }}
             echo "${{ secrets.ENV_PROD_FILE_BASE64 }}" | base64 --decode > .env
-            sudo docker-compose -f docker-compose.yml pull api
             sudo docker-compose -f docker-compose.yml down
             sudo docker-compose -f docker-compose.yml rm -f
             sudo docker-compose -f docker-compose.yml up -d
