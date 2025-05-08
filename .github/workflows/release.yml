@@ -77,21 +77,9 @@ jobs:
             cd ~/.deploy/${{ github.event.repository.name }}
             echo "${{ secrets.ENV_PROD_FILE_BASE64 }}" | base64 --decode > .env
             sudo docker-compose -f docker-compose.yml pull api
-            if ! sudo docker ps --filter "name=redis" --filter "status=running" | grep redis; then
-              echo "Redis is not running. Starting Redis..."
-              sudo docker-compose -f docker-compose.yml up -d redis
-            else
-              echo "Redis is already running."
-            fi
-            if ! sudo docker ps --filter "name=postgres" --filter "status=running" | grep postgres; then
-              echo "Postgres is not running. Starting Postgres..."
-              sudo docker-compose -f docker-compose.yml up -d postgres
-            else
-              echo "Postgres is already running."
-            fi
-            echo "Deploying API container"
-            sudo docker-compose -f docker-compose.yml up -d --no-deps api
-            echo "Cleaning images..."
+            sudo docker-compose -f docker-compose.yml down
+            sudo docker-compose -f docker-compose.yml rm -f
+            sudo docker-compose -f docker-compose.yml up -d
             sudo docker image prune -af
       - name: Confirm Completion
         run: echo "Deployment finished for version ${{ env.TAG_NAME }}"
