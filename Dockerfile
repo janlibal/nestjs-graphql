@@ -26,6 +26,7 @@ RUN apk add --no-cache bash
 WORKDIR /usr/src/app
 
 COPY --from=deps /usr/src/app/node_modules ./node_modules
+COPY --from=deps /usr/src/app/node_modules ./node_modules
 
 COPY . .
 
@@ -57,8 +58,8 @@ RUN apk add --no-cache bash
 
 COPY --from=builder --chown=node:node /usr/src/app/dist ./dist
 COPY --from=builder --chown=node:node /usr/src/app/node_modules ./node_modules
-COPY --from=builder --chown=node:node /usr/src/app/package.json ./package.json
-COPY --from=builder --chown=node:node /usr/src/app/yarn.lock ./yarn.lock
+COPY --from=builder --chown=node:node /usr/src/app/package.json ./usr/src/app/package.json
+COPY --from=builder --chown=node:node /usr/src/app/yarn.lock ./usr/src/app/yarn.lock
 
 COPY --chown=node:node ./wait-for-it.sh /opt/wait-for-it.sh
 COPY --chown=node:node ./startup.relational.prod.sh /opt/startup.relational.prod.sh
