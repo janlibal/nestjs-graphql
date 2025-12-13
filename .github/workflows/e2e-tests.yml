@@ -1,7 +1,7 @@
 name: E2E Tests
 on:
   pull_request:
-    branches: ['unknown']
+    branches: ['unknown'] #main
 jobs:
   changes_checker:
     name: Check for relevant changes
