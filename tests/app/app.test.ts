@@ -8,7 +8,7 @@ describe('App', () => {
 
   describe('App', () => {
     describe('QUERY > hello', () => {
-      it('should greet with Hello World', async () => {
+      it('should greet with Hello World John', async () => {
         const mockName: string = 'John'
 
         const response = await request(app)
