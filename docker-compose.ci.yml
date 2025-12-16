@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: relational.ci.Dockerfile
-    image: app-ci:latest
+    #image: app-ci:latest
     env_file:
       - .env
     ports:
