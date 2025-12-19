@@ -45,12 +45,15 @@ jobs:
       - name: Copy prod.log from container to host
         if: ${{ failure() && steps.relational.conclusion == 'failure' }}
         run: docker cp app-ci:/usr/src/app/prod.log .
-      - name: Upload prod.log to artifacts for debugging
+      #- name: Upload prod.log to artifacts for debugging
+      #  if: failure()
+      #  uses: actions/upload-artifact@v4
+      #  with:
+      #    name: prod-logs
+      #    path: prod.log
+      - name: Dump API logs
         if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: prod-logs
-          path: prod.log
+        run: docker compose -f docker-compose.ci.yml logs api > prod.log
       - name: Cleanup .env file
         if: always()
         run: rm -f .env
