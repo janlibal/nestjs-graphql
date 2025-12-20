@@ -40,10 +40,16 @@ jobs:
       - name: Recreate .env file from secret
         run: |
           echo "${{ secrets.ENV_TEST_FILE_BASE64 }}" | base64 --decode > .env
-      - name: Run e2e tests
-        id: relational
+      #- name: Run e2e tests
+      #  id: relational
+      #  run: |
+      #    docker compose -f docker-compose.ci.yml --env-file .env -p ci-relational up --build --exit-code-from api
+      - name: Build & run E2E tests
         run: |
-          docker compose -f docker-compose.ci.yml --env-file .env -p ci-relational up --build --exit-code-from api
+          docker compose -f docker-compose.ci.yml up \
+            --build \
+            --exit-code-from api \
+            --abort-on-container-exit=false
       - name: Copy prod.log from container to host
         if: ${{ failure() && steps.relational.conclusion == 'failure' }}
         run: docker cp app-ci:/usr/src/app/prod.log .
