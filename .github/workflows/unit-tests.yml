@@ -31,14 +31,19 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-      - name: Recreate .env file from secret
-        run: |
-          echo "${{ secrets.ENV_TEST_FILE_BASE64 }}" | base64 --decode > .env
-      - name: Set up Node
-        uses: actions/setup-node@v3
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: yarn
+      - name: Recreate .env file from secret
+        run: |
+          echo "${{ secrets.ENV_TEST_FILE_BASE64 }}" | base64 --decode > .env
+      #- name: Set up Node
+      #  uses: actions/setup-node@v3
+      #  with:
+      #    node-version: 22
+      #    cache: yarn
       - name: Install dependencies
         run: yarn install
       - name: Run Unit Tests
