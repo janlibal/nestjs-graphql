@@ -1,7 +1,7 @@
 name: E2E Tests
 on:
   pull_request:
-    branches: ['unknown'] #main
+    branches: ['main'] #unknown
 jobs:
   changes_checker:
     name: Check for relevant changes
@@ -40,10 +40,6 @@ jobs:
       - name: Recreate .env file from secret
         run: |
           echo "${{ secrets.ENV_TEST_FILE_BASE64 }}" | base64 --decode > .env
-      #- name: Run e2e tests
-      #  id: relational
-      #  run: |
-      #    docker compose -f docker-compose.ci.yml --env-file .env -p ci-relational up --build --exit-code-from api
       - name: Build & run E2E tests
         run: |
           docker compose -f docker-compose.ci.yml up \
@@ -53,12 +49,6 @@ jobs:
       - name: Copy prod.log from container to host
         if: ${{ failure() && steps.relational.conclusion == 'failure' }}
         run: docker cp app-ci:/usr/src/app/prod.log .
-      #- name: Upload prod.log to artifacts for debugging
-      #  if: failure()
-      #  uses: actions/upload-artifact@v4
-      #  with:
-      #    name: prod-logs
-      #    path: prod.log
       - name: Dump API logs
         if: failure()
         run: docker compose -f docker-compose.ci.yml logs api > prod.log
@@ -68,9 +58,6 @@ jobs:
         with:
           name: api-logs
           path: prod.log
-      #- name: Cleanup .env file
-      #  if: always()
-      #  run: rm -f .env
       - name: Cleanup
         if: always()
         run: |
