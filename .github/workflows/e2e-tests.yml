@@ -68,6 +68,11 @@ jobs:
         with:
           name: api-logs
           path: prod.log
-      - name: Cleanup .env file
+      #- name: Cleanup .env file
+      #  if: always()
+      #  run: rm -f .env
+      - name: Cleanup
         if: always()
-        run: rm -f .env
+        run: |
+          docker compose -f docker-compose.ci.yml down -v
+          rm -f .env
