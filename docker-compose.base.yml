@@ -1,0 +1,33 @@
+name: backend-dev
+services:
+  # This is the configuration for our PostgreSQL database container
+  # Note the `postgres` name is important, in out Node app when we refer
+  # to  `host: "postgres"` that value is mapped on the network to the
+  # address of this container.
+  postgres:
+    image: janlibal/pg-multipledb # postgres:16.3-alpine
+    networks:
+      - api-network
+    labels:
+      - "com.janlibal=app-dev"
+      - "environment=dev"
+  # PostgreSQL pgAdmin panel accessible at http://localhost:16543/
+  pgadmin-compose:
+    image: dpage/pgadmin4
+    networks:
+      - api-network
+    labels:
+      - "com.janlibal=app-dev"
+      - "environment=dev"
+  redis:
+    image: redis:latest
+    networks:
+      - api-network
+    labels:
+      - "com.janlibal=app-dev"
+      - "environment=dev"
+
+networks:
+  api-network:
+    name: backend-dev-network
+    driver: bridge
