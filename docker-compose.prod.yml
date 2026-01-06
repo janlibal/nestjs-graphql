@@ -1,28 +1,15 @@
-version: "3.9"
+name: backend-prod
 services:
   api:
-    container_name: app-ci
-    build:
-      context: .
-      dockerfile: relational.ci.Dockerfile
-    env_file:
-      - .env
+    container_name: application
     ports:
       - ${APP_PORT}:${APP_PORT}
-    healthcheck:
-      test: ["CMD", "curl", "-f", "-X", "POST", "-H", "Content-Type: application/json", "--data", '{"query":"{__typename}"}', "http://localhost:80/api/v1/graphql"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
+    restart: unless-stopped
     labels:
       - "com.janlibal=app-prod"
       - "environment=prod"
   postgres:
     container_name: postgres
-    env_file:
-      - .env
-    expose:
-      - 5432
     ports:
       - ${DB_PORT}:${DB_PORT}
     environment:
@@ -30,33 +17,32 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       #POSTGRES_DB: ${DATABASE_NAME}
       POSTGRES_MULTIPLE_DATABASES: ${MULTIPLE_DATABASES}
+    restart: unless-stopped
+    #env_file:
+    #  - .env
+    volumes:
+      - postgres:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "${DB_USERNAME}"]
       interval: 5s
       timeout: 5s
       retries: 5
-    restart: "no"
-    volumes:
-      - postgres:/var/lib/postgresql/data
     labels:
       - "com.janlibal=app-prod"
       - "environment=prod"
-
   redis:
     container_name: redis
-    env_file:
-      - .env
     command: redis-server --requirepass root
     ports:
       - ${REDIS_PORT}:${REDIS_PORT}
     restart: unless-stopped
+    volumes:
+      - redis:/data
     healthcheck:
       test: ["CMD", "redis-cli", "-a", "root", "ping"]
       interval: 5s
       timeout: 3s
       retries: 5
-    volumes:
-      - redis:/data
     environment:
     #  - ALLOW_EMPTY_PASSWORD=yes
       - 'REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL'
@@ -66,12 +52,12 @@ services:
 
 volumes:
   postgres:
-    name: ci-postgres
+    name: prod-db
     labels:
       purpose: database
-      environment: ci
+      environment: prod
   redis:
-    name: ci-redis
+    name: redis
     labels:
       purpose: in-mem-cache
       environment: ci

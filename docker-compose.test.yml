@@ -9,26 +9,17 @@ services:
     build:
       context: .
       dockerfile: relational.test.Dockerfile
-    image: app-test:latest
     ports:
       - ${APP_PORT}:${APP_PORT}
     volumes:
       - ./src:/usr/src/app/src
       - ./tests:/usr/src/app/tests
-    depends_on:
-      redis:
-        condition: service_healthy
-      postgres:
-        condition: service_healthy
     restart: "no"
-    networks:
-      - api-network
     labels:
       - "com.janlibal=app-test"
       - "environment=test"
   postgres:
     container_name: postgres
-    image: janlibal/pg-multipledb # postgres:16.3-alpine
     ports:
       - ${DB_PORT}:${DB_PORT}
     environment:
@@ -44,26 +35,11 @@ services:
     restart: "no"
     volumes:
       - postgres:/var/lib/postgresql/data
-    networks:
-      - api-network
     labels:
       - "com.janlibal=app-test"
       - "environment=test"
-  # PostgreSQL pgAdmin panel accessible at http://localhost:16543/
-  #pgadmin-compose:
-  #  container_name: nest-pgadmin
-  #  image: dpage/pgadmin4
-  #  environment:
-  #    PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
-  #    PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
-  #  ports:
-  #    #- "16543:80"
-  #    - ${PGADMIN_PORT}:80
-  #  depends_on:
-  #    - postgres
   redis:
     container_name: redis
-    image: redis:latest
     command: redis-server --requirepass root
     ports:
       - ${REDIS_PORT}:${REDIS_PORT}
@@ -78,15 +54,13 @@ services:
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
     #  - 'REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL'
-    networks:
-      - api-network
     labels:
       - "com.janlibal=app-test"
       - "environment=test"
 
 volumes:
   postgres:
-    name: test-db
+    name: test-postgres
     labels:
       purpose: database
       environment: test
@@ -96,8 +70,3 @@ volumes:
       purpose: in-mem-cache
       environment: test
     driver: local
-
-networks:
-  api-network:
-    name: backend-test-network
-    driver: bridge

@@ -42,7 +42,7 @@ jobs:
           echo "${{ secrets.ENV_TEST_FILE_BASE64 }}" | base64 --decode > .env
       - name: Build & run E2E tests
         run: |
-          docker compose -f docker-compose.ci.yml up \
+          docker compose -f docker-compose.yml -f docker-compose.ci.yml up \
             --build \
             --exit-code-from api \
             --abort-on-container-exit=false
@@ -51,7 +51,7 @@ jobs:
         run: docker cp app-ci:/usr/src/app/prod.log .
       - name: Dump API logs
         if: failure()
-        run: docker compose -f docker-compose.ci.yml logs api > prod.log
+        run: docker compose -f docker-compose.yml -f docker-compose.ci.yml logs api > prod.log
       - name: Upload logs
         if: failure()
         uses: actions/upload-artifact@v4
@@ -61,5 +61,5 @@ jobs:
       - name: Cleanup
         if: always()
         run: |
-          docker compose -f docker-compose.ci.yml down -v
+          docker compose -f docker-compose.yml -f docker-compose.ci.yml down -v
           rm -f .env

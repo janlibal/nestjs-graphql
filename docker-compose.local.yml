@@ -6,7 +6,6 @@ services:
   # address of this container.
   postgres:
     container_name: postgres
-    image: janlibal/pg-multipledb # postgres:16.3-alpine
     env_file:
       - .env
     ports:
@@ -23,15 +22,9 @@ services:
       retries: 5
     volumes:
       - postgres:/var/lib/postgresql/data
-    networks:
-      - api-network
-    labels:
-      - "com.janlibal=app-dev"
-      - "environment=dev"
   # PostgreSQL pgAdmin panel accessible at http://localhost:16543/
   pgadmin-compose:
     container_name: pgadmin
-    image: dpage/pgadmin4
     env_file:
       - .env
     environment:
@@ -42,16 +35,10 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    networks:
-      - api-network
     volumes:
       - pgadmin-data:/var/lib/pgadmin
-    labels:
-      - "com.janlibal=app-dev"
-      - "environment=dev"
   redis:
     container_name: redis
-    image: redis:latest
     env_file:
       - .env
     command: redis-server --requirepass root
@@ -65,14 +52,9 @@ services:
     restart: "no"
     volumes:
       - redis:/data
-    networks:
-      - api-network
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
     #  - 'REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL'
-    labels:
-      - "com.janlibal=app-dev"
-      - "environment=dev"
 
 volumes:
   postgres:
@@ -91,8 +73,3 @@ volumes:
     labels:
       purpose: pgadmin-data
       environment: dev
-
-networks:
-  api-network:
-    name: backend-dev-network
-    driver: bridge
