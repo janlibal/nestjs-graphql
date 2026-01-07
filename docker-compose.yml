@@ -1,7 +1,6 @@
 name: backend
 services:
   api:
-    image: app:latest
     depends_on:
       redis:
         condition: service_healthy
@@ -10,11 +9,19 @@ services:
     networks:
       - api-network
   postgres:
-    image: janlibal/pg-multipledb # postgres:16.3-alpine
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${DB_USERNAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     networks:
       - api-network
   redis:
-    image: redis:latest
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "root", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
     networks:
       - api-network
 
