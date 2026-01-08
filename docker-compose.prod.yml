@@ -1,14 +1,16 @@
 name: backend-prod
 services:
   api:
-    container_name: application
+    image: "ghcr.io/janlibal/nestjs-graphql:latest"
+    container_name: app
     ports:
       - ${APP_PORT}:${APP_PORT}
     restart: unless-stopped
     labels:
-      - "com.janlibal=app-prod"
+      - "com.mycompany=app-prod"
       - "environment=prod"
   postgres:
+    image: janlibal/pg-multipledb # postgres:16.3-alpine
     container_name: postgres
     ports:
       - ${DB_PORT}:${DB_PORT}
@@ -22,15 +24,8 @@ services:
     #  - .env
     volumes:
       - postgres:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "${DB_USERNAME}"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    labels:
-      - "com.janlibal=app-prod"
-      - "environment=prod"
   redis:
+    image: redis:latest
     container_name: redis
     command: redis-server --requirepass root
     ports:
@@ -38,26 +33,18 @@ services:
     restart: unless-stopped
     volumes:
       - redis:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "-a", "root", "ping"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
     environment:
     #  - ALLOW_EMPTY_PASSWORD=yes
       - 'REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL'
-    labels:
-      - "com.janlibal=app-prod"
-      - "environment=prod"
 
 volumes:
   postgres:
-    name: prod-db
+    name: postgres-prod
     labels:
       purpose: database
       environment: prod
   redis:
-    name: redis
+    name: redis-prod
     labels:
       purpose: in-mem-cache
       environment: ci
