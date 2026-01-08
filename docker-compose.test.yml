@@ -19,6 +19,7 @@ services:
       - "com.janlibal=app-test"
       - "environment=test"
   postgres:
+    image: janlibal/pg-multipledb # postgres:16.3-alpine
     container_name: postgres
     ports:
       - ${DB_PORT}:${DB_PORT}
@@ -27,11 +28,6 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       #POSTGRES_DB: ${DATABASE_NAME}
       POSTGRES_MULTIPLE_DATABASES: ${MULTIPLE_DATABASES}
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "${DB_USERNAME}"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
     restart: "no"
     volumes:
       - postgres:/var/lib/postgresql/data
@@ -39,6 +35,7 @@ services:
       - "com.janlibal=app-test"
       - "environment=test"
   redis:
+    image: redis:latest
     container_name: redis
     command: redis-server --requirepass root
     ports:
@@ -46,11 +43,6 @@ services:
     restart: "no"
     volumes:
       - redis:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "-a", "root", "ping", "--raw"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
     #  - 'REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL'
@@ -60,12 +52,12 @@ services:
 
 volumes:
   postgres:
-    name: test-postgres
+    name: postgres-test
     labels:
       purpose: database
       environment: test
   redis:
-    name: test-redis
+    name: redis-test
     labels:
       purpose: in-mem-cache
       environment: test
