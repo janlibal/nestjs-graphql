@@ -8,7 +8,7 @@ services:
     container_name: app-test
     build:
       context: .
-      dockerfile: relational.test.Dockerfile
+      dockerfile: Dockerfile.test
     ports:
       - ${APP_PORT}:${APP_PORT}
     volumes:
