@@ -47,6 +47,8 @@
     "lint-staged": "lint-staged",
     "local:up": "docker compose -f docker-compose.base.yml -f docker-compose.local.yml up -d",
     "local:down": "docker compose -f docker-compose.base.yml -f docker-compose.local.yml down",
+    "dev:up": "docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build -d",
+    "dev:down": "docker compose -f docker-compose.yml -f docker-compose.dev.yml down",
     "test": "vitest run -c ./vitest.config.unit.ts",
     "test:unit": "vitest -c ./vitest.config.unit.ts",
     "test:unit:ui": "vitest -c ./vitest.config.unit.ts --ui",
