@@ -63,10 +63,10 @@ COPY --from=builder --chown=node:node /usr/src/app/package.json ./package.json
 COPY --from=builder --chown=node:node /usr/src/app/yarn.lock ./yarn.lock
 
 COPY --chown=node:node ./wait-for-it.sh /opt/wait-for-it.sh
-COPY --chown=node:node ./startup.relational.prod.sh /opt/startup.relational.prod.sh
+COPY --chown=node:node ./startup.prod.sh /opt/startup.prod.sh
 
-RUN chmod +x /opt/wait-for-it.sh /opt/startup.relational.prod.sh && \
-sed -i 's/\r//g' /opt/wait-for-it.sh /opt/startup.relational.prod.sh
+RUN chmod +x /opt/wait-for-it.sh /opt/startup.prod.sh && \
+sed -i 's/\r//g' /opt/wait-for-it.sh /opt/startup.prod.sh
 
 ARG ENV_FILE_CONTENT
 RUN echo "$ENV_FILE_CONTENT" | base64 -d > .env && chown node:node .env
@@ -75,7 +75,7 @@ RUN chown -R node:node /usr/src/app/*
 
 USER node
 
-CMD ["/opt/startup.relational.prod.sh"]
+CMD ["/opt/startup.prod.sh"]
 
 
 
