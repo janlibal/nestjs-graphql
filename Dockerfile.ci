@@ -33,7 +33,7 @@ COPY --from=build /usr/src/app /usr/src/app
 
 COPY ./wait-for-it.sh /opt/wait-for-it.sh
 COPY ./wait-for-graphql.sh /opt/wait-for-graphql.sh
-COPY ./startup.relational.ci.sh /opt/startup.ci.sh
+COPY ./startup.ci.sh /opt/startup.ci.sh
 
 RUN chmod +x /opt/wait-for-it.sh /opt/wait-for-graphql.sh /opt/startup.ci.sh
 
