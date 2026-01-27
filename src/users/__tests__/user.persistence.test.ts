@@ -96,7 +96,7 @@ describe('UserPersistence', () => {
 
     describe('create()', () => {
       it('should create new user', async () => {
-        const persistenceModel = await UserMapper.toPersistence(rawUserDomainObject)
+        const persistenceModel = UserMapper.toPersistence(rawUserDomainObject)
 
         vi.spyOn(prismaService.user, 'create').mockResolvedValue(rawUserEntityObject)
 

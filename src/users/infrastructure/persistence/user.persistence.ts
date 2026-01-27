@@ -31,7 +31,7 @@ export class UserPersistence {
     })
     return await Promise.all(
       users.map(async (userEntity) => {
-        return await UserMapper.toDomain(userEntity)
+        return UserMapper.toDomain(userEntity)
       })
     )
   }
@@ -49,7 +49,7 @@ export class UserPersistence {
   async save(data: UserModel): Promise<UserModel> {
     const persistenceModel = await UserMapper.toPersistence(data)
     const newEntity = await this.prisma.user.create({ data: persistenceModel })
-    return await UserMapper.toDomain(newEntity)
+    return UserMapper.toDomain(newEntity)
   }
 
   async findPaginated(paginationArgs: PaginationArgs): Promise<UserModel[]> {
@@ -61,7 +61,7 @@ export class UserPersistence {
 
     return await Promise.all(
       users.map(async (userEntity) => {
-        return await UserMapper.toDomain(userEntity)
+        return UserMapper.toDomain(userEntity)
       })
     )
   }
