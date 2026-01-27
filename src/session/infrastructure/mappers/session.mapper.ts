@@ -2,7 +2,7 @@ import { Session as SessionEntity } from '@prisma/client'
 import { Session } from '../../model/session.model'
 
 export class SessionMapper {
-  static async toPersistence(data: Session): Promise<SessionEntity> {
+  static toPersistence(data: Session): SessionEntity {
     const persistenceEntity: SessionEntity = {
       id: data.id,
       hash: data.hash,
@@ -14,7 +14,7 @@ export class SessionMapper {
     return persistenceEntity
   }
 
-  static async toDomain(data: SessionEntity): Promise<Session> {
+  static toDomain(data: SessionEntity): Session {
     const domainEntity: Session = {
       id: data.id,
       hash: data.hash,

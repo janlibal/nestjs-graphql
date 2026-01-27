@@ -5,7 +5,7 @@ import { AuthProvidersEnum } from '../../enums/auth.provider.enum'
 import { User } from '../../model/user.model'
 
 export class UserMapper {
-  static async toPersistence(data: User): Promise<Omit<UserEntity, 'id'>> {
+  static toPersistence(data: User): Omit<UserEntity, 'id'> {
     const persistenceEntity: Omit<UserEntity, 'id'> = {
       firstName: data.firstName,
       lastName: data.lastName,
@@ -18,7 +18,7 @@ export class UserMapper {
     return persistenceEntity
   }
 
-  static async toDomain(raw: UserEntity): Promise<User> {
+  static toDomain(raw: UserEntity): User {
     let status: Status | undefined = undefined
     status = new Status()
     status = { id: Number(raw.statusId) }
