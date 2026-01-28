@@ -1,7 +1,7 @@
 import { User as UserModel } from '../../model/user.model'
-import { User as UserEntity } from '@prisma/client'
 import { NullableType } from '../../../utils/types/nullable.type'
 import { PaginationArgs } from '../../inputs/pagination.args'
+import { UserEntity } from '../../entities/user.entity'
 
 export abstract class UserRepository {
   abstract save(
