@@ -1,5 +1,4 @@
 import { User as UserModel } from '../../model/user.model'
-import { User as UserEntity } from '@prisma/client'
 import { NullableType } from '../../../utils/types/nullable.type'
 import { PaginationArgs } from '../../inputs/pagination.args'
 
@@ -14,7 +13,7 @@ export abstract class UserRepository {
 
   abstract findMany(): Promise<UserModel[]>
 
-  abstract findByFirstNames(firstNames: string[]): Promise<UserEntity[]>
+  abstract findByFirstNames(firstNames: string[]): Promise<UserModel[]>
 
   abstract findPaginated(paginationArgs: PaginationArgs): Promise<UserModel[]>
 

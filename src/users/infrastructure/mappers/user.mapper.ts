@@ -1,5 +1,6 @@
 import { Status } from 'src/statuses/status.model'
-import { User as UserEntity, ProviderEnum as Provider } from '@prisma/client'
+import { UserEntity } from '../../entities/user.entity'
+import { ProviderEntity as Provider } from '../../entities/provider.entity'
 import { Role } from '../../../roles/role.model'
 import { AuthProvidersEnum } from '../../enums/auth.provider.enum'
 import { User } from '../../model/user.model'

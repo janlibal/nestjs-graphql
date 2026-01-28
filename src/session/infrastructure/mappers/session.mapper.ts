@@ -1,4 +1,4 @@
-import { Session as SessionEntity } from '@prisma/client'
+import { SessionEntity } from '../../entities/session.entity'
 import { Session } from '../../model/session.model'
 
 export class SessionMapper {
