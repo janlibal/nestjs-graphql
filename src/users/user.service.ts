@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, UnprocessableEntityException } from '@nestjs/common'
-import { User } from '@prisma/client'
 import { User as UserModel } from './model/user.model'
+import { UserEntity } from './entities/user.entity'
 import { AuthProvidersEnum } from './enums/auth.provider.enum'
 import { CreateUserInput } from './inputs/create.user.intput'
 import { StatusEnum } from '../statuses/status.enum'
@@ -16,7 +16,7 @@ import { UserRepository } from './infrastructure/repository/user.repository'
 export class UserService {
   constructor(private userRepository: UserRepository) {}
 
-  async getByFirstNames(firstNames: string[]): Promise<User[]> {
+  async getByFirstNames(firstNames: string[]): Promise<UserEntity[]> {
     return await this.userRepository.findByFirstNames(firstNames)
   }
 
@@ -24,13 +24,13 @@ export class UserService {
     return await this.userRepository.findMany()
   }
 
-  findById(id: User['id']): Promise<NullableType<UserModel>> {
+  findById(id: UserModel['id']): Promise<NullableType<UserModel>> {
     const data = this.userRepository.findById(id)
     if (!data) throw new UnprocessableEntityException('No user found')
     return data
   }
 
-  async findByEmail(email: User['email']): Promise<NullableType<UserModel>> {
+  async findByEmail(email: UserModel['email']): Promise<NullableType<UserModel>> {
     return await this.userRepository.findByEmail(email)
   }
 
