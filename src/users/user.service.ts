@@ -1,6 +1,5 @@
 import { ConflictException, Injectable, UnprocessableEntityException } from '@nestjs/common'
 import { User as UserModel } from './model/user.model'
-import { UserEntity } from './entities/user.entity'
 import { AuthProvidersEnum } from './enums/auth.provider.enum'
 import { CreateUserInput } from './inputs/create.user.intput'
 import { StatusEnum } from '../statuses/status.enum'
@@ -16,7 +15,7 @@ import { UserRepository } from './infrastructure/repository/user.repository'
 export class UserService {
   constructor(private userRepository: UserRepository) {}
 
-  async getByFirstNames(firstNames: string[]): Promise<UserEntity[]> {
+  async getByFirstNames(firstNames: string[]): Promise<UserModel[]> {
     return await this.userRepository.findByFirstNames(firstNames)
   }
 

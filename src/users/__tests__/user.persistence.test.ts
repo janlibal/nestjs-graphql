@@ -44,11 +44,12 @@ describe('UserPersistence', () => {
     describe('findByFirstNames()', () => {
       it('should return users containing provided firstNames', async () => {
         const userEntityObjects = userMockEntityObjects(rawUserEntityObject, 5)
+        const userDomainObjects = userMockDomainObjects(rawUserDomainObject, 5)
         vi.spyOn(prismaService.user, 'findMany').mockResolvedValue(userEntityObjects)
 
         const result = await userPersistence.findByFirstNames(['Joe1', 'Joe5'])
 
-        expect(result).toEqual(userEntityObjects)
+        expect(result).toEqual(userDomainObjects)
 
         expect(mockPrismaService.user.findMany).toHaveBeenCalled()
       })
@@ -56,7 +57,9 @@ describe('UserPersistence', () => {
     describe('findMany()', () => {
       it('should find all users', async () => {
         const userEntityObjects = userMockEntityObjects(rawUserEntityObject, 5)
+
         const userDomainObjects = userMockDomainObjects(rawUserDomainObject, 5)
+
         vi.spyOn(prismaService.user, 'findMany').mockResolvedValue(userEntityObjects)
 
         const result = await userPersistence.findMany()

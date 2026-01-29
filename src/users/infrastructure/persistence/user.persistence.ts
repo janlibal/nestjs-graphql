@@ -4,15 +4,14 @@ import { PrismaService } from '../../../database/prisma.service'
 import { UserMapper } from '../mappers/user.mapper'
 import { PaginationArgs } from '../../inputs/pagination.args'
 import { NullableType } from '../../../utils/types/nullable.type'
-import { UserEntity } from '../../entities/user.entity'
 //import { PaginatedUsers } from './inputs/paginated.users'
 
 @Injectable()
 export class UserPersistence {
   constructor(private prisma: PrismaService) {}
 
-  async findByFirstNames(firstNames: string[]): Promise<UserEntity[]> {
-    return this.prisma.user.findMany({
+  async findByFirstNames(firstNames: string[]): Promise<User[]> {
+    const entities = await this.prisma.user.findMany({
       where: {
         firstName: {
           in: firstNames
@@ -23,17 +22,14 @@ export class UserPersistence {
         role: true
       }
     })
+    return entities.map((user) => UserMapper.toDomain(user))
   }
 
   async findMany(): Promise<User[]> {
     const users = await this.prisma.user.findMany({
       include: { status: true, role: true }
     })
-    return await Promise.all(
-      users.map(async (userEntity) => {
-        return UserMapper.toDomain(userEntity)
-      })
-    )
+    return users.map((user) => UserMapper.toDomain(user))
   }
 
   async findById(id: User['id']): Promise<NullableType<User>> {
