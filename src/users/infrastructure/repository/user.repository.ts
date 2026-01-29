@@ -1,7 +1,6 @@
 import { User as UserModel } from '../../model/user.model'
 import { NullableType } from '../../../utils/types/nullable.type'
 import { PaginationArgs } from '../../inputs/pagination.args'
-import { UserEntity } from '../../entities/user.entity'
 
 export abstract class UserRepository {
   abstract save(
@@ -14,7 +13,7 @@ export abstract class UserRepository {
 
   abstract findMany(): Promise<UserModel[]>
 
-  abstract findByFirstNames(firstNames: string[]): Promise<UserEntity[]>
+  abstract findByFirstNames(firstNames: string[]): Promise<UserModel[]>
 
   abstract findPaginated(paginationArgs: PaginationArgs): Promise<UserModel[]>
 

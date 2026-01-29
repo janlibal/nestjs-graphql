@@ -10,7 +10,7 @@ import {
   rawUserEntityObject,
   userObjectHashedPwd
 } from './mock/user.data'
-import { userMockEntityObjects } from './mock/user.data-helper'
+import { userMockDomainObjects, userMockEntityObjects } from './mock/user.data-helper'
 import { UserRepository } from '../infrastructure/repository/user.repository'
 
 describe('UserService', () => {
@@ -72,10 +72,10 @@ describe('UserService', () => {
     })
     describe('getAll()', () => {
       it('should return all users', async () => {
-        const userEntityObjects = userMockEntityObjects(rawUserEntityObject, 5)
-        mockUserRepository.findMany.mockResolvedValue(userEntityObjects)
+        const userDomainObjects = userMockDomainObjects(rawUserDomainObject, 5)
+        mockUserRepository.findMany.mockResolvedValue(userDomainObjects)
         const result = await userService.getAll()
-        expect(result).toEqual(userEntityObjects)
+        expect(result).toEqual(userDomainObjects)
         expect(mockUserRepository.findMany).toHaveBeenCalled()
       })
     })
@@ -83,6 +83,7 @@ describe('UserService', () => {
       it('should return all users based on firstNames search', async () => {
         //mockUserRepository.findByFirstNames.mockResolvedValue(allUsers.map(a => a.firstName === 'Joe'))
         const userEntityObjects = userMockEntityObjects(rawUserEntityObject, 5)
+        const userDomainObjects = userMockDomainObjects(rawUserDomainObject, 5)
 
         mockUserRepository.findByFirstNames.mockResolvedValue(
           userEntityObjects.filter((user) => ['Joe'].some((names) => names === user.firstName))
@@ -90,7 +91,7 @@ describe('UserService', () => {
         const result = await userService.getByFirstNames(['Joe'])
         //expect(result).toEqual(allUsers.map(a => a.firstName === 'Joe'))
         expect(result).toEqual(
-          userEntityObjects.filter((user) => ['Joe'].some((names) => names === user.firstName))
+          userDomainObjects.filter((user) => ['Joe'].some((names) => names === user.firstName))
         )
         expect(mockUserRepository.findByFirstNames).toHaveBeenCalledWith(['Joe'])
       })

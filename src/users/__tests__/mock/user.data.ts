@@ -1,7 +1,7 @@
 import { CreateUserInput } from '../../inputs/create.user.intput'
 import { AuthProvidersEnum } from '../../enums/auth.provider.enum'
 import { User as UserDomain } from '../../model/user.model'
-import { User as UserEntity } from '@prisma/client'
+import { UserEntity } from '../../entities/user.entity'
 
 export const createUserInput: CreateUserInput = {
   email: 'jan.libal@janlibal.com',

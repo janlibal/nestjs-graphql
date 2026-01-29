@@ -2,7 +2,6 @@ import { Resolver, Query, Mutation, Args } from '@nestjs/graphql'
 import { User as UserModel } from './model/user.model'
 import { CreateUserInput } from './inputs/create.user.intput'
 import { NullableType } from '../utils/types/nullable.type'
-import { User } from '@prisma/client'
 import { ValidateUserInputPipe } from './pipes/validate-user-input.pipe'
 import { UserService } from './user.service'
 
@@ -20,8 +19,8 @@ export class UserResolver {
   @Query(() => [UserModel])
   async findbyFirstNames(
     @Args('firstNames', { type: () => [String] })
-    firstNames: User['firstName'][]
-  ): Promise<User[]> {
+    firstNames: UserModel['firstName'][]
+  ): Promise<UserModel[]> {
     return await this.userService.getByFirstNames(firstNames)
   }
 
@@ -32,7 +31,7 @@ export class UserResolver {
 
   @Query(() => UserModel, { nullable: true })
   async findOne(
-    @Args('id', { type: () => String }) id: User['id']
+    @Args('id', { type: () => String }) id: UserModel['id']
   ): Promise<NullableType<UserModel>> {
     return await this.userService.findById(id)
   }
