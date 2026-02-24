@@ -1,4 +1,4 @@
-FROM node:23.11.0-alpine AS build
+FROM node:22.11.0-alpine AS build
 LABEL com.janlibal.image.stage="build" \
       com.janlibal.image.title="backend-nest-api-graphql" \
       com.janlibal.image.created="2025-05-01" \
@@ -19,7 +19,7 @@ COPY . /usr/src/app/
 RUN yarn run prisma:generate
 RUN yarn run rebuild
 
-FROM node:23.11.0-alpine AS runtime
+FROM node:22.11.0-alpine AS runtime
 LABEL com.janlibal.image.stage="runtime" \
       com.janlibal.image.title="backend-nest-api-graphql" \
       com.janlibal.image.created="2025-05-01" \
