@@ -27,7 +27,10 @@ export class UserPersistence {
 
   async findMany(): Promise<User[]> {
     const users = await this.prisma.user.findMany({
-      include: { status: true, role: true }
+      include: {
+        status: true,
+        role: true
+      }
     })
     return users.map((user) => UserMapper.toDomain(user))
   }
@@ -50,7 +53,10 @@ export class UserPersistence {
 
   async findPaginated(paginationArgs: PaginationArgs): Promise<User[]> {
     const users = await this.prisma.user.findMany({
-      include: { status: true, role: true },
+      include: {
+        status: true,
+        role: true
+      },
       skip: (paginationArgs.page - 1) * paginationArgs.limit, // Skip (page - 1) * limit
       take: paginationArgs.limit // Limit the number of results
     })
