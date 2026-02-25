@@ -1,45 +1,59 @@
-FROM node:20-alpine AS build
-LABEL com.janlibal.image.stage="build" \
+FROM node:20-alpine AS base
+LABEL com.janlibal.image.stage="base" \
       com.janlibal.image.title="backend-nest-api-graphql" \
-      com.janlibal.image.created="2025-05-01" \
+      com.janlibal.image.created="2026-02-25" \
       com.janlibal.image.authors="Jan Libal <jan.libal@yahoo.com>"
-
-RUN apk add --no-cache bash curl
 
 WORKDIR /usr/src/app
 
-RUN yarn global add @nestjs/cli typescript ts-node
+RUN apk add --no-cache libc6-compat openssl
 
-COPY package*.json /usr/src/app/
+
+FROM base AS deps
+LABEL com.janlibal.image.stage="deps" \
+      com.janlibal.image.title="backend-nest-api-graphql" \
+      com.janlibal.image.created="2026-02-25" \
+      com.janlibal.image.authors="Jan Libal <jan.libal@yahoo.com>"
+
+COPY package.json yarn.lock ./
 
 RUN yarn install --frozen-lockfile
 
-COPY . /usr/src/app/
+FROM base AS build
+LABEL com.janlibal.image.stage="build" \
+      com.janlibal.image.title="backend-nest-api-graphql" \
+      com.janlibal.image.created="2026-02-25" \
+      com.janlibal.image.authors="Jan Libal <jan.libal@yahoo.com>"
+
+COPY --from=deps /usr/src/app/node_modules ./node_modules
+
+COPY . .
 
 RUN yarn run prisma:generate
 RUN yarn run rebuild
 
+RUN yarn install --frozen-lockfile --production && yarn cache clean
+
 FROM node:20-alpine AS runtime
 LABEL com.janlibal.image.stage="runtime" \
       com.janlibal.image.title="backend-nest-api-graphql" \
-      com.janlibal.image.created="2025-05-01" \
+      com.janlibal.image.created="2026-02-25" \
       com.janlibal.image.authors="Jan Libal <jan.libal@yahoo.com>"
 
 WORKDIR /usr/src/app
+RUN apk add --no-cache libc6-compat openssl
+ENV NODE_ENV=production
 
-RUN apk add --no-cache bash curl
-
-COPY --from=build /usr/src/app /usr/src/app
+COPY --from=build /usr/src/app/node_modules ./node_modules
+COPY --from=build /usr/src/app/dist ./dist
+COPY --from=build /usr/src/app/prisma ./prisma
+COPY package.json ./
 
 COPY ./wait-for-it.sh /opt/wait-for-it.sh
 COPY ./wait-for-graphql.sh /opt/wait-for-graphql.sh
 COPY ./startup.ci.sh /opt/startup.ci.sh
 
-RUN chmod +x /opt/wait-for-it.sh /opt/wait-for-graphql.sh /opt/startup.ci.sh
-
+RUN chmod +x /opt/*.sh && sed -i 's/\r//g' /opt/*.sh
 RUN sed -i 's/\r//g' /opt/wait-for-it.sh /opt/startup.ci.sh /opt/wait-for-graphql.sh
-
-ARG NODE_ENV="prod"
-ENV NODE_ENV="${NODE_ENV}"
 
 CMD ["/opt/startup.ci.sh"]
