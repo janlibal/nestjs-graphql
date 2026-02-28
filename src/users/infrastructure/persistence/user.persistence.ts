@@ -4,6 +4,7 @@ import { PrismaService } from '../../../database/prisma.service'
 import { UserMapper } from '../mappers/user.mapper'
 import { PaginationArgs } from '../../inputs/pagination.args'
 import { NullableType } from '../../../utils/types/nullable.type'
+import { includeRoleStatus } from '../../args/user.includes'
 //import { PaginatedUsers } from './inputs/paginated.users'
 
 @Injectable()
@@ -12,25 +13,15 @@ export class UserPersistence {
 
   async findByFirstNames(firstNames: string[]): Promise<User[]> {
     const entities = await this.prisma.user.findMany({
-      where: {
-        firstName: {
-          in: firstNames
-        }
-      },
-      include: {
-        status: true,
-        role: true
-      }
+      where: { firstName: { in: firstNames } },
+      include: includeRoleStatus
     })
     return entities.map((user) => UserMapper.toDomain(user))
   }
 
   async findMany(): Promise<User[]> {
     const users = await this.prisma.user.findMany({
-      include: {
-        status: true,
-        role: true
-      }
+      include: includeRoleStatus
     })
     return users.map((user) => UserMapper.toDomain(user))
   }
@@ -53,10 +44,7 @@ export class UserPersistence {
 
   async findPaginated(paginationArgs: PaginationArgs): Promise<User[]> {
     const users = await this.prisma.user.findMany({
-      include: {
-        status: true,
-        role: true
-      },
+      include: includeRoleStatus,
       skip: (paginationArgs.page - 1) * paginationArgs.limit, // Skip (page - 1) * limit
       take: paginationArgs.limit // Limit the number of results
     })
